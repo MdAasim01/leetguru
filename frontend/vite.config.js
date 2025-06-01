@@ -7,7 +7,7 @@ export default defineConfig({
 	server: {
 		proxy: {
 			"/api": {
-				target: "http://193.46.198.253:8080", // Your backend in dev
+				target: "https://srv697867.hstgr.cloud/leetguru", // Your backend in dev
 				changeOrigin: true,
 				rewrite: (path) => path.replace(/^\/api/, "/api"),
 			},
