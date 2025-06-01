@@ -16,6 +16,7 @@ export const createProblem = async (req, res) => {
 		testcases,
 		codeSnippets,
 		referenceSolutions,
+		isPublic = true,
 	} = req.body;
 
 	try {
@@ -66,6 +67,7 @@ export const createProblem = async (req, res) => {
 				testcases,
 				codeSnippets,
 				referenceSolutions,
+				isPublic,
 				userId: req.user.id,
 			},
 		});
@@ -86,11 +88,12 @@ export const createProblem = async (req, res) => {
 export const getAllProblems = async (req, res) => {
 	try {
 		const problems = await db.problem.findMany({
+			where: {
+				OR: [{ isPublic: true }, { userId: req.user.id }],
+			},
 			include: {
 				solvedBy: {
-					where: {
-						userId: req.user.id,
-					},
+					where: { userId: req.user.id },
 				},
 			},
 		});
@@ -118,14 +121,17 @@ export const getProblemById = async (req, res) => {
 	const { id } = req.params;
 
 	try {
-		const problem = await db.problem.findUnique({
-			where: {
-				id,
-			},
-		});
+		const problem = await db.problem.findUnique({ where: { id } });
 
 		if (!problem) {
 			return res.status(404).json({ error: "Problem not found." });
+		}
+
+		// Block access to private problems not owned by user
+		if (!problem.isPublic && problem.userId !== req.user.id) {
+			return res.status(403).json({
+				error: "You are not authorized to view this problem.",
+			});
 		}
 
 		return res.status(200).json({
@@ -249,6 +255,14 @@ export const deleteProblem = async (req, res) => {
 
 		if (!problem) {
 			return res.status(404).json({ error: "Problem Not found" });
+		}
+
+		if (problem.userId !== req.user.id) {
+			return res
+				.status(403)
+				.json({
+					error: "You are not authorized to delete this problem",
+				});
 		}
 
 		await db.problem.delete({ where: { id } });

@@ -26,37 +26,54 @@ export const createPlayList = async (req, res) => {
 export const getPlayAllListDetails = async (req, res) => {
 	try {
 		const playLists = await db.playlist.findMany({
-			where: {
-				userId: req.user.id,
-			},
+			where: { userId: req.user.id },
 			include: {
 				problems: {
 					include: {
-						problem: true,
+						problem: {
+							where: {
+								OR: [
+									{ isPublic: true },
+									{ userId: req.user.id },
+								],
+							},
+						},
 					},
 				},
 			},
 		});
+
 		res.status(200).json({
 			success: true,
-			message: "Playlist fetched successfully",
+			message: "Playlists fetched successfully",
 			playLists,
 		});
 	} catch (error) {
-		console.error("Error fetching playlist:", error);
-		res.status(500).json({ error: "Failed to fetch playlist" });
+		console.error("Error fetching playlists:", error);
+		res.status(500).json({ error: "Failed to fetch playlists" });
 	}
 };
+
 export const getPlayListDetails = async (req, res) => {
 	const { playlistId } = req.params;
 
 	try {
 		const playList = await db.playlist.findUnique({
-			where: { id: playlistId, userId: req.user.id },
+			where: {
+				id: playlistId,
+				userId: req.user.id,
+			},
 			include: {
 				problems: {
 					include: {
-						problem: true,
+						problem: {
+							where: {
+								OR: [
+									{ isPublic: true },
+									{ userId: req.user.id },
+								],
+							},
+						},
 					},
 				},
 			},
@@ -95,11 +112,26 @@ export const addProblemToPlaylist = async (req, res) => {
 				problemId,
 			}))
 		);
+		const accessibleProblems = await db.problem.findMany({
+			where: {
+				id: { in: problemIds },
+				OR: [{ isPublic: true }, { userId: req.user.id }],
+			},
+			select: { id: true },
+		});
 
-		// Create records for each problem in the playlist
+		const accessibleIds = accessibleProblems.map((p) => p.id);
+
+		if (accessibleIds.length !== problemIds.length) {
+			return res.status(403).json({
+				error: "Some problems are private and not accessible.",
+			});
+		}
+
+		// Proceed to insert only accessible problems
 		const problemsInPlaylist = await db.problemInPlaylist.createMany({
-			data: problemIds.map((problemId) => ({
-				playListId: playlistId, // ✅ match your Prisma field name exactly
+			data: accessibleIds.map((problemId) => ({
+				playListId: playlistId,
 				problemId,
 			})),
 		});
@@ -119,10 +151,18 @@ export const deletePlayList = async (req, res) => {
 	const { playlistId } = req.params;
 
 	try {
+		const playlist = await db.playlist.findUnique({
+			where: { id: playlistId },
+		});
+
+		if (!playlist || playlist.userId !== req.user.id) {
+			return res.status(403).json({
+				error: "You are not authorized to delete this playlist",
+			});
+		}
+
 		const deletedPlaylist = await db.playlist.delete({
-			where: {
-				id: playlistId,
-			},
+			where: { id: playlistId },
 		});
 
 		res.status(200).json({
@@ -146,7 +186,19 @@ export const removeProblemFromPlaylist = async (req, res) => {
 				.status(400)
 				.json({ error: "Invalid or missing problemIds" });
 		}
-		// Only delete given problemIds not all
+
+		// Verify ownership of playlist
+		const playlist = await db.playlist.findUnique({
+			where: { id: playlistId },
+		});
+
+		if (!playlist || playlist.userId !== req.user.id) {
+			return res
+				.status(403)
+				.json({
+					error: "You are not authorized to modify this playlist",
+				});
+		}
 
 		const deletedProblem = await db.problemInPlaylist.deleteMany({
 			where: {

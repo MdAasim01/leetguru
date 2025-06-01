@@ -142,6 +142,7 @@ exports.Prisma.ProblemScalarFieldEnum = {
   testcases: 'testcases',
   codeSnippets: 'codeSnippets',
   referenceSolutions: 'referenceSolutions',
+  isPublic: 'isPublic',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -192,6 +193,7 @@ exports.Prisma.PlaylistScalarFieldEnum = {
   name: 'name',
   description: 'description',
   userId: 'userId',
+  isPublic: 'isPublic',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -202,6 +204,13 @@ exports.Prisma.ProblemInPlaylistScalarFieldEnum = {
   problemId: 'problemId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PlaylistAccessScalarFieldEnum = {
+  id: 'id',
+  playlistId: 'playlistId',
+  userId: 'userId',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -246,7 +255,8 @@ exports.Prisma.ModelName = {
   TestCaseResult: 'TestCaseResult',
   ProblemSolved: 'ProblemSolved',
   Playlist: 'Playlist',
-  ProblemInPlaylist: 'ProblemInPlaylist'
+  ProblemInPlaylist: 'ProblemInPlaylist',
+  PlaylistAccess: 'PlaylistAccess'
 };
 
 /**
