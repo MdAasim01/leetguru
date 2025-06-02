@@ -15,7 +15,9 @@ import {
 	Users,
 	ThumbsUp,
 	Home,
+	FullscreenIcon,
 } from "lucide-react";
+import { FullScreen, useFullScreenHandle } from "react-full-screen";
 import { Link, useParams } from "react-router-dom";
 import { useProblemStore } from "../store/useProblemStore";
 import { getLanguageId } from "../lib/lang";
@@ -23,10 +25,12 @@ import { useExecutionStore } from "../store/useExecutionStore";
 import { useSubmissionStore } from "../store/useSubmissionStore";
 import Submission from "../components/Submission";
 import SubmissionsList from "../components/SubmissionList";
+import { use } from "react";
 
 const ProblemPage = () => {
 	const { id } = useParams();
 	const { getProblemById, problem, isProblemLoading } = useProblemStore();
+	const handle = useFullScreenHandle();
 
 	const {
 		submission: submissions,
@@ -38,9 +42,10 @@ const ProblemPage = () => {
 
 	const [code, setCode] = useState("");
 	const [activeTab, setActiveTab] = useState("description");
-	const [selectedLanguage, setSelectedLanguage] = useState("javascript");
+	const [selectedLanguage, setSelectedLanguage] = useState("JAVASCRIPT");
 	const [isBookmarked, setIsBookmarked] = useState(false);
 	const [testcases, setTestCases] = useState([]);
+	const [isFullscreen, setIsFullscreen] = useState(false);
 
 	const { executeCode, submission, isExecuting } = useExecutionStore();
 
@@ -70,8 +75,6 @@ const ProblemPage = () => {
 			getSubmissionForProblem(id);
 		}
 	}, [activeTab, id]);
-
-	console.log("submission", submissions);
 
 	const handleLanguageChange = (e) => {
 		const lang = e.target.value;
@@ -318,55 +321,89 @@ const ProblemPage = () => {
 						</div>
 					</div>
 
-					<div className="card bg-base-100 shadow-xl">
-						<div className="card-body p-0">
-							<div className="tabs tabs-bordered">
-								<button className="tab tab-active gap-2">
-									<Terminal className="w-4 h-4" />
-									Code Editor
-								</button>
-							</div>
-
-							<div className="h-[600px] w-full">
-								<Editor
-									height="100%"
-									language={selectedLanguage.toLowerCase()}
-									theme="vs-dark"
-									value={code}
-									onChange={(value) => setCode(value || "")}
-									options={{
-										minimap: { enabled: false },
-										fontSize: 20,
-										lineNumbers: "on",
-										roundedSelection: false,
-										scrollBeyondLastLine: false,
-										readOnly: false,
-										automaticLayout: true,
-									}}
-								/>
-							</div>
-
-							<div className="p-4 border-t border-base-300 bg-base-200">
-								<div className="flex justify-between items-center">
-									<button
-										className={`btn btn-primary gap-2 ${
-											isExecuting ? "loading" : ""
-										}`}
-										onClick={handleRunCode}
-										disabled={isExecuting}
-									>
-										{!isExecuting && (
-											<Play className="w-4 h-4" />
-										)}
-										Run Code
+					<FullScreen handle={handle}>
+						<div className={`card bg-base-100 shadow-xl `}>
+							<div className="card-body p-0">
+								<div className="tabs tabs-bordered">
+									<button className="tab tab-active gap-2">
+										<Terminal className="w-4 h-4" />
+										Code Editor
 									</button>
-									<button className="btn btn-success gap-2">
-										Submit Solution
-									</button>
+								</div>
+
+								<div
+									className={`${
+										isFullscreen
+											? "h-screen pb-16"
+											: "h-[600px]"
+									} p-4`}
+								>
+									<div className="flex justify-between items-center mb-2">
+										<h2 className="text-lg font-bold">
+											Code Editor
+										</h2>
+										<button
+											className="btn btn-sm btn-outline"
+											onClick={() => {
+												handle.active
+													? handle.exit()
+													: handle.enter();
+												setIsFullscreen(!isFullscreen);
+											}}
+										>
+											<FullscreenIcon className="w-4 h-4" />
+										</button>
+									</div>
+									<Editor
+										height="100%"
+										language={selectedLanguage.toLowerCase()}
+										theme="vs-dark"
+										value={code}
+										onChange={(value) =>
+											setCode(value || "")
+										}
+										options={{
+											minimap: { enabled: true },
+											fontSize: 15,
+											lineNumbers: "on",
+											roundedSelection: false,
+											scrollBeyondLastLine: false,
+											readOnly: false,
+											automaticLayout: true,
+											wordWrap: "on",
+											tabSize: 2,
+											insertSpaces: true,
+											quickSuggestions: true,
+											autoClosingBrackets: "always",
+											bracketPairColorization: {
+												enabled: true,
+											},
+										}}
+									/>
+								</div>
+
+								<div className="p-4 border-t border-base-300 bg-base-200">
+									<div className="flex justify-between items-center">
+										<button
+											className={`btn btn-primary gap-2 ${
+												isExecuting ? "loading" : ""
+											}`}
+											onClick={handleRunCode}
+											disabled={isExecuting}
+										>
+											{!isExecuting && (
+												<Play className="w-4 h-4" />
+											)}
+											Run Code
+										</button>
+										<button className="btn btn-success gap-2">
+											Submit Solution
+										</button>
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
+					</FullScreen>
 				</div>
 
 				<div className="card bg-base-100 shadow-xl mt-6">
