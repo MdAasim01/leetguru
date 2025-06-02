@@ -94,6 +94,36 @@ export const getPlayListDetails = async (req, res) => {
 	}
 };
 
+export const getUsersWithPlaylistAccess = async (req, res) => {
+	const { playlistId } = req.params;
+
+	try {
+		const accessList = await db.playlistAccess.findMany({
+			where: { playlistId },
+			include: {
+				user: {
+					select: {
+						id: true,
+						name: true,
+						email: true,
+						image: true,
+					},
+				},
+			},
+		});
+
+		const users = accessList.map((entry) => entry.user);
+
+		res.status(200).json({
+			success: true,
+			users,
+		});
+	} catch (error) {
+		console.error("Error fetching access list:", error);
+		res.status(500).json({ error: "Failed to fetch access list" });
+	}
+};
+
 export const addProblemToPlaylist = async (req, res) => {
 	const { playlistId } = req.params;
 	const { problemIds } = req.body; // Accept an array of problem IDs
@@ -193,11 +223,9 @@ export const removeProblemFromPlaylist = async (req, res) => {
 		});
 
 		if (!playlist || playlist.userId !== req.user.id) {
-			return res
-				.status(403)
-				.json({
-					error: "You are not authorized to modify this playlist",
-				});
+			return res.status(403).json({
+				error: "You are not authorized to modify this playlist",
+			});
 		}
 
 		const deletedProblem = await db.problemInPlaylist.deleteMany({
@@ -221,3 +249,114 @@ export const removeProblemFromPlaylist = async (req, res) => {
 		});
 	}
 };
+
+export const grantPlaylistAccess = async (req, res) => {
+	const { playlistId } = req.params;
+	const { userId } = req.body;
+
+	try {
+		// Validate input
+		if (!userId) {
+			return res
+				.status(400)
+				.json({ error: "Missing userId in request body" });
+		}
+
+		// Fetch playlist
+		const playlist = await db.playlist.findUnique({
+			where: { id: playlistId },
+		});
+
+		if (!playlist) {
+			return res.status(404).json({ error: "Playlist not found" });
+		}
+
+		// Check if current user is ADMIN
+		if (req.user.role !== "ADMIN") {
+			return res
+				.status(403)
+				.json({ error: "Only ADMINs can grant access" });
+		}
+
+		// Check if the current user is also the creator of the playlist
+		if (playlist.userId !== req.user.id) {
+			return res.status(403).json({
+				error: "Only the creator of the playlist can grant access",
+			});
+		}
+
+		// Prevent access control on public playlists
+		if (playlist.isPublic) {
+			return res.status(400).json({
+				error: "Access control is not needed for public playlists",
+			});
+		}
+
+		// Ensure target user exists
+		const user = await db.user.findUnique({ where: { id: userId } });
+		if (!user) {
+			return res.status(404).json({ error: "Target user not found" });
+		}
+
+		// Grant access using upsert to avoid duplicates
+		const access = await db.playlistAccess.upsert({
+			where: {
+				playlistId_userId: {
+					playlistId,
+					userId,
+				},
+			},
+			update: {},
+			create: {
+				playlistId,
+				userId,
+			},
+		});
+
+		res.status(200).json({
+			success: true,
+			message: "Access granted successfully",
+			access,
+		});
+	} catch (error) {
+		console.error("Error granting access:", error);
+		res.status(500).json({ error: "Internal server error" });
+	}
+};
+
+export const revokePlaylistAccess = async (req, res) => {
+	const { playlistId } = req.params;
+	const { userId } = req.body;
+
+	try {
+		if (!userId) {
+			return res
+				.status(400)
+				.json({ error: "Missing userId in request body" });
+		}
+
+		// Delete access entry
+		await db.playlistAccess.delete({
+			where: {
+				playlistId_userId: {
+					playlistId,
+					userId,
+				},
+			},
+		});
+
+		res.status(200).json({
+			success: true,
+			message: "Access revoked successfully",
+		});
+	} catch (error) {
+		console.error("Error revoking access:", error);
+
+		if (error.code === "P2025") {
+			return res.status(404).json({ error: "Access entry not found" });
+		}
+
+		res.status(500).json({ error: "Internal server error" });
+	}
+};
+
