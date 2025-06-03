@@ -30,6 +30,12 @@ model User {
   name      String?
   email     String   @unique
   image     String?
+  dob       DateTime?
+  bio       String?
+  website   String?
+  github    String?
+  linkedin  String?
+  twitter   String?
   role      UserRole @default(USER)
   password  String
   createdAt DateTime @default(now())
@@ -48,6 +54,7 @@ model Problem {
   description String
   difficulty  Difficulty
   tags        String[]
+  companies   String[]
   userId      String
   examples    Json
   constraints String

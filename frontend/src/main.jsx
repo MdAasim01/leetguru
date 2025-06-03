@@ -15,6 +15,7 @@ import ProfilePage from "./page/ProfilePage";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import ProblemSolvingPage from "./page/ProblemSolvingPage";
 import PlaylistsPage from "./page/PlaylistPage";
+import EditProfilePage from "./page/EditProfilePage";
 
 const router = createBrowserRouter([
 	{
@@ -58,6 +59,14 @@ const router = createBrowserRouter([
 				element: (
 					<ProtectedRoute authentication>
 						<ProfilePage />
+					</ProtectedRoute>
+				),
+			},
+			{
+				path: "edit-profile",
+				element: (
+					<ProtectedRoute authentication>
+						<EditProfilePage />
 					</ProtectedRoute>
 				),
 			},
