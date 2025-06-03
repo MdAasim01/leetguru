@@ -42,15 +42,15 @@ export function FormField({
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0 bg-neutral-800 border-neutral-700" align="start">
             <Calendar
-              mode="single"
+              mode="double"
               selected={value ? new Date(value) : null}
               onSelect={(date) => onChange({ target: { name: id, value: date ? format(date, "yyyy-MM-dd") : "" } })} // Ensure correct format for state
               initialFocus
-              className="text-neutral-200"
-              classNames={{
-                day_selected: "bg-blue-500 text-white hover:bg-blue-600 focus:bg-blue-600",
-                day_today: "text-blue-400",
-              }}
+              // className="text-neutral-200"
+              // classNames={{
+              //   day_selected: "bg-blue-500 text-white hover:bg-blue-600 focus:bg-blue-600",
+              //   day_today: "text-blue-400",
+              // }}
             />
           </PopoverContent>
         </Popover>
