@@ -1,0 +1,34 @@
+{
+  "id": "remove-element",
+  "title": "Remove Element",
+  "difficulty": "Easy",
+  "tags": ["Array", "Two Pointers"],
+  "description": "Given an integer array `nums` and an integer `val`, remove all occurrences of `val` in `nums` in-place. The order of the elements may be changed. Then return the number of elements in `nums` which are not equal to `val`.\n\nConsider the number of elements in `nums` which are not equal to `val` be `k`, to get accepted, you need to do the following things:\n\n- Change the array `nums` such that the first `k` elements of `nums` contain the elements which are not equal to `val`.\n- The remaining elements of `nums` are not important as well as the size of `nums`.\n- Return `k`.",
+  "examples": [
+    {
+      "id": 1,
+      "input": "nums = [3,2,2,3], val = 3",
+      "output": "2, nums = [2,2,_,_]",
+      "explanation": "Your function should return k = 2, with the first two elements of nums being 2. It does not matter what you leave beyond the returned k (hence the underscores)."
+    },
+    {
+      "id": 2,
+      "input": "nums = [0,1,2,2,3,0,4,2], val = 2",
+      "output": "5, nums = [0,1,4,0,3,_,_,_]",
+      "explanation": "Your function should return k = 5, with the first five elements of nums containing 0, 0, 1, 3, and 4. Note that the order of those five elements may be arbitrary. It does not matter what you leave beyond the returned k (hence the underscores)."
+    }
+  ],
+  "constraints": ["0 <= nums.length <= 100", "0 <= nums[i] <= 50", "0 <= val <= 100"],
+  "defaultCode": {
+    "c": "#include <stdio.h>\n\nint removeElement(int* nums, int numsSize, int val) {\n    int k = 0;\n    for (int i = 0; i < numsSize; i++) {\n        if (nums[i] != val) {\n            nums[k] = nums[i];\n            k++;\n        }\n    }\n    return k;\n}",
+    "javascript": "/**\n * @param {number[]} nums\n * @param {number} val\n * @return {number}\n */\nvar removeElement = function(nums, val) {\n    let k = 0;\n    for (let i = 0; i < nums.length; i++) {\n        if (nums[i] !== val) {\n            nums[k] = nums[i];\n            k++;\n        }\n    }\n    return k;\n};",
+    "python": "class Solution:\n    def removeElement(self, nums: List[int], val: int) -> int:\n        k = 0\n        for i in range(len(nums)):\n            if nums[i] != val:\n                nums[k] = nums[i]\n                k += 1\n        return k"
+  },
+  "testCases": [
+    { "id": "case1", "name": "Case 1", "input": "nums = [3,2,2,3], val = 3", "expectedOutput": "2" },
+    { "id": "case2", "name": "Case 2", "input": "nums = [0,1,2,2,3,0,4,2], val = 2", "expectedOutput": "5" },
+    { "id": "case3", "name": "Case 3", "input": "nums = [1], val = 1", "expectedOutput": "0" },
+    { "id": "case4", "name": "Case 4", "input": "nums = [1,2,3], val = 4", "expectedOutput": "3" },
+    { "id": "case5", "name": "Case 5", "input": "nums = [], val = 0", "expectedOutput": "0" }
+  ]
+}

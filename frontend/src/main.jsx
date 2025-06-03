@@ -11,7 +11,10 @@ import AdminRoute from "./components/AdminRoute";
 import AddProblem from "./page/AddProblem";
 import ProblemPage from "./page/ProblemPage";
 import LandingPage from "./page/LandingPage";
+import ProfilePage from "./page/ProfilePage";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import ProblemSolvingPage from "./page/ProblemSolvingPage";
+import PlaylistsPage from "./page/PlaylistPage";
 
 const router = createBrowserRouter([
 	{
@@ -51,6 +54,22 @@ const router = createBrowserRouter([
 				),
 			},
 			{
+				path: "profile",
+				element: (
+					<ProtectedRoute authentication>
+						<ProfilePage />
+					</ProtectedRoute>
+				),
+			},
+			{
+				path: "problem-solve",
+				element: (
+					<ProtectedRoute authentication>
+						<ProblemSolvingPage />
+					</ProtectedRoute>
+				),
+			},
+			{
 				path: "problem/:id",
 				element: (
 					<ProtectedRoute authentication>
@@ -63,6 +82,14 @@ const router = createBrowserRouter([
 				element: (
 					<AdminRoute>
 						<AddProblem />
+					</AdminRoute>
+				),
+			},
+			{
+				path: "playlists",
+				element: (
+					<AdminRoute>
+						<PlaylistsPage />
 					</AdminRoute>
 				),
 			},

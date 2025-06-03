@@ -10,6 +10,21 @@ const App = () => {
 	const { authUser, authStatus, setAuthUser, setAuthStatus } = useAuthStore();
 	const [isCheckingAuth, setIsCheckingAuth] = useState(true);
 
+
+
+	useEffect(() => {
+		const root = window.document.documentElement
+		if (!root.classList.contains("dark")) {
+			root.classList.add("dark")
+		}
+		// Optionally remove light theme if it was set by mistake or from previous state
+		if (root.classList.contains("light")) {
+			root.classList.remove("light")
+		}
+		// Persist for future visits if desired, though for preview this is enough
+		// localStorage.setItem("theme", "dark");
+	}, [])
+
 	useEffect(() => {
 		const check = async () => {
 			try {

@@ -7,7 +7,7 @@ import AddToPlaylistModal from "./AddToPlaylist";
 import CreatePlaylistModal from "./CreatePlaylistModal";
 import { usePlaylistStore } from "../store/usePlaylistStore";
 
-const ProblemsTable = ({ problems }) => {
+const ProblemTable = ({ problems }) => {
 	const { authUser } = useAuthStore();
 	const { onDeleteProblem } = useActions();
 	const { createPlaylist } = usePlaylistStore();
@@ -276,4 +276,4 @@ const ProblemsTable = ({ problems }) => {
 	);
 };
 
-export default ProblemsTable;
+export default ProblemTable;

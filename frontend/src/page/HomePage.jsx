@@ -2,7 +2,8 @@ import React, { useEffect } from "react";
 
 import { useProblemStore } from "../store/useProblemStore";
 import { Loader } from "lucide-react";
-import ProblemTable from "../components/ProblemTable";
+// import ProblemTable from "../components/ProblemTable";
+import ProblemsTable from "../components/problem-table/ProblemsTable";
 
 const HomePage = () => {
 	const { getAllProblems, problems, isProblemsLoading } = useProblemStore();
@@ -33,7 +34,10 @@ const HomePage = () => {
 			</p>
 
 			{problems.length > 0 ? (
-				<ProblemTable problems={problems} />
+				<>
+					{/* <ProblemTable problems={problems} /> */}
+					<ProblemsTable />
+				</>
 			) : (
 				<p className="mt-10 text-center text-lg font-semibold text-gray-500 dark:text-gray-400 z-10 border border-primary px-4 py-2 rounded-md border-dashed">
 					No problems found
