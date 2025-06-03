@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
 import { Loader } from "lucide-react";
+import { Navbar } from "./Landing2";
 
-const ProtectedRoute = ({ authentication = true, children }) => {
+const ProtectedRoute = ({ authentication = true, showHeader = true, children }) => {
 	const { authStatus } = useAuthStore();
 	const navigate = useNavigate();
 	const [isCheckingAuth, setIsCheckingAuth] = useState(true);
@@ -33,7 +34,12 @@ const ProtectedRoute = ({ authentication = true, children }) => {
 		);
 	}
 
-	return children;
+	return (
+		<>
+			{showHeader && <Navbar />}
+			{children}
+		</>
+	);
 };
 
 export default ProtectedRoute;

@@ -1,8 +1,9 @@
 import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
 import { Loader } from "lucide-react";
+import { Navbar } from "./Landing2";
 
-const AdminRoute = ({ children }) => {
+const AdminRoute = ({ children, showHeader = true, }) => {
 	const { authUser, isCheckingAuth } = useAuthStore();
 	const navigate = useNavigate();
 
@@ -18,7 +19,12 @@ const AdminRoute = ({ children }) => {
 		navigate("/");
 	}
 
-	return children;
+	return (
+		<>
+			{showHeader && <Navbar />}
+			{children}
+		</>
+	);
 };
 
 export default AdminRoute;

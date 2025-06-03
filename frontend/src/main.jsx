@@ -16,6 +16,7 @@ import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import ProblemSolvingPage from "./page/ProblemSolvingPage";
 import PlaylistsPage from "./page/PlaylistPage";
 import EditProfilePage from "./page/EditProfilePage";
+import NewLanding from "./page/NewLanding";
 
 const router = createBrowserRouter([
 	{
@@ -55,6 +56,14 @@ const router = createBrowserRouter([
 				),
 			},
 			{
+				path: "landing",
+				element: (
+					<ProtectedRoute authentication={false}>
+						<NewLanding />
+					</ProtectedRoute>
+				),
+			},
+			{
 				path: "profile",
 				element: (
 					<ProtectedRoute authentication>
@@ -73,7 +82,7 @@ const router = createBrowserRouter([
 			{
 				path: "problem-solve",
 				element: (
-					<ProtectedRoute authentication>
+					<ProtectedRoute authentication showHeader={false}>
 						<ProblemSolvingPage />
 					</ProtectedRoute>
 				),
