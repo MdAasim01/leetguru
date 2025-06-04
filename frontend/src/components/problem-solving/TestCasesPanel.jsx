@@ -54,9 +54,9 @@ export function TestCasesPanel({ testCases }) {
 
         <TabsContent value="testcases" className="flex-grow p-3 space-y-3 overflow-y-auto mt-0">
           <div className="flex space-x-2 mb-2">
-            {testCases.map((tc) => (
+            {testCases.map((tc, index) => (
               <Button
-                key={tc.id}
+                key={index}
                 variant={activeTestCaseId === tc.id ? "secondary" : "ghost"}
                 size="sm"
                 className={`text-xs h-7 px-2 ${activeTestCaseId === tc.id ? "bg-neutral-600 text-foreground" : "text-muted-foreground hover:bg-neutral-700 hover:text-foreground"}`}

@@ -5,39 +5,52 @@ import { Select, SelectTrigger, SelectValue, SelectItem, SelectContent } from "@
 import { Button } from "@/components/ui/button"
 import { Maximize, Minimize, Code, RefreshCcw, Bookmark, Play } from "lucide-react"
 import { FullScreen, useFullScreenHandle } from "react-full-screen"
+import toast from "react-hot-toast";
 
-const MonacoEditorPanel = ({ selectedLanguage, onLanguageChange, codeSnippets = {} }) => {
+const SUPPORTED_LANGUAGES = ["javascript", "python", "c"]
+
+const MonacoEditorPanel = ({
+  selectedLanguage = "javascript",
+  onLanguageChange,
+  codeSnippets = {},
+  onRunClick,
+  isExecuting = false,
+}) => {
   const [code, setCode] = useState("")
-  const [isExecuting, setIsExecuting] = useState(false)
   const fullscreenHandle = useFullScreenHandle()
   const editorRef = useRef(null)
 
   const normalizeLangKey = (lang) => lang?.toUpperCase() || "JAVASCRIPT"
 
-  // Set initial/default code when selectedLanguage changes
+  // Inject snippet when selectedLanguage or codeSnippets change
   useEffect(() => {
-    console.log("Selected language changed:", selectedLanguage)
-    console.log("Available code snippets:", codeSnippets);
-    
     const langKey = normalizeLangKey(selectedLanguage)
-    const snippet = codeSnippets[langKey] || ""
-    setCode(snippet)
+    const snippet = codeSnippets[langKey]
+    if (snippet !== undefined) {
+      setCode(snippet)
+    } else {
+      toast.error(`No snippet found for language: ${langKey}`);
+      setCode("")
+    }
   }, [selectedLanguage, codeSnippets])
 
-  // Track code manually if needed outside component
   const handleEditorChange = (val) => {
     setCode(val || "")
-  }
-
-  const handleRun = () => {
-    setIsExecuting(true)
-    // Placeholder: connect to executeCode store
-    setTimeout(() => setIsExecuting(false), 1500)
   }
 
   const handleReset = () => {
     const langKey = normalizeLangKey(selectedLanguage)
     setCode(codeSnippets[langKey] || "")
+  }
+
+  const handleRun = () => {
+    if (!code.trim()) {
+      toast.error("Please write some code before running.")
+      return
+    }
+    if (typeof onRunClick === "function") {
+      onRunClick(code, normalizeLangKey(selectedLanguage))
+    }
   }
 
   return (
@@ -57,9 +70,11 @@ const MonacoEditorPanel = ({ selectedLanguage, onLanguageChange, codeSnippets = 
                 <SelectValue placeholder="Language" />
               </SelectTrigger>
               <SelectContent className="bg-neutral-700 border-neutral-600 text-foreground">
-                <SelectItem value="javascript" className="text-xs">JavaScript</SelectItem>
-                <SelectItem value="python" className="text-xs">Python</SelectItem>
-                <SelectItem value="c" className="text-xs">C</SelectItem>
+                {SUPPORTED_LANGUAGES.map((lang) => (
+                  <SelectItem key={lang} value={lang} className="text-xs">
+                    {lang.charAt(0).toUpperCase() + lang.slice(1)}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
             <Button
@@ -117,4 +132,4 @@ const MonacoEditorPanel = ({ selectedLanguage, onLanguageChange, codeSnippets = 
   )
 }
 
-export default MonacoEditorPanel
+export { MonacoEditorPanel }
