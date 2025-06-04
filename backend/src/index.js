@@ -5,6 +5,7 @@ import problemRoutes from "./routes/problem.routes.js";
 import executionRoute from "./routes/executeCode.routes.js";
 import submissionRoutes from "./routes/submission.routes.js";
 import playlistRoutes from "./routes/playlist.routes.js";
+import userStatsRoutes from "./routes/profile.routes.js";
 
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -36,6 +37,7 @@ app.use("/api/v1/problems", problemRoutes);
 app.use("/api/v1/execute-code", executionRoute);
 app.use("/api/v1/submission", submissionRoutes);
 app.use("/api/v1/playlist", playlistRoutes);
+app.use("/api/v1/user-stats", userStatsRoutes);
 
 app.listen(process.env.PORT, () => {
 	console.log("Server is running on port 8080");
