@@ -4,6 +4,8 @@ import { Lightbulb, Tag } from "lucide-react"
 export function ProblemDescriptionPanel({ problem }) {
   if (!problem) return <div>Loading problem...</div>
 
+  const exampleEntries = Object.entries(problem.examples || {})
+
   return (
     <div className="p-5 space-y-6 overflow-y-auto h-full">
       <h1 className="text-2xl font-bold text-foreground">{problem.title}</h1>
@@ -39,9 +41,9 @@ export function ProblemDescriptionPanel({ problem }) {
         <p>{problem.description.split("\n\n")[3]}</p>
       </div>
 
-      {problem.examples.map((example) => (
-        <div key={example.id} className="space-y-1">
-          <h3 className="font-semibold text-foreground">Example {example.id}:</h3>
+      {exampleEntries.map(([lang, example], idx) => (
+        <div key={lang} className="space-y-1">
+          <h3 className="font-semibold text-foreground">Example ({lang}):</h3>
           <pre className="bg-muted/50 p-3 rounded-md text-xs text-muted-foreground whitespace-pre-wrap">
             <strong className="text-foreground">Input:</strong> {example.input}
             <br />
@@ -58,13 +60,14 @@ export function ProblemDescriptionPanel({ problem }) {
 
       <div>
         <h3 className="font-semibold text-foreground">Constraints:</h3>
-        <ul className="list-disc pl-5 text-sm text-muted-foreground">
+        {/* <ul className="list-disc pl-5 text-sm text-muted-foreground">
           {problem.constraints.map((constraint, index) => (
             <li key={index} className="prose prose-sm prose-invert">
               {constraint}
             </li>
           ))}
-        </ul>
+        </ul> */}
+        <code>{problem.constraints}</code>
       </div>
     </div>
   )
