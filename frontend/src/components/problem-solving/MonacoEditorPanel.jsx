@@ -10,15 +10,29 @@ import toast from "react-hot-toast";
 const SUPPORTED_LANGUAGES = ["javascript", "python", "c"]
 
 const MonacoEditorPanel = ({
+  code: externalCode,
+  onCodeChange,
   selectedLanguage = "javascript",
   onLanguageChange,
   codeSnippets = {},
   onRunClick,
   isExecuting = false,
 }) => {
-  const [code, setCode] = useState("")
+  // const [code, setCode] = useState("")
+  const [internalCode, setInternalCode] = useState("")
+  const code = externalCode !== undefined ? externalCode : internalCode
+  const setCode = onCodeChange || setInternalCode
+
   const fullscreenHandle = useFullScreenHandle()
   const editorRef = useRef(null)
+
+  useEffect(() => {
+    console.log("Code: ", code);
+    console.log("Selected Language: ", selectedLanguage);
+    console.log("Code Snippets: ", codeSnippets);
+
+
+  }, [])
 
   const normalizeLangKey = (lang) => lang?.toUpperCase() || "JAVASCRIPT"
 

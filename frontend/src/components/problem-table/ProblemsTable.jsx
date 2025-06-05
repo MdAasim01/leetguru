@@ -62,7 +62,7 @@ export default function ProblemsTable() {
   })
 
   return (
-    <div className="space-y-4 w-full">
+    <div className="space-y-4 w-full z-10">
       <DataTableToolbar table={table} />
       <div className="rounded-md border">
         <Table>

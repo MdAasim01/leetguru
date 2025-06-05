@@ -3,11 +3,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
 import { CheckSquare, CodeXml, Maximize, Play } from "lucide-react"
 
-export function TestCasesPanel({ testCases }) {
-  const [activeTestCaseId, setActiveTestCaseId] = useState(testCases[0]?.id || null)
+export function TestCasesPanel({ testCases = [], submission = null }) {
+  const [activeTestCaseId, setActiveTestCaseId] = useState(testCases?.[0]?.id || null)
   const [results, setResults] = useState({}) // Store results per test case
 
-  const activeTestCase = testCases.find((tc) => tc.id === activeTestCaseId)
+  const activeTestCase = testCases?.find((tc) => tc.id === activeTestCaseId)
 
   const handleRunTest = (testCaseId) => {
     // Mock running test
