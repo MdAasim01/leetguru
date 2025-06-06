@@ -23,25 +23,89 @@ export const createPlayList = async (req, res) => {
 	}
 };
 
+export const updatePlaylist = async (req, res) => {
+	const { playlistId } = req.params;
+	const { name, description } = req.body;
+
+	try {
+		// Fetch the playlist to validate ownership
+		const playlist = await db.playlist.findUnique({
+			where: { id: playlistId },
+		});
+
+		if (!playlist || playlist.userId !== req.user.id) {
+			return res.status(403).json({
+				error: "You are not authorized to update this playlist",
+			});
+		}
+
+		const updated = await db.playlist.update({
+			where: { id: playlistId },
+			data: {
+				...(name && { name }),
+				...(description && { description }),
+			},
+		});
+
+		res.status(200).json({
+			success: true,
+			message: "Playlist updated successfully",
+			playlist: updated,
+		});
+	} catch (error) {
+		console.error("Error updating playlist:", error.message);
+		res.status(500).json({ error: "Failed to update playlist" });
+	}
+};
+
 export const getPlayAllListDetails = async (req, res) => {
 	try {
-		const playLists = await db.playlist.findMany({
-			where: { userId: req.user.id },
+		const rawPlaylists = await db.playlist.findMany({
+			where: {
+				OR: [
+					{ userId: req.user.id },
+					{
+						accessList: {
+							some: { userId: req.user.id },
+						},
+					},
+				],
+			},
 			include: {
 				problems: {
 					include: {
-						problem: {
-							where: {
-								OR: [
-									{ isPublic: true },
-									{ userId: req.user.id },
-								],
+						problem: true, // Fetch full problem to filter later
+					},
+				},
+				accessList: {
+					include: {
+						user: {
+							select: {
+								id: true,
+								name: true,
+								image: true,
 							},
 						},
 					},
 				},
 			},
 		});
+
+		// Filter inaccessible (private) problems
+		const playLists = rawPlaylists.map((playlist) => ({
+			...playlist,
+			problem: playlist.problems
+				.filter(
+					(p) =>
+						p.problem?.isPublic || p.problem?.userId === req.user.id
+				)
+				.map((p) => p.problem),
+			sharedWith: playlist.accessList.map((entry) => ({
+				id: entry.user.id,
+				name: entry.user.name,
+				avatarUrl: entry.user.image || null,
+			})),
+		}));
 
 		res.status(200).json({
 			success: true,
@@ -359,4 +423,3 @@ export const revokePlaylistAccess = async (req, res) => {
 		res.status(500).json({ error: "Internal server error" });
 	}
 };
-

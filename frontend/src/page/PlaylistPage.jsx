@@ -1,10 +1,10 @@
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { CreatePlaylistModal } from "../components/playlists/CreatePlaylistModal"
 import { AddProblemsModal } from "../components/playlists/AddProblemsModal"
 import { SharePlaylistModal } from "../components/playlists/SharePlaylistModal"
 import { PlaylistCard } from "../components/playlists/PlaylistCard"
-import { initialPlaylistsData, allProblemsData, allUsersData, currentUserId } from "../data/playlist-mock-data"
+import { initialPlaylistsData, allUsersData } from "../data/playlist-mock-data"
 import { ListMusic, Plus, Users, FolderSymlink } from "lucide-react"
 import {
   AlertDialog,
@@ -16,105 +16,105 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
+import { useProblemStore } from "@/store/useProblemStore"
+import { usePlaylistStore } from "@/store/usePlaylistStore"
+import { useAuthStore } from "@/store/useAuthStore"
 
 export default function PlaylistsPage() {
-  const [playlists, setPlaylists] = useState(initialPlaylistsData)
 
-  const [showCreateModal, setShowCreateModal] = useState(false)
-  const [showAddProblemsModal, setShowAddProblemsModal] = useState(false)
-  const [showShareModal, setShowShareModal] = useState(false)
+  const {
+    playlists,
+    getAllPlaylists,
+    createPlaylist,
+    addProblemToPlaylist,
+    removeProblemFromPlaylist,
+    deletePlaylist,
+    grantAccessToPlaylist, revokeAccessFromPlaylist
+  } = usePlaylistStore();
 
-  const [selectedPlaylist, setSelectedPlaylist] = useState(null) // For AddProblems and Share modals
-  const [playlistToDelete, setPlaylistToDelete] = useState(null) // For delete confirmation
+  const { problems, getAllProblems } = useProblemStore();
+  const { authUser } = useAuthStore();
 
-  const myPlaylists = useMemo(() => playlists.filter((pl) => pl.ownerId === currentUserId), [playlists])
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showAddProblemsModal, setShowAddProblemsModal] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
+
+  const [selectedPlaylist, setSelectedPlaylist] = useState(null);
+  const [playlistToDelete, setPlaylistToDelete] = useState(null);
+
+  const myPlaylists = useMemo(
+    () => playlists.filter((pl) => pl.userId === authUser.id),
+    [playlists]
+  );
+
   const sharedPlaylists = useMemo(
-    () => playlists.filter((pl) => pl.ownerId !== currentUserId && pl.sharedWith.some((u) => u.id === currentUserId)),
-    [playlists],
-  )
+    () =>
+      playlists.filter(
+        (pl) =>
+          pl.userId !== authUser.id &&
+          pl.sharedWith?.some((u) => u.id === authUser.id)
+      ),
+    [playlists]
+  );
 
-  const handleCreatePlaylist = (newPlaylistData) => {
-    const newPlaylist = {
-      id: `pl-${Date.now()}-${Math.random().toString(16).slice(2)}`,
-      ownerId: currentUserId,
-      sharedWith: [
-        { id: currentUserId, name: "You (Owner)", avatarUrl: "/placeholder.svg?width=32&height=32&text=ME" },
-      ], // Owner is implicitly shared with
+  useEffect(() => {
+    getAllProblems();
+    getAllPlaylists();
+  }, [getAllProblems, getAllPlaylists]);
+
+  const handleCreatePlaylist = async (newPlaylistData) => {
+    const sharedWithOwner = [
+      {
+        id: authUser.id,
+        name: "You (Owner)",
+        avatarUrl: "/placeholder.svg?width=32&height=32&text=ME",
+      },
+    ];
+    await createPlaylist({
       ...newPlaylistData,
-    }
-    setPlaylists((prev) => [newPlaylist, ...prev])
-  }
+      userId: authUser.id,
+      sharedWith: sharedWithOwner,
+    });
+  };
 
   const handleOpenAddProblemsModal = (playlist) => {
-    setSelectedPlaylist(playlist)
-    setShowAddProblemsModal(true)
-  }
+    setSelectedPlaylist(playlist);
+    setShowAddProblemsModal(true);
+  };
 
-  const handleAddProblemsToPlaylist = (problemsToAdd) => {
-    if (!selectedPlaylist) return
-    setPlaylists((prev) =>
-      prev.map((pl) =>
-        pl.id === selectedPlaylist.id
-          ? {
-              ...pl,
-              problems: [
-                ...pl.problems,
-                ...problemsToAdd.filter((pNew) => !pl.problems.find((pOld) => pOld.id === pNew.id)),
-              ],
-            }
-          : pl,
-      ),
-    )
-  }
+  const handleAddProblemsToPlaylist = async (problemsToAdd) => {
+    if (!selectedPlaylist) return;
+    const problemIds = problemsToAdd.map((p) => p.id);
+    await addProblemToPlaylist(selectedPlaylist.id, problemIds);
+  };
 
-  const handleRemoveProblemFromPlaylist = (playlistId, problemId) => {
-    setPlaylists((prev) =>
-      prev.map((pl) =>
-        pl.id === playlistId ? { ...pl, problems: pl.problems.filter((p) => p.id !== problemId) } : pl,
-      ),
-    )
-  }
+  const handleRemoveProblemFromPlaylist = async (playlistId, problemId) => {
+    await removeProblemFromPlaylist(playlistId, [problemId]);
+  };
 
   const handleOpenShareModal = (playlist) => {
-    setSelectedPlaylist(playlist)
-    setShowShareModal(true)
-  }
+    setSelectedPlaylist(playlist);
+    setShowShareModal(true);
+  };
 
-  const handleShareWithUser = (userToShareWith) => {
-    if (!selectedPlaylist) return
-    setPlaylists((prev) =>
-      prev.map((pl) =>
-        pl.id === selectedPlaylist.id ? { ...pl, sharedWith: [...pl.sharedWith, userToShareWith] } : pl,
-      ),
-    )
-  }
+  const handleShareWithUser = async (userToShareWith) => {
+    if (!selectedPlaylist) return;
+    await grantAccessToPlaylist(selectedPlaylist.id, userToShareWith.id);
+  };
 
-  const handleRevokeUserAccess = (userIdToRevoke) => {
-    if (!selectedPlaylist) return
-    setPlaylists((prev) =>
-      prev.map((pl) =>
-        pl.id === selectedPlaylist.id
-          ? { ...pl, sharedWith: pl.sharedWith.filter((user) => user.id !== userIdToRevoke) }
-          : pl,
-      ),
-    )
-  }
+  const handleRevokeUserAccess = async (playlistId, userIdToRevoke) => {
+    await revokeAccessFromPlaylist(playlistId, userIdToRevoke);
+  };
 
   const confirmDeletePlaylist = (playlist) => {
-    setPlaylistToDelete(playlist)
-  }
+    setPlaylistToDelete(playlist);
+  };
 
-  const handleDeletePlaylist = () => {
-    if (!playlistToDelete) return
-    setPlaylists((prev) => prev.filter((pl) => pl.id !== playlistToDelete.id))
-    setPlaylistToDelete(null) // Close confirmation dialog
-  }
-
-  const handleViewPlaylistDetails = (playlist) => {
-    // For now, just log. In a real app, this might navigate to a dedicated playlist view page.
-    console.log("Viewing playlist:", playlist)
-    alert(`Viewing details for: ${playlist.name}\n(Implement navigation or detailed modal here)`)
-  }
+  const handleDeletePlaylist = async () => {
+    if (!playlistToDelete) return;
+    await deletePlaylist(playlistToDelete.id);
+    setPlaylistToDelete(null);
+  };
 
   return (
     <div className="min-h-screen bg-neutral-900 text-neutral-200 p-4 md:p-8">
@@ -143,7 +143,6 @@ export default function PlaylistsPage() {
                 onRemoveProblem={handleRemoveProblemFromPlaylist}
                 onDeletePlaylist={() => confirmDeletePlaylist(playlist)}
                 onSharePlaylist={() => handleOpenShareModal(playlist)}
-                onViewPlaylist={() => handleViewPlaylistDetails(playlist)}
               />
             ))}
           </div>
@@ -164,11 +163,10 @@ export default function PlaylistsPage() {
                 key={playlist.id}
                 playlist={playlist}
                 isOwner={false}
-                onViewPlaylist={() => handleViewPlaylistDetails(playlist)}
                 // Pass empty functions for actions not available to non-owners
-                onAddProblems={() => {}}
-                onRemoveProblem={() => {}}
-                onDeletePlaylist={() => {}}
+                onAddProblems={() => { }}
+                onRemoveProblem={() => { }}
+                onDeletePlaylist={() => { }}
                 onSharePlaylist={() => handleOpenShareModal(playlist)} // Allow viewing share status
               />
             ))}
@@ -183,17 +181,18 @@ export default function PlaylistsPage() {
         isOpen={showCreateModal}
         onClose={() => setShowCreateModal(false)}
         onCreatePlaylist={handleCreatePlaylist}
-        allProblems={allProblemsData}
+        allProblems={problems}
       />
       {selectedPlaylist && (
         <>
           <AddProblemsModal
             isOpen={showAddProblemsModal}
             onClose={() => setShowAddProblemsModal(false)}
-            onAddProblems={handleAddProblemsToPlaylist}
-            allProblems={allProblemsData}
-            existingProblemIds={selectedPlaylist.problems.map((p) => p.id)}
+            allProblems={problems}
+            existingProblemIds={selectedPlaylist?.problems.map((p) => p.problem.id) || []}
+            playlistId={selectedPlaylist?.id}
           />
+
           <SharePlaylistModal
             isOpen={showShareModal}
             onClose={() => setShowShareModal(false)}

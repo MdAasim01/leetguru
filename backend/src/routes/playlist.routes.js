@@ -10,12 +10,15 @@ import {
 	grantPlaylistAccess,
 	removeProblemFromPlaylist,
 	revokePlaylistAccess,
+	updatePlaylist,
 } from "../controllers/playlist.controller.js";
 import { canGrantAccessToPlaylist } from "../middlewares/playlist.middleware.js";
 
 const router = express.Router();
 
-router.get("/", authMiddleware, getPlayAllListDetails);
+router.get("/get-all-playlists", authMiddleware, getPlayAllListDetails);
+
+router.patch("/:playlistId/update", authMiddleware, updatePlaylist);
 
 router.get("/:playlistId", authMiddleware, getPlayListDetails);
 
@@ -26,7 +29,7 @@ router.post("/:playlistId/add-problem", authMiddleware, addProblemToPlaylist);
 router.delete("/:playlistId", authMiddleware, deletePlayList);
 
 router.get(
-	"/playlist/:playlistId/access",
+	"/:playlistId/get-access",
 	authMiddleware,
 	canGrantAccessToPlaylist,
 	getUsersWithPlaylistAccess
@@ -40,7 +43,7 @@ router.post(
 );
 
 router.delete(
-	"/:playlistId/access",
+	"/:playlistId/revoke-access",
 	authMiddleware,
 	canGrantAccessToPlaylist,
 	revokePlaylistAccess

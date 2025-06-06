@@ -106,9 +106,9 @@ const router = createBrowserRouter([
 			{
 				path: "playlists",
 				element: (
-					<AdminRoute>
+					<ProtectedRoute authentication>
 						<PlaylistsPage />
-					</AdminRoute>
+					</ProtectedRoute>
 				),
 			},
 		],

@@ -6,29 +6,41 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Badge } from "@/components/ui/badge"
 import { Search } from "lucide-react"
+import { usePlaylistStore } from "@/store/usePlaylistStore"
 
-export function AddProblemsModal({ isOpen, onClose, onAddProblems, allProblems, existingProblemIds }) {
+export function AddProblemsModal({ isOpen, onClose, allProblems, existingProblemIds, playlistId }) {
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedProblemIds, setSelectedProblemIds] = useState([])
 
+  const { addProblemToPlaylist } = usePlaylistStore()
+
   const availableProblems = useMemo(() => {
     return allProblems.filter(
-      (p) => !existingProblemIds.includes(p.id) && p.title.toLowerCase().includes(searchTerm.toLowerCase()),
+      (p) =>
+        !existingProblemIds.includes(p.id) &&
+        p.title.toLowerCase().includes(searchTerm.toLowerCase())
     )
   }, [allProblems, existingProblemIds, searchTerm])
 
   const handleToggleProblem = (problemId) => {
     setSelectedProblemIds((prev) =>
-      prev.includes(problemId) ? prev.filter((id) => id !== problemId) : [...prev, problemId],
+      prev.includes(problemId)
+        ? prev.filter((id) => id !== problemId)
+        : [...prev, problemId]
     )
   }
 
-  const handleSubmit = () => {
-    const problemsToAdd = allProblems.filter((p) => selectedProblemIds.includes(p.id))
-    onAddProblems(problemsToAdd)
-    setSelectedProblemIds([])
-    setSearchTerm("")
-    onClose()
+  const handleSubmit = async () => {
+    if (selectedProblemIds.length === 0) {
+      return onClose()
+    }
+
+    try {
+      await addProblemToPlaylist(playlistId, selectedProblemIds)
+      handleClose()
+    } catch (error) {
+      console.error("Failed to add problems:", error)
+    }
   }
 
   const handleClose = () => {
@@ -62,7 +74,10 @@ export function AddProblemsModal({ isOpen, onClose, onAddProblems, allProblems, 
           <ScrollArea className="h-[300px] border border-neutral-700 rounded-md p-2">
             {availableProblems.length > 0 ? (
               availableProblems.map((problem) => (
-                <div key={problem.id} className="flex items-center justify-between p-2 hover:bg-neutral-700/50 rounded">
+                <div
+                  key={problem.id}
+                  className="flex items-center justify-between p-2 hover:bg-neutral-700/50 rounded"
+                >
                   <div>
                     <label htmlFor={`add-problem-${problem.id}`} className="font-medium cursor-pointer">
                       {problem.title}
@@ -94,7 +109,9 @@ export function AddProblemsModal({ isOpen, onClose, onAddProblems, allProblems, 
                 </div>
               ))
             ) : (
-              <p className="text-center text-muted-foreground py-4">No more problems to add or match your search.</p>
+                <p className="text-center text-muted-foreground py-4">
+                  No more problems to add or match your search.
+                </p>
             )}
           </ScrollArea>
         </div>
@@ -109,7 +126,11 @@ export function AddProblemsModal({ isOpen, onClose, onAddProblems, allProblems, 
               Cancel
             </Button>
           </DialogClose>
-          <Button type="button" onClick={handleSubmit} className="bg-blue-600 hover:bg-blue-700">
+          <Button
+            type="button"
+            onClick={handleSubmit}
+            className="bg-blue-600 hover:bg-blue-700"
+          >
             Add Selected ({selectedProblemIds.length})
           </Button>
         </DialogFooter>

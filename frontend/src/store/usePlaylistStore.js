@@ -33,10 +33,36 @@ export const usePlaylistStore = create((set, get) => ({
 		}
 	},
 
+	updatePlaylistDetails: async (playlistId, updates) => {
+		try {
+			const response = await axiosInstance.patch(
+				`/playlist/${playlistId}/update`,
+				updates
+			);
+
+			set((state) => ({
+				playlists: state.playlists.map((pl) =>
+					pl.id === playlistId ? response.data.playlist : pl
+				),
+			}));
+
+			toast.success("Playlist updated successfully");
+			return response.data.playlist;
+		} catch (error) {
+			console.error("Error updating playlist:", error);
+			toast.error(
+				error.response?.data?.error || "Failed to update playlist"
+			);
+			throw error;
+		}
+	},
+
 	getAllPlaylists: async () => {
 		try {
 			set({ isLoading: true });
-			const response = await axiosInstance.get("/playlist");
+			const response = await axiosInstance.get(
+				"/playlist/get-all-playlists"
+			);
 			set({ playlists: response.data.playLists });
 		} catch (error) {
 			console.error("Error fetching playlists:", error);
@@ -119,6 +145,52 @@ export const usePlaylistStore = create((set, get) => ({
 			toast.error("Failed to delete playlist");
 		} finally {
 			set({ isLoading: false });
+		}
+	},
+
+	grantAccessToPlaylist: async (playlistId, userId) => {
+		try {
+			const response = await axiosInstance.post(
+				`/playlist/${playlistId}/access`,
+				{ userId }
+			);
+			toast.success("Access granted successfully");
+			return response.data.access;
+		} catch (error) {
+			console.error("Error granting playlist access:", error);
+			toast.error(
+				error.response?.data?.error || "Failed to grant access"
+			);
+			throw error;
+		}
+	},
+
+	revokeAccessFromPlaylist: async (playlistId, userId) => {
+		try {
+			await axiosInstance.delete(
+				`/playlist/${playlistId}/revoke-access`,
+				{ data: { userId } }
+			);
+			toast.success("Access revoked successfully");
+		} catch (error) {
+			console.error("Error revoking playlist access:", error);
+			toast.error(
+				error.response?.data?.error || "Failed to revoke access"
+			);
+			throw error;
+		}
+	},
+
+	getPlaylistAccessList: async (playlistId) => {
+		try {
+			const response = await axiosInstance.get(
+				`/playlist/${playlistId}/get-access`
+			);
+			return response.data.users;
+		} catch (error) {
+			console.error("Error fetching access list:", error);
+			toast.error("Failed to fetch access list");
+			return [];
 		}
 	},
 }));

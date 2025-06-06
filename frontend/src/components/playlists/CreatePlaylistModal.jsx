@@ -1,5 +1,9 @@
 import { useState, useMemo } from "react"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose } from "@/components/ui/dialog"
+import { usePlaylistStore } from "@/store/usePlaylistStore"
+import {
+  Dialog, DialogContent, DialogHeader, DialogTitle,
+  DialogFooter, DialogClose
+} from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -7,36 +11,58 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Badge } from "@/components/ui/badge"
 import { Search } from "lucide-react"
+import { currentUserId } from "@/data/playlist-mock-data"
 
-export function CreatePlaylistModal({ isOpen, onClose, onCreatePlaylist, allProblems }) {
+export function CreatePlaylistModal({ isOpen, onClose, allProblems }) {
   const [name, setName] = useState("")
   const [description, setDescription] = useState("")
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedProblemIds, setSelectedProblemIds] = useState([])
 
+  const { createPlaylist, addProblemToPlaylist } = usePlaylistStore()
+
   const availableProblems = useMemo(() => {
-    return allProblems.filter((p) => p.title.toLowerCase().includes(searchTerm.toLowerCase()))
+    return allProblems.filter((p) =>
+      p.title.toLowerCase().includes(searchTerm.toLowerCase())
+    )
   }, [allProblems, searchTerm])
 
   const handleToggleProblem = (problemId) => {
     setSelectedProblemIds((prev) =>
-      prev.includes(problemId) ? prev.filter((id) => id !== problemId) : [...prev, problemId],
+      prev.includes(problemId)
+        ? prev.filter((id) => id !== problemId)
+        : [...prev, problemId]
     )
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!name.trim()) {
       alert("Playlist name is required.")
       return
     }
-    const problemsForPlaylist = allProblems.filter((p) => selectedProblemIds.includes(p.id))
-    onCreatePlaylist({ name, description, problems: problemsForPlaylist })
-    // Reset form
-    setName("")
-    setDescription("")
-    setSelectedProblemIds([])
-    setSearchTerm("")
-    onClose()
+
+    try {
+      const newPlaylist = await createPlaylist({
+        name,
+        description,
+        ownerId: currentUserId,
+        sharedWith: [
+          {
+            id: currentUserId,
+            name: "You (Owner)",
+            avatarUrl: "/placeholder.svg?width=32&height=32&text=ME"
+          }
+        ]
+      })
+
+      if (selectedProblemIds.length > 0) {
+        await addProblemToPlaylist(newPlaylist.id, selectedProblemIds)
+      }
+
+      handleClose()
+    } catch (err) {
+      console.error("Error during playlist creation:", err)
+    }
   }
 
   const handleClose = () => {

@@ -11,6 +11,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { Link } from "react-router-dom"
+import { usePlaylistStore } from "@/store/usePlaylistStore"
+import { useState } from "react"
+import { EditPlaylistModal } from "./EditPlaylistModal"
 
 export function PlaylistCard({
   playlist,
@@ -19,8 +23,17 @@ export function PlaylistCard({
   onRemoveProblem,
   onDeletePlaylist,
   onSharePlaylist,
-  onViewPlaylist,
 }) {
+  const nestedProblems = playlist.problems?.map((p) => p.problem) || []
+
+  const [showEditModal, setShowEditModal] = useState(false)
+  const { updatePlaylistDetails } = usePlaylistStore()
+
+  const handleUpdate = async (updates) => {
+    await updatePlaylistDetails(playlist.id, updates)
+    setShowEditModal(false)
+  }
+
   return (
     <Card className="bg-neutral-800 border-neutral-700 text-foreground flex flex-col h-full">
       <CardHeader className="pb-3">
@@ -41,16 +54,11 @@ export function PlaylistCard({
                 <MoreVertical className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="bg-neutral-750 border-neutral-600 text-neutral-200">
-              <DropdownMenuItem onClick={onViewPlaylist} className="hover:!bg-neutral-600 focus:!bg-neutral-600">
-                <Eye className="mr-2 h-4 w-4" /> View Details
-              </DropdownMenuItem>
+            <DropdownMenuContent align="end" className="bg-neutral-700 shadow-2xs border-neutral-600 text-neutral-200">
               {isOwner && (
                 <>
                   <DropdownMenuItem
-                    onClick={() => {
-                      /* Edit playlist details */
-                    }}
+                    onClick={() => setShowEditModal(true)}
                     className="hover:!bg-neutral-600 focus:!bg-neutral-600"
                   >
                     <Edit3 className="mr-2 h-4 w-4" /> Edit Details
@@ -74,10 +82,11 @@ export function PlaylistCard({
           </DropdownMenu>
         </div>
       </CardHeader>
+
       <CardContent className="flex-grow overflow-hidden py-0">
-        <p className="text-xs text-neutral-500 mb-1">Problems ({playlist.problems.length})</p>
+        <p className="text-xs text-neutral-500 mb-1">Problems ({nestedProblems.length})</p>
         <ScrollArea className="h-[180px] border border-neutral-700 rounded-md">
-          {playlist.problems.length > 0 ? (
+          {nestedProblems.length > 0 ? (
             <Table className="text-xs">
               <TableHeader>
                 <TableRow className="border-neutral-700 hover:bg-transparent">
@@ -87,9 +96,13 @@ export function PlaylistCard({
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {playlist.problems.map((problem) => (
+                {nestedProblems.map((problem) => (
                   <TableRow key={problem.id} className="border-neutral-700 hover:bg-neutral-700/30">
-                    <TableCell className="font-medium py-1.5 px-2 truncate max-w-[150px]">{problem.title}</TableCell>
+                    <TableCell className="max-w-[150px] p-0">
+                      <Link to={`/problem/${problem.id}`} className="font-medium py-2.5 px-2 truncate">
+                        {problem.title}
+                      </Link>
+                    </TableCell>
                     <TableCell className="py-1.5 px-2">
                       <Badge
                         variant={
@@ -129,11 +142,21 @@ export function PlaylistCard({
           )}
         </ScrollArea>
       </CardContent>
+
       <CardFooter className="pt-3 pb-3 text-xs text-neutral-500">
         {isOwner
           ? "You own this playlist."
-          : `Shared by ${playlist.sharedWith.find((u) => u.id === playlist.ownerId)?.name || "another user"}.`}
+          : `Shared by ${playlist.sharedWith?.find((u) => u.id === playlist.userId)?.name || "another user"}.`}
       </CardFooter>
+      {showEditModal && (
+        <EditPlaylistModal
+          isOpen={showEditModal}
+          onClose={() => setShowEditModal(false)}
+          playlist={playlist}
+          onSubmit={handleUpdate}
+        />
+      )}
     </Card>
   )
 }
+

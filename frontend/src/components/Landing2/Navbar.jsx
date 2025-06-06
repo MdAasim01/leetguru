@@ -44,10 +44,19 @@ const Navbar = () => {
                 </span>
               </Link>
               <div className="hidden md:ml-10 md:flex md:space-x-8">
-                <a href="#features" className="text-gray-300 font-medium">Features</a>
-                <a href="#problems" className="text-gray-300 hover:text-white font-medium">Problems</a>
-                <a href="#testimonials" className="text-gray-300 hover:text-white font-medium">Testimonials</a>
-                <a href="#pricing" className="text-gray-300 hover:text-white font-medium">Pricing</a>
+                {!authUser ? (
+                  <>
+                    <a href="#features" className="text-gray-300 font-medium">Features</a>
+                    <a href="#problems" className="text-gray-300 hover:text-white font-medium">Problems</a>
+                    <a href="#testimonials" className="text-gray-300 hover:text-white font-medium">Testimonials</a>
+                    <a href="#pricing" className="text-gray-300 hover:text-white font-medium">Pricing</a>
+                  </>
+                ) : (
+                  <>
+                    <Link to="/all-problems" className="text-gray-300 hover:text-white font-medium">Problems</Link>
+                    <Link to="/playlists" className="text-gray-300 hover:text-white font-medium">Playlists</Link>
+                  </>
+                )}
               </div>
             </div>
             <div className="hidden md:flex items-center space-x-4">
