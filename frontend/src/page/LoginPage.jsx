@@ -129,7 +129,7 @@ const LoginPage = () => {
 						{/* Submit Button */}
 						<button
 							type="submit"
-							className="btn btn-primary w-full"
+							className="btn bg-primary text-slate-900 w-full"
 							disabled={isCheckingAuth}
 						>
 							{isCheckingAuth ? (
@@ -147,7 +147,7 @@ const LoginPage = () => {
 					<div className="text-center">
 						<p className="text-base-content/60">
 							Don't have an account?{" "}
-							<Link to="/signup" className="link link-primary">
+							<Link to="/signup" className="link text-primary">
 								Sign up
 							</Link>
 						</p>

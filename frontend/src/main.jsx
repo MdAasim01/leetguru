@@ -27,7 +27,7 @@ const router = createBrowserRouter([
 				path: "",
 				element: (
 					<ProtectedRoute authentication={false}>
-						<LandingPage />
+						<NewLanding />
 					</ProtectedRoute>
 				),
 			},

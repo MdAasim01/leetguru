@@ -1,39 +1,58 @@
-// Removed "use client"
-import React from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import {
-  flexRender,
+  useReactTable,
   getCoreRowModel,
   getFacetedRowModel,
   getFacetedUniqueValues,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  useReactTable,
+  flexRender,
 } from "@tanstack/react-table"
-
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
-import { sampleProblems } from "@/data/problem-data" // Updated import path
 import { getColumns } from "./columns"
 import { DataTableToolbar } from "./data-table-toolbar"
 import { cn } from "@/lib/utils"
+import { useAuthStore } from "../../store/useAuthStore"
 
-export default function ProblemsTable() {
-  const [data, setData] = React.useState(sampleProblems)
-  const [rowSelection, setRowSelection] = React.useState({})
-  const [columnVisibility, setColumnVisibility] = React.useState({})
-  const [columnFilters, setColumnFilters] = React.useState([])
-  const [sorting, setSorting] = React.useState([])
+export default function ProblemsTable({ problems }) {
+  const [data, setData] = useState([])
+  const [loading, setLoading] = useState(true)
 
-  const handleSolvedChange = (id, solved) => {
-    setData((prevData) => prevData.map((problem) => (problem.id === id ? { ...problem, solved } : problem)))
-    // If you want the "solved" checkbox to also control row selection:
-    // setRowSelection(prev => ({...prev, [id]: solved}));
-    // However, this might conflict if you use the header checkbox for "select all".
-    // The current `columns.jsx` links the solved checkbox to row.toggleSelected.
+  const [rowSelection, setRowSelection] = useState({})
+  const [columnVisibility, setColumnVisibility] = useState({})
+  const [columnFilters, setColumnFilters] = useState([])
+  const [sorting, setSorting] = useState([])
+
+  const { authUser } = useAuthStore()
+
+  const fetchProblems = async () => {
+    setLoading(true)
+    try {
+      const problemsWithSolved = problems?.map((p) => ({
+        ...p,
+        solved: p.solvedBy?.some((s) => s.userId === authUser?.id) ?? false,
+      }))
+      setData(problemsWithSolved)
+    } catch (err) {
+      console.error("Error fetching problems", err)
+    } finally {
+      setLoading(false)
+    }
   }
 
-  const columns = React.useMemo(() => getColumns(handleSolvedChange), [])
+  useEffect(() => {
+    fetchProblems()
+  }, [])
+
+  const handleSolvedChange = (id, solved) => {
+    setData((prev) =>
+      prev.map((p) => (p.id === id ? { ...p, solved } : p))
+    )
+  }
+
+  const columns = useMemo(() => getColumns(handleSolvedChange, authUser), [authUser])
 
   const table = useReactTable({
     data,
@@ -44,7 +63,7 @@ export default function ProblemsTable() {
       rowSelection,
       columnFilters,
     },
-    enableRowSelection: true, // Or (row) => row.original.someProperty to enable selection conditionally
+    enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -55,10 +74,6 @@ export default function ProblemsTable() {
     getSortedRowModel: getSortedRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
-    meta: {
-      // Pass any custom meta data to the table instance if needed by columns
-      // e.g. updateData: (rowIndex, columnId, value) => setData(...)
-    },
   })
 
   return (
@@ -81,7 +96,13 @@ export default function ProblemsTable() {
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {loading ? (
+              <TableRow>
+                <TableCell colSpan={columns.length} className="text-center">
+                  Loading...
+                </TableCell>
+              </TableRow>
+            ) : table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                   {row.getVisibleCells().map((cell) => {
@@ -96,18 +117,18 @@ export default function ProblemsTable() {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
-                  No results.
+                    <TableCell colSpan={columns.length} className="text-center h-24">
+                      No problems found.
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
       </div>
+
       <div className="flex items-center justify-between space-x-2 py-4">
         <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of {table.getFilteredRowModel().rows.length} row(s)
-          selected.
+          {table.getFilteredSelectedRowModel().rows.length} of {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>
         <div className="flex items-center space-x-2">
           <Button
@@ -118,7 +139,12 @@ export default function ProblemsTable() {
           >
             Previous
           </Button>
-          <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
             Next
           </Button>
         </div>

@@ -52,7 +52,7 @@ export function DataTableToolbar({ table }) {
                 checked={selectedTags.includes(tag)}
                 onCheckedChange={(checked) => {
                   const currentTags = selectedTags
-                  const newTags = checked ? [...currentTags, tag] : currentTags.filter((t) => t !== tag)
+                  const newTags = checked ? [...currentTags, tag.toLowerCase()] : currentTags.filter((t) => t !== tag.toLowerCase())
                   table.getColumn("tags")?.setFilterValue(newTags.length > 0 ? newTags : undefined)
                 }}
               >
@@ -98,8 +98,8 @@ export function DataTableToolbar({ table }) {
                 onCheckedChange={(checked) => {
                   const currentCompanies = selectedCompanies
                   const newCompanies = checked
-                    ? [...currentCompanies, company]
-                    : currentCompanies.filter((c) => c !== company)
+                    ? [...currentCompanies, company.toLowerCase()]
+                    : currentCompanies.filter((c) => c !== company.toLowerCase())
                   table.getColumn("companies")?.setFilterValue(newCompanies.length > 0 ? newCompanies : undefined)
                 }}
               >
@@ -135,7 +135,7 @@ export function DataTableToolbar({ table }) {
           <SelectContent>
             <SelectItem value="all">All Difficulties</SelectItem>
             {difficulties.map((difficulty) => (
-              <SelectItem key={difficulty} value={difficulty}>
+              <SelectItem key={difficulty} value={difficulty.toLowerCase()}>
                 {difficulty}
               </SelectItem>
             ))}

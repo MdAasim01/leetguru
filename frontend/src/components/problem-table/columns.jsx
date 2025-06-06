@@ -19,39 +19,24 @@ export const getColumns = (onSolvedChange) => [
     id: "solved",
     accessorKey: "solved",
     header: ({ table }) => (
-      <div className="flex items-center justify-center">
-        <Checkbox
-          checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
-          onCheckedChange={(value) => {
-            table.toggleAllPageRowsSelected(!!value)
-          }}
-          aria-label="Select all rows"
-          className="translate-y-[2px]"
-        />
-      </div>
+      <div className="flex items-center justify-center">Solved</div>
     ),
     cell: ({ row }) => (
       <div className="flex items-center justify-center">
         <Checkbox
           checked={row.original.solved}
-          onCheckedChange={(value) => {
-            onSolvedChange(row.original.id, !!value)
-            // Note: row.toggleSelected might not be needed if 'solved' directly controls selection state
-            // If you want 'solved' to also select the row for other batch actions, keep it.
-            // Otherwise, if 'solved' is independent of general row selection, you might remove this line.
-            row.toggleSelected(!!value)
-          }}
-          aria-label="Mark as solved"
-          className="translate-y-[2px]"
+          readOnly
+          className="pointer-events-none translate-y-[2px]"
         />
       </div>
     ),
     enableSorting: false,
     enableHiding: false,
     meta: {
-      className: "w-[50px] text-center",
+      className: "w-[60px] text-center",
     },
-  },
+  }
+  ,
   {
     accessorKey: "title",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Title" />,
@@ -78,8 +63,11 @@ export const getColumns = (onSolvedChange) => [
       )
     },
     filterFn: (row, id, value) => {
-      const tags = row.getValue(id)
-      return value.length === 0 || value.some((filterTag) => tags.includes(filterTag))
+      const tags = row.getValue(id)?.map((t) => t.toLowerCase()) || []
+      return (
+        value.length === 0 ||
+        value.some((filterTag) => tags.includes(filterTag.toLowerCase()))
+      )
     },
     meta: {
       className: "min-w-[150px]",
@@ -105,8 +93,11 @@ export const getColumns = (onSolvedChange) => [
       )
     },
     filterFn: (row, id, value) => {
-      const companies = row.getValue(id)
-      return value.length === 0 || value.some((filterCompany) => companies.includes(filterCompany))
+      const companies = row.getValue(id)?.map((c) => c.toLowerCase()) || []
+      return (
+        value.length === 0 ||
+        value.some((filterCompany) => companies.includes(filterCompany.toLowerCase()))
+      )
     },
     meta: {
       className: "min-w-[150px]",
@@ -134,7 +125,10 @@ export const getColumns = (onSolvedChange) => [
       return <div className={`font-medium ${colorClass}`}>{difficulty}</div>
     },
     filterFn: (row, id, value) => {
-      return value.length === 0 || value.includes(row.getValue(id))
+      return (
+        value.length === 0 ||
+        value.includes(row.getValue(id).toLowerCase())
+      )
     },
     meta: {
       className: "w-[100px]",

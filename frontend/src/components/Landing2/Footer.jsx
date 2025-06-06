@@ -9,10 +9,10 @@ const Footer = () => {
           <div className="lg:col-span-2">
             <div className="flex items-center">
               <div className="bg-emerald-500 w-8 h-8 rounded-lg flex items-center justify-center">
-                <span className="text-gray-900 font-bold text-xl">C</span>
+                <span className="text-gray-900 font-bold text-xl">LG</span>
               </div>
               <span className="ml-2 text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-cyan-400">
-                CodeCraft
+                LeetGuru
               </span>
             </div>
             <p className="mt-4 text-gray-400 max-w-md">
