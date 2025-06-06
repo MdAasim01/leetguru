@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { TooltipProvider } from "@/components/ui/tooltip" // Ensure Tooltip components are imported
 import { DataTableColumnHeader } from "./data-table-column-header"
+import { Link } from "react-router-dom"
 
 export const getColumns = (onSolvedChange) => [
   {
@@ -41,7 +42,16 @@ export const getColumns = (onSolvedChange) => [
     accessorKey: "title",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Title" />,
     cell: ({ row }) => {
-      return <div className="max-w-[300px] truncate font-medium">{row.getValue("title")}</div>
+      const id = row.original.id
+      const title = row.getValue("title")
+      return (
+        <Link
+          to={`/problem/${id}`}
+          className="max-w-[300px] truncate font-medium hover:underline text-primary"
+        >
+          {title}
+        </Link>
+      )
     },
     meta: {
       className: "min-w-[200px]",

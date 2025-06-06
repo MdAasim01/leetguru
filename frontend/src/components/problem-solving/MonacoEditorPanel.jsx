@@ -12,7 +12,7 @@ const SUPPORTED_LANGUAGES = ["javascript", "python", "c"]
 const MonacoEditorPanel = ({
   code: externalCode,
   onCodeChange,
-  selectedLanguage = "javascript",
+  selectedLanguage = "JAVASCRIPT",
   onLanguageChange,
   codeSnippets = {},
   onRunClick,
@@ -30,8 +30,6 @@ const MonacoEditorPanel = ({
     console.log("Code: ", code);
     console.log("Selected Language: ", selectedLanguage);
     console.log("Code Snippets: ", codeSnippets);
-
-
   }, [])
 
   const normalizeLangKey = (lang) => lang?.toUpperCase() || "JAVASCRIPT"

@@ -90,8 +90,8 @@ const router = createBrowserRouter([
 			{
 				path: "problem/:id",
 				element: (
-					<ProtectedRoute authentication>
-						<ProblemPage />
+					<ProtectedRoute authentication showHeader={false}>
+						<ProblemSolvingPage />
 					</ProtectedRoute>
 				),
 			},

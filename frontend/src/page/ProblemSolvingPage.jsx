@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
     ResizableHandle,
@@ -16,16 +16,26 @@ import {
     History,
     BarChart3,
     Loader2,
+    ArrowBigLeft,
+    ChevronLeft,
 } from "lucide-react";
 import { useExecutionStore } from "../store/useExecutionStore";
 import { useProblemStore } from "../store/useProblemStore";
 import toast from "react-hot-toast";
 import { getLanguageId } from "@/lib/lang";
+import { Chevron } from "react-day-picker";
+import SolutionsPanel from "@/components/problem-solving/SolutionsPanel";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Editor } from "@monaco-editor/react";
+import EditorialPanel from "@/components/problem-solving/EditorialPanel";
+import SubmissionsPanel from "@/components/problem-solving/SubmissionsPanel";
+import { useSubmissionStore } from "@/store/useSubmissionStore";
 
 export default function ProblemSolvingPage() {
     const { id } = useParams();
     const { getProblemById, problem, isProblemLoading } = useProblemStore();
-    const { executeCode, isExecuting, runResults, clearResults } =
+    const { submissionsByUser, getSubmissionForProblem } = useSubmissionStore();
+    const { executeCode, isExecuting, submission } =
         useExecutionStore();
 
     const [selectedLanguage, setSelectedLanguage] = useState("javascript");
@@ -34,7 +44,12 @@ export default function ProblemSolvingPage() {
 
     useEffect(() => {
         getProblemById(id);
+        getSubmissionForProblem(id);
     }, [id]);
+
+    useEffect(() => {
+        console.log("submission:", submission);
+    }, []);
 
     useEffect(() => {
         if (problem && selectedLanguage) {
@@ -77,19 +92,19 @@ export default function ProblemSolvingPage() {
             value: "editorial",
             label: "Editorial",
             icon: BookOpen,
-            content: <div className="p-4">Coming soon</div>,
+            content: <EditorialPanel editorial={problem?.editorial} />,
         },
         {
             value: "solutions",
             label: "Solutions",
             icon: FlaskConical,
-            content: <div className="p-4">Coming soon</div>,
+            content: <SolutionsPanel solutions={problem?.referenceSolutions} />,
         },
         {
             value: "submissions",
             label: "Submissions",
             icon: History,
-            content: <div className="p-4">Coming soon</div>,
+            content: <SubmissionsPanel submissions={submissionsByUser} />,
         },
         {
             value: "result",
@@ -97,8 +112,8 @@ export default function ProblemSolvingPage() {
             icon: BarChart3,
             content: (
                 <div className="p-4 space-y-4">
-                    {runResults?.length === 0 && <p>No results yet</p>}
-                    {runResults?.map((res, idx) => (
+                    {submission?.length === 0 && <p>No results yet</p>}
+                    {submission?.testCases?.map((res, idx) => (
                         <div
                             key={idx}
                             className="border border-neutral-700 rounded p-4"
@@ -137,46 +152,51 @@ export default function ProblemSolvingPage() {
 
     return (
         <div className="h-screen flex flex-col bg-neutral-900 text-neutral-300">
-            <header className="p-2 border-b border-neutral-700 shrink-0">
-                <span className="text-lg font-semibold text-white">
+            <header className="p-2 border-b border-neutral-700 shrink-0 flex items-center space-x-2">
+                <Link className="cursor-pointer border border-neutral-700 rounded p-1" to="/all-problems">
+                    <ChevronLeft className="mr-4 h-8 w-8" />
+                </Link>
+                <h5 className="text-lg font-semibold text-white">
                     Problem Arena: {problem?.title}
-                </span>
+                </h5>
             </header>
 
             <ResizablePanelGroup
                 direction="horizontal"
                 className="flex-grow min-h-0"
             >
-                <ResizablePanel defaultSize={40} minSize={25}>
-                    <div className="flex flex-col h-full bg-neutral-850">
-                        <Tabs
-                            value={activeMainTab}
-                            onValueChange={setActiveMainTab}
-                            className="flex-grow flex flex-col"
-                        >
-                            <TabsList className="bg-neutral-850 border-b border-neutral-700 rounded-none p-0 justify-start shrink-0">
+                <ResizablePanel defaultSize={40} minSize={25} overflow="auto">
+                    <ScrollArea className="h-full">
+                        <div className="flex flex-col h-full bg-neutral-850">
+                            <Tabs
+                                value={activeMainTab}
+                                onValueChange={setActiveMainTab}
+                                className="flex-grow flex flex-col"
+                            >
+                                <TabsList className=" sticky top-0 z-2 bg-neutral-800 border-b border-neutral-700 rounded-none p-0 justify-start shrink-0">
+                                    {mainTabs.map((tab) => (
+                                        <TabsTrigger
+                                            key={tab.value}
+                                            value={tab.value}
+                                            className="text-xs px-3 py-2.5 data-[state=active]:bg-neutral-900 data-[state=active]:text-white data-[state=active]:border-b-2 data-[state=active]:border-blue-500 rounded-none text-neutral-400 hover:text-white"
+                                        >
+                                            <tab.icon className="mr-1.5 h-4 w-4" />{" "}
+                                            {tab.label}
+                                        </TabsTrigger>
+                                    ))}
+                                </TabsList>
                                 {mainTabs.map((tab) => (
-                                    <TabsTrigger
+                                    <TabsContent
                                         key={tab.value}
                                         value={tab.value}
-                                        className="text-xs px-3 py-2.5 data-[state=active]:bg-neutral-700 data-[state=active]:text-white data-[state=active]:border-b-2 data-[state=active]:border-blue-500 rounded-none text-neutral-400 hover:text-white"
+                                        className="flex-grow overflow-y-auto mt-0 h-full"
                                     >
-                                        <tab.icon className="mr-1.5 h-4 w-4" />{" "}
-                                        {tab.label}
-                                    </TabsTrigger>
+                                        {tab.content}
+                                    </TabsContent>
                                 ))}
-                            </TabsList>
-                            {mainTabs.map((tab) => (
-                                <TabsContent
-                                    key={tab.value}
-                                    value={tab.value}
-                                    className="flex-grow overflow-y-auto mt-0 h-full"
-                                >
-                                    {tab.content}
-                                </TabsContent>
-                            ))}
-                        </Tabs>
-                    </div>
+                            </Tabs>
+                        </div>
+                    </ScrollArea>
                 </ResizablePanel>
 
                 <ResizableHandle
@@ -209,11 +229,8 @@ export default function ProblemSolvingPage() {
                         <ResizablePanel defaultSize={35} minSize={20}>
                             <div className="p-2 h-full">
                                 <TestCasesPanel
-                                    testCases={problem?.testCases}
-                                    submission={{
-                                        stdout: runResults?.map(r => r.stdout),
-                                        status: runResults?.map(r => r.status)
-                                    }}
+                                    testCases={problem?.testcases}
+                                    submission={submission}
                                 />
                             </div>
                         </ResizablePanel>
