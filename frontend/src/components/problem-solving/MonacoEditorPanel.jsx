@@ -26,11 +26,11 @@ const MonacoEditorPanel = ({
   const fullscreenHandle = useFullScreenHandle()
   const editorRef = useRef(null)
 
-  useEffect(() => {
-    console.log("Code: ", code);
-    console.log("Selected Language: ", selectedLanguage);
-    console.log("Code Snippets: ", codeSnippets);
-  }, [])
+  // useEffect(() => {
+  //   console.log("Code: ", code);
+  //   console.log("Selected Language: ", selectedLanguage);
+  //   console.log("Code Snippets: ", codeSnippets);
+  // }, [])
 
   const normalizeLangKey = (lang) => lang?.toUpperCase() || "JAVASCRIPT"
 
@@ -97,9 +97,9 @@ const MonacoEditorPanel = ({
             >
               <RefreshCcw className="h-4 w-4" />
             </Button>
-            <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground">
+            {/* <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground">
               <Bookmark className="h-4 w-4" />
-            </Button>
+            </Button> */}
             <Button
               variant="ghost"
               size="icon"
