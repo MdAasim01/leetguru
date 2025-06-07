@@ -104,7 +104,11 @@ export default function ProblemsTable({ problems }) {
               </TableRow>
             ) : table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"} className={
+                  row.original?.tags?.includes("demo")
+                    ? "bg-yellow-100 dark:bg-yellow-900"
+                    : ""
+                }>
                   {row.getVisibleCells().map((cell) => {
                     const meta = cell.column.columnDef.meta
                     return (

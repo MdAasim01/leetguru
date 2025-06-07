@@ -70,7 +70,7 @@ const AddToPlaylistModal = ({ isOpen, onClose, problemId }) => {
 						</button>
 						<button
 							type="submit"
-							className="btn btn-primary"
+							className="btn bg-primary"
 							disabled={!selectedPlaylist || isLoading}
 						>
 							{isLoading ? (

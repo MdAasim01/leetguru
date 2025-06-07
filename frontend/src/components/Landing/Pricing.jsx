@@ -36,7 +36,7 @@ const PricingCard = ({ title, price, features, popular, delay }) => (
         </ul>
 
         <motion.button
-            className={`btn w-full ${popular ? 'btn-primary' : 'btn-outline'}`}
+            className={`btn w-full ${popular ? 'bg-primary' : 'btn-outline'}`}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
         >

@@ -47,7 +47,7 @@ const BulkProblemUploader = () => {
 				Problems uploaded: {currentIndex} / {problems.length}
 			</p>
 			<button
-				className="btn btn-primary"
+				className="btn bg-primary"
 				onClick={handleSubmitProblem}
 				disabled={isLoading || currentIndex >= problems.length}
 			>

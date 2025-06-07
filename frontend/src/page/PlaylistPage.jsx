@@ -122,7 +122,7 @@ export default function PlaylistsPage() {
         <h1 className="text-3xl font-bold flex items-center text-neutral-100 mb-4 sm:mb-0">
           <ListMusic className="mr-3 h-8 w-8 text-blue-500" /> Playlists
         </h1>
-        <Button onClick={() => setShowCreateModal(true)} className="bg-blue-600 hover:bg-blue-700 text-white">
+        <Button onClick={() => setShowCreateModal(true)} className="bg-primary hover:bg-primary/80 text-slate-800">
           <Plus className="mr-2 h-4 w-4" /> Create New Playlist
         </Button>
       </header>

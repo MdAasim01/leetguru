@@ -75,7 +75,7 @@ export default function ProblemSolvingPage() {
                 id
             );
             toast.success("Code executed successfully");
-            setActiveMainTab("result");
+            setActiveMainTab("feedback");
         } catch (err) {
             toast.error("Code execution failed");
         }
@@ -107,12 +107,12 @@ export default function ProblemSolvingPage() {
             content: <SubmissionsPanel submissions={submissionsByUser} />,
         },
         {
-            value: "result",
-            label: "Result",
+            value: "feedback",
+            label: "Feedback",
             icon: BarChart3,
             content: (
                 <div className="p-4 space-y-4">
-                    {submission?.length === 0 && <p>No results yet</p>}
+                    {submission?.length === 0 && <p>No Feedback yet</p>}
                     {submission?.testCases?.map((res, idx) => (
                         <div
                             key={idx}
@@ -231,6 +231,7 @@ export default function ProblemSolvingPage() {
                                 <TestCasesPanel
                                     testCases={problem?.testcases}
                                     submission={submission}
+                                    forceTab={submission ? "results" : "testcases"}
                                 />
                             </div>
                         </ResizablePanel>

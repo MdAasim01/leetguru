@@ -1,28 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { StatsSection } from '../components/profile/StatsSection';
-import { StreakCalendar } from '../components/profile/StreakCalendar';
-import { RankingSection } from '../components/profile/RankingSection';
-import { ProblemList } from '../components/profile/ProblemList';
-import { User, CalendarDays, Edit3 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import axios from 'axios';
-import { axiosInstance } from '@/lib/axios';
+import { StatsSection } from "../components/profile/StatsSection";
+import { StreakCalendar } from "../components/profile/StreakCalendar";
+import { RankingSection } from "../components/profile/RankingSection";
+import { ProblemList } from "../components/profile/ProblemList";
+import { CalendarDays, Edit3, Copy } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { axiosInstance } from "@/lib/axios";
+import { Link } from "react-router-dom";
+import { useAuthStore } from "@/store/useAuthStore";
+import toast from "react-hot-toast";
 
 export default function ProfilePage() {
-  const [username, setUsername] = useState("Loading...");
-  const [avatarUrl, setAvatarUrl] = useState("/placeholder.svg");
-  const [joinDate, setJoinDate] = useState("2023-01-01");
+  const { authUser } = useAuthStore();
   const [stats, setStats] = useState(null);
   const [streak, setStreak] = useState(null);
   const [ranking, setRanking] = useState(null);
   const [solvedProblems, setSolvedProblems] = useState([]);
   const [submissions, setSubmissions] = useState([]);
 
+  const username = authUser?.name || "User";
+  const avatarUrl = authUser?.image || "/placeholder.svg";
+  const joinDate = authUser?.createdAt || "2023-01-01";
+
   useEffect(() => {
-    // Ideally all these calls should be in a try/catch or useSWR/tanstack-query
     const fetchData = async () => {
       try {
         const [
@@ -33,12 +35,12 @@ export default function ProfilePage() {
           solvedRes,
           rankRes,
         ] = await Promise.all([
-          axiosInstance.get('/user-stats/activity-summary'),
-          axiosInstance.get('/user-stats/overview'),
-          axiosInstance.get('/user-stats/solved-difficulty'),
-          axiosInstance.get('/user-stats/solved-language'),
-          axiosInstance.get('/user-stats/solved-details'),
-          axiosInstance.get('/user-stats/rank'),
+          axiosInstance.get("/user-stats/activity-summary"),
+          axiosInstance.get("/user-stats/overview"),
+          axiosInstance.get("/user-stats/solved-difficulty"),
+          axiosInstance.get("/user-stats/solved-language"),
+          axiosInstance.get("/user-stats/solved-details"),
+          axiosInstance.get("/user-stats/rank"),
         ]);
 
         const activity = activityRes.data.data;
@@ -48,11 +50,6 @@ export default function ProfilePage() {
         const solved = solvedRes.data.data;
         const rank = rankRes.data.data;
 
-        setUsername("CodeNinja27"); // Ideally from auth/user endpoint
-        setJoinDate("2023-01-15");
-        setAvatarUrl("/placeholder.svg");
-
-        // === STATS ===
         const colorMap = {
           JavaScript: "bg-yellow-400",
           Python: "bg-blue-400",
@@ -78,7 +75,6 @@ export default function ProfilePage() {
           acceptanceRate: parseFloat(statsData.acceptanceRate),
         });
 
-        // === STREAK ===
         const contributions = {};
         activity.activityGraph.forEach(({ date, count }) => {
           contributions[date] = count;
@@ -91,25 +87,22 @@ export default function ProfilePage() {
           totalActiveDays: activity.totalActiveDays,
         });
 
-        // === RANKING ===
         setRanking({
           currentUserRank: rank.rank,
           totalUsers: rank.totalUsers,
           percentile: parseFloat(rank.percentile),
         });
 
-        // === SOLVED PROBLEMS (mock style) ===
         setSolvedProblems(
           solved.map((s, i) => ({
             id: `sp-${i}`,
             title: s.title,
-            difficulty: "Unknown", // Add if you store it; otherwise remove
+            difficulty: s.difficulty || "Unknown",
             tags: [],
             solvedDate: new Date(s.date).toISOString().split("T")[0],
           }))
         );
 
-        // === SUBMISSIONS (mock style) ===
         setSubmissions(
           solved.map((s, i) => ({
             id: `sub-${i}`,
@@ -129,9 +122,14 @@ export default function ProfilePage() {
     fetchData();
   }, []);
 
+
+  const handleCopyUserId = () => {
+    navigator.clipboard.writeText(authUser.id);
+    toast.success("User ID copied to clipboard");
+  };
+
   return (
     <div className="container mx-auto p-4 md:p-6 lg:p-8 space-y-8">
-      {/* Profile Header */}
       <Card>
         <CardContent className="pt-6 flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6">
           <Avatar className="h-24 w-24 md:h-32 md:w-32 border-2 border-primary">
@@ -140,18 +138,30 @@ export default function ProfilePage() {
           </Avatar>
           <div className="flex-grow text-center md:text-left">
             <h1 className="text-3xl md:text-4xl font-bold">{username}</h1>
+            <p className="text-sm text-neutral-400 flex items-center justify-center md:justify-start mt-1">
+              @{authUser.id}
+              <button
+                onClick={handleCopyUserId}
+                className="ml-2 hover:text-white text-neutral-500"
+                title="Copy user ID"
+              >
+                <Copy className="w-4 h-4" />
+              </button>
+            </p>
+
             <p className="text-muted-foreground flex items-center justify-center md:justify-start">
               <CalendarDays className="mr-2 h-4 w-4" />
               Joined on {new Date(joinDate).toLocaleDateString()}
             </p>
           </div>
           <Button variant="outline">
-            <Edit3 className="mr-2 h-4 w-4" /> Edit Profile
+            <Link to="/edit-profile" className="flex items-center space-x-2">
+              <Edit3 className="mr-2 h-4 w-4" /> Edit Profile
+            </Link>
           </Button>
         </CardContent>
       </Card>
 
-      {/* Main Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-1 space-y-6">
           {stats && <StatsSection stats={stats} />}

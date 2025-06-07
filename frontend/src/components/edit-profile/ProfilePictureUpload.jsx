@@ -13,7 +13,7 @@ export function ProfilePictureUpload({ currentAvatarUrl, onAvatarChange }) {
       const reader = new FileReader()
       reader.onloadend = () => {
         setPreviewUrl(reader.result)
-        onAvatarChange(reader.result) // In a real app, this would be the file object or upload logic
+        onAvatarChange(file, reader.result) // ✅ send file and preview
       }
       reader.readAsDataURL(file)
     }
@@ -27,10 +27,7 @@ export function ProfilePictureUpload({ currentAvatarUrl, onAvatarChange }) {
     <div className="flex flex-col items-center space-y-3">
       <Avatar className="h-32 w-32 border-2 border-neutral-600">
         <AvatarImage src={previewUrl || "/placeholder.svg"} alt="User Avatar" />
-        <AvatarFallback className="text-4xl bg-neutral-700 text-neutral-400">
-          {/* Fallback logic can be improved, e.g., initials from name */}
-          CN
-        </AvatarFallback>
+        <AvatarFallback className="text-4xl bg-neutral-700 text-neutral-400">CN</AvatarFallback>
       </Avatar>
       <input
         type="file"

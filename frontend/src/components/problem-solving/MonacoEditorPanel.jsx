@@ -7,7 +7,7 @@ import { Maximize, Minimize, Code, RefreshCcw, Bookmark, Play } from "lucide-rea
 import { FullScreen, useFullScreenHandle } from "react-full-screen"
 import toast from "react-hot-toast";
 
-const SUPPORTED_LANGUAGES = ["javascript", "python", "c"]
+const SUPPORTED_LANGUAGES = ["javascript", "python", "java"]
 
 const MonacoEditorPanel = ({
   code: externalCode,

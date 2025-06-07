@@ -70,7 +70,7 @@ const Navbar = () => {
 						Sign In
 					</Link>
 					<motion.button
-						className="btn btn-primary"
+						className="btn bg-primary"
 						whileHover={{ scale: 1.05 }}
 						whileTap={{ scale: 0.95 }}
 					>

@@ -620,7 +620,7 @@ const CreateProblemForm = () => {
 							Create Problem
 						</h2>
 
-						<div className="flex flex-col md:flex-row gap-3 mt-4 md:mt-0">
+						{/* <div className="flex flex-col md:flex-row gap-3 mt-4 md:mt-0">
 							<div className="join">
 								<button
 									type="button"
@@ -651,7 +651,7 @@ const CreateProblemForm = () => {
 								<Download className="w-4 h-4" />
 								Load Sample
 							</button>
-						</div>
+						</div> */}
 
 					</div>
 
@@ -735,7 +735,7 @@ const CreateProblemForm = () => {
 								</h3>
 								<button
 									type="button"
-									className="btn btn-primary btn-sm"
+									className="btn bg-primary btn-sm"
 									onClick={() => appendTag("")}
 								>
 									<Plus className="w-4 h-4 mr-1" /> Add Tag
@@ -782,7 +782,7 @@ const CreateProblemForm = () => {
 								</h3>
 								<button
 									type="button"
-									className="btn btn-primary btn-sm"
+									className="btn bg-primary btn-sm"
 									onClick={() => appendCompany("")}
 								>
 									<Plus className="w-4 h-4 mr-1" /> Add Company
@@ -820,7 +820,7 @@ const CreateProblemForm = () => {
 								</h3>
 								<button
 									type="button"
-									className="btn btn-primary btn-sm"
+									className="btn bg-primary btn-sm"
 									onClick={() =>
 										appendTestCase({
 											input: "",
@@ -1201,7 +1201,6 @@ const CreateProblemForm = () => {
 							</div>
 						</div>
 
-						// Inside your form JSX
 						{authUser.role === "ADMIN" && (
 							<Controller
 								name="isPublic"
@@ -1230,7 +1229,7 @@ const CreateProblemForm = () => {
 						<div className="card-actions justify-end pt-4 border-t">
 							<button
 								type="submit"
-								className="btn btn-primary btn-lg gap-2"
+								className="btn bg-primary btn-lg gap-2"
 							>
 								{isLoading ? (
 									<span className="loading loading-spinner text-white"></span>

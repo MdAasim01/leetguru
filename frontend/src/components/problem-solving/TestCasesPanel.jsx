@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import {
   CheckCircle2,
   XCircle,
@@ -9,11 +9,15 @@ import {
 } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-export function TestCasesPanel({ testCases = [], submission = null }) {
-  const [activeTab, setActiveTab] = useState("testcases")
+export function TestCasesPanel({ testCases = [], submission = null, forceTab = "testcases" }) {
+  const [activeTab, setActiveTab] = useState(forceTab || "testcases");
 
   const memoryArr = submission ? JSON.parse(submission.memory || "[]") : []
   const timeArr = submission ? JSON.parse(submission.time || "[]") : []
+
+  useEffect(() => {
+    setActiveTab("results");
+  }, [forceTab]);
 
   const avgMemory =
     memoryArr.length > 0
@@ -31,7 +35,7 @@ export function TestCasesPanel({ testCases = [], submission = null }) {
 
   return (
     <div className="bg-neutral-800 rounded-lg flex flex-col h-full">
-      <Tabs defaultValue="testcases" className="flex flex-col h-full" onValueChange={setActiveTab}>
+      <Tabs value={activeTab} className="flex flex-col h-full" onValueChange={setActiveTab}>
         {/* Tabs Header */}
         <div className="flex items-center justify-between p-2 border-b border-neutral-700">
           <TabsList className="bg-neutral-800 p-0">

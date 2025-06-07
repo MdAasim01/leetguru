@@ -1,42 +1,78 @@
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from "@/components/ui/card"
-import { ProfilePictureUpload } from "../components/edit-profile/ProfilePictureUpload"
-import { FormField } from "../components/edit-profile/FormField"
-import { User, Mail, Info, LinkIcon, Github, Linkedin, TwitterIcon } from "lucide-react"
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from "@/components/ui/card";
+import { ProfilePictureUpload } from "../components/edit-profile/ProfilePictureUpload";
+import { FormField } from "../components/edit-profile/FormField";
+import { User, Mail, Info, LinkIcon, Github, Linkedin, TwitterIcon } from "lucide-react";
+import { useAuthStore } from "@/store/useAuthStore";
+import toast from "react-hot-toast";
 
 export default function EditProfilePage() {
-  const [profileData, setProfileData] = useState({
-  name: "Code Ninja",
-  email: "codeninja@example.com",
-  avatarUrl: "/placeholder.svg?width=128&height=128&text=CN",
-  dob: "", // YYYY-MM-DD format
-  bio: "Passionate full-stack developer, open-source enthusiast, and lifelong learner. Always exploring new technologies and building cool stuff.",
-  website: "https://codeninja.dev",
-  github: "https://github.com/codeninja",
-  linkedin: "https://linkedin.com/in/codeninja",
-  twitter: "https://twitter.com/codeninja_dev",
-})
-  const [avatarPreview, setAvatarPreview] = useState("/placeholder.svg?width=128&height=128&text=CN")
+  const { authUser, updateProfile } = useAuthStore();
+  const [profileData, setProfileData] = useState(null);
+  const [avatarPreview, setAvatarPreview] = useState(null);
+  const [avatarFile, setAvatarFile] = useState(null); // Track file
+
+  useEffect(() => {
+    if (authUser) {
+      setProfileData({
+        name: authUser?.name || "",
+        email: authUser?.email || "",
+        dob: authUser?.dob?.split("T")[0] || "",
+        bio: authUser?.bio || "",
+        website: authUser?.website || "",
+        github: authUser?.github || "",
+        linkedin: authUser?.linkedin || "",
+        twitter: authUser?.twitter || "",
+      });
+      setAvatarPreview(authUser?.image || "/placeholder.svg");
+    }
+  }, [authUser]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target
-    setProfileData((prev) => ({ ...prev, [name]: value }))
-  }
+    const { name, value } = e.target;
+    setProfileData((prev) => ({ ...prev, [name]: value }));
+  };
 
-  const handleAvatarChange = (newAvatarDataUrl) => {
-    // In a real app, you'd handle file upload here.
-    // For now, we just update the preview and a mock data URL in state.
-    setAvatarPreview(newAvatarDataUrl)
-    setProfileData((prev) => ({ ...prev, avatarUrl: newAvatarDataUrl }))
-    console.log("New avatar data URL (mock):", newAvatarDataUrl.substring(0, 50) + "...")
-  }
+  const handleAvatarChange = (file, previewUrl) => {
+    setAvatarPreview(previewUrl);
+    setAvatarFile(file); // Store actual File object
+  };
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    // In a real app, send profileData to the backend
-    console.log("Profile data saved:", profileData)
-    alert("Profile saved successfully! (Check console for data)")
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+
+    // Append updated fields only
+    for (const key in profileData) {
+      if (profileData[key] !== authUser[key]) {
+        formData.append(key, profileData[key]);
+      }
+    }
+
+    // Append avatar if changed
+    if (avatarFile instanceof File) {
+      formData.append("avatar", avatarFile);
+    }
+
+    try {
+      await updateProfile(formData, avatarFile);
+
+      toast.success("Profile updated successfully!");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to update profile.");
+    }
+  };
+
+  if (!profileData) {
+    return (
+      <div className="min-h-screen bg-neutral-900 text-neutral-200 flex items-center justify-center">
+        <p>Loading profile...</p>
+      </div>
+    );
   }
 
   return (
@@ -83,7 +119,7 @@ export default function EditProfilePage() {
                 onChange={handleChange}
                 placeholder="Tell us a little about yourself..."
                 icon={Info}
-                className="bg-neutral-750 border-neutral-600 focus:border-blue-500 text-neutral-200 min-h-[120px] pl-9 pt-2" // Custom styling for textarea with icon
+                className="bg-neutral-750 border-neutral-600 focus:border-blue-500 text-neutral-200 min-h-[120px] pl-9 pt-2"
               />
 
               <div>
@@ -143,5 +179,5 @@ export default function EditProfilePage() {
         </Card>
       </div>
     </div>
-  )
+  );
 }

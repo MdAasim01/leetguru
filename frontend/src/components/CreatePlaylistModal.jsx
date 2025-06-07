@@ -78,7 +78,7 @@ const CreatePlaylistModal = ({ isOpen, onClose, onSubmit }) => {
 						>
 							Cancel
 						</button>
-						<button type="submit" className="btn btn-primary">
+						<button type="submit" className="btn bg-primary">
 							Create Playlist
 						</button>
 					</div>

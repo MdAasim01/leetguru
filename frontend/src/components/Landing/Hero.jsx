@@ -20,7 +20,7 @@ const Hero = () => {
           </p>
           <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
             <motion.button 
-              className="btn btn-primary btn-lg"
+              className="btn bg-primary btn-lg"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >

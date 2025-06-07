@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import { db } from "../libs/db.js";
 import { UserRole } from "../generated/prisma/index.js";
 import jwt from "jsonwebtoken";
+import { uploadOnCloudinary } from "../libs/cloudinary.js";
 
 export const register = async (req, res) => {
 	const { email, password, name, role } = req.body;
@@ -148,3 +149,69 @@ export const check = async (req, res) => {
 		});
 	}
 };
+
+export const updateUserProfile = async (req, res) => {
+	const userId = req.user.id;
+	const { name, bio, dob, website, github, linkedin, twitter } = req.body;
+
+	const avatarFileArray = req.files?.avatar;
+	const avatarLocalPath =
+		Array.isArray(avatarFileArray) && avatarFileArray.length > 0
+			? avatarFileArray[0].path
+			: null;
+
+	const coverFileArray = req.files?.coverImage;
+	const coverImageLocalPath =
+		Array.isArray(coverFileArray) && coverFileArray.length > 0
+			? coverFileArray[0].path
+			: null;
+
+	if (
+		req.files &&
+		Array.isArray(req.files.coverImage) &&
+		req.files.coverImage.length > 0
+	) {
+		coverImageLocalPath = req.files.coverImage[0].path;
+	}
+
+	const avatar = await uploadOnCloudinary(avatarLocalPath);
+
+	try {
+		const updatedUser = await db.user.update({
+			where: { id: userId },
+			data: {
+				name,
+				bio,
+				dob: dob ? new Date(dob) : undefined,
+				image: avatar?.url,
+				website,
+				github,
+				linkedin,
+				twitter,
+			},
+			select: {
+				id: true,
+				email: true,
+				name: true,
+				image: true,
+				role: true,
+				dob: true,
+				bio: true,
+				website: true,
+				github: true,
+				linkedin: true,
+				twitter: true,
+			},
+		});
+
+		res.status(200).json({
+			success: true,
+			message: "Profile updated successfully",
+			user: updatedUser,
+		});
+	} catch (error) {
+		console.error("Error updating profile:", error);
+		res.status(500).json({ error: "Failed to update profile" });
+	}
+};
+
