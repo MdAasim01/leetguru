@@ -13,7 +13,8 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { TooltipProvider } from "@/components/ui/tooltip" // Ensure Tooltip components are imported
 import { DataTableColumnHeader } from "./data-table-column-header"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import { useProblemStore } from "@/store/useProblemStore"
 
 export const getColumns = (authUser, onSaveToPlaylist) => [
   {
@@ -146,40 +147,7 @@ export const getColumns = (authUser, onSaveToPlaylist) => [
   },
   {
     id: "actions",
-    cell: ({ row }) => {
-      const problem = row.original
-      return (
-        <TooltipProvider delayDuration={100}>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem onClick={() => alert(`Editing: ${problem.title}`)}>
-                <Edit className="mr-2 h-4 w-4" />
-                Edit
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => alert(`Deleting: ${problem.title}`)}
-                className="text-red-600 focus:text-red-600 focus:bg-red-50 dark:text-red-400 dark:focus:text-red-400 dark:focus:bg-red-900/50"
-              >
-                <Trash2 className="mr-2 h-4 w-4" />
-                Delete
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => onSaveToPlaylist(problem.id)}>
-                <ListPlus className="mr-2 h-4 w-4" />
-                Save to Playlist
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </TooltipProvider>
-      )
-    },
+    cell: ({ row }) => <RowActions problem={row.original} />,
     enableSorting: false,
     enableHiding: false,
     meta: {
@@ -187,3 +155,48 @@ export const getColumns = (authUser, onSaveToPlaylist) => [
     },
   },
 ]
+
+
+
+function RowActions({ problem }) {
+  const navigate = useNavigate();
+
+  const { deleteProblem } = useProblemStore();
+
+  const handleDeleteProblem = async (problemId) => {
+    await deleteProblem(problemId);
+    console.log(`Delete problem with ID: ${problemId}`)
+  }
+
+  return (
+    <TooltipProvider delayDuration={100}>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" className="h-8 w-8 p-0">
+            <span className="sr-only">Open menu</span>
+            <MoreHorizontal className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+          <DropdownMenuItem onClick={() => navigate("/add-problem", { state: { problem } })}>
+            <Edit className="mr-2 h-4 w-4" />
+            Edit
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => handleDeleteProblem(problem.id)}
+            className="text-red-600 focus:text-red-600 focus:bg-red-50 dark:text-red-400 dark:focus:text-red-400 dark:focus:bg-red-900/50"
+          >
+            <Trash2 className="mr-2 h-4 w-4" />
+            Delete
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={() => onSaveToPlaylist(problem.id)}>
+            <ListPlus className="mr-2 h-4 w-4" />
+            Save to Playlist
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </TooltipProvider>
+  );
+}

@@ -43,6 +43,19 @@ export const useProblemStore = create((set) => ({
 		}
 	},
 
+	deleteProblem: async (id) => {
+		try {
+			set({ isProblemLoading: true });
+			const res = await axiosInstance.delete(`/problems/delete-problem/${id}`);
+			toast.success(res.data.message);
+		} catch (error) {
+			console.log("Error getting all problems", error);
+			toast.error("Error in getting problems");
+		} finally {
+			set({ isProblemLoading: false });
+		}
+	},
+
 	getSolvedProblemByUser: async () => {
 		try {
 			const res = await axiosInstance.get("/problems/get-solved-problem");

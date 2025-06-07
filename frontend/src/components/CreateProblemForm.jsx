@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
+import { useLocation, useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import {
@@ -13,13 +14,12 @@ import {
 	Download,
 } from "lucide-react";
 import Editor from "@monaco-editor/react";
-import { useState } from "react";
 import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/store/useAuthStore";
 import { Checkbox } from "./ui/checkbox";
 import { Label } from "./ui/label";
+
 
 const problemSchema = z.object({
 	title: z.string().min(3, "Title must be at least 3 characters"),
@@ -516,9 +516,12 @@ public class Main {
 };
 
 const CreateProblemForm = () => {
-	const [sampleType, setSampleType] = useState("DP");
+	const location = useLocation();
 	const navigation = useNavigate();
-	const { authUser } = useAuthStore()
+	const { authUser } = useAuthStore();
+	const prefillData = location.state?.problem || null;
+	const isEditMode = Boolean(location.state?.problem);
+
 	const {
 		register,
 		control,
@@ -537,8 +540,7 @@ const CreateProblemForm = () => {
 				JAVA: { input: "", output: "", explanation: "" },
 			},
 			codeSnippets: {
-				JAVASCRIPT:
-					"function solution() {\n  // Write your code here\n}",
+				JAVASCRIPT: "function solution() {\n  // Write your code here\n}",
 				PYTHON: "def solution():\n    # Write your code here\n    pass",
 				JAVA: "public class Solution {\n    public static void main(String[] args) {\n        // Write your code here\n    }\n}",
 			},
@@ -554,7 +556,7 @@ const CreateProblemForm = () => {
 		fields: testCaseFields,
 		append: appendTestCase,
 		remove: removeTestCase,
-		replace: replacetestcases,
+		replace: replaceTestCases,
 	} = useFieldArray({
 		control,
 		name: "testcases",
@@ -579,20 +581,34 @@ const CreateProblemForm = () => {
 		control,
 		name: "companies",
 	});
+
 	const [isLoading, setIsLoading] = useState(false);
+
+	useEffect(() => {
+		if (prefillData) {
+			reset({
+				...prefillData,
+				tags: prefillData.tags?.length ? prefillData.tags : [""],
+				companies: prefillData.companies?.length ? prefillData.companies : [""],
+				testcases: prefillData.testcases?.length ? prefillData.testcases : [{ input: "", output: "" }],
+			});
+
+			if (prefillData.tags) replaceTags(prefillData.tags);
+			if (prefillData.testcases) replaceTestCases(prefillData.testcases);
+			if (prefillData.companies) replaceCompanies(prefillData.companies);
+		}
+	}, [prefillData]);
 
 	const onSubmit = async (value) => {
 		try {
 			setIsLoading(true);
-			const res = await axiosInstance.post(
-				"/problems/create-problem",
-				value
-			);
-			console.log(res.data);
+			console.log(value);
+
+			const res = await axiosInstance.post("/problems/create-problem", value);
 			toast.success(res.data.message || "Problem Created successfully⚡");
 			navigation("/");
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 			toast.error("Error creating problem");
 		} finally {
 			setIsLoading(false);
@@ -1227,16 +1243,13 @@ const CreateProblemForm = () => {
 
 
 						<div className="card-actions justify-end pt-4 border-t">
-							<button
-								type="submit"
-								className="btn bg-primary btn-lg gap-2"
-							>
+							<button type="submit" className="btn bg-primary hover:bg-primary/70 btn-lg gap-2">
 								{isLoading ? (
 									<span className="loading loading-spinner text-white"></span>
 								) : (
 									<>
 										<CheckCircle2 className="w-5 h-5" />
-										Create Problem
+											{isEditMode ? "Update Problem" : "Create Problem"}
 									</>
 								)}
 							</button>
