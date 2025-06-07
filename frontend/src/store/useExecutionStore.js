@@ -25,6 +25,8 @@ export const useExecutionStore = create((set) => ({
 
 			set({ submission: res.data.submission });
 
+			return res.data.submission;
+
 			console.log("Code executed successfully", res.data.submission);
 
 			// toast.success(res.data.message);

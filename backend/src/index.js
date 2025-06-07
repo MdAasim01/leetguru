@@ -9,6 +9,7 @@ import userStatsRoutes from "./routes/profile.routes.js";
 
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import feedbackRouter from "./routes/feedback.routes.js";
 
 dotenv.config();
 
@@ -38,6 +39,7 @@ app.use("/api/v1/execute-code", executionRoute);
 app.use("/api/v1/submission", submissionRoutes);
 app.use("/api/v1/playlist", playlistRoutes);
 app.use("/api/v1/user-stats", userStatsRoutes);
+app.use("/api/v1/feedback", feedbackRouter);
 
 app.listen(process.env.PORT, () => {
 	console.log("Server is running on port 8080");

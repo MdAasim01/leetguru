@@ -30,6 +30,7 @@ import { Editor } from "@monaco-editor/react";
 import EditorialPanel from "@/components/problem-solving/EditorialPanel";
 import SubmissionsPanel from "@/components/problem-solving/SubmissionsPanel";
 import { useSubmissionStore } from "@/store/useSubmissionStore";
+import { axiosInstance } from "@/lib/axios";
 
 export default function ProblemSolvingPage() {
     const { id } = useParams();
@@ -37,6 +38,10 @@ export default function ProblemSolvingPage() {
     const { submissionsByUser, getSubmissionForProblem } = useSubmissionStore();
     const { executeCode, isExecuting, submission } =
         useExecutionStore();
+
+    const [aiFeedback, setAiFeedback] = useState("");
+    const [isLoadingFeedback, setIsLoadingFeedback] = useState(false);
+
 
     const [selectedLanguage, setSelectedLanguage] = useState("javascript");
     const [activeMainTab, setActiveMainTab] = useState("description");
@@ -61,21 +66,37 @@ export default function ProblemSolvingPage() {
     const handleRunCode = async () => {
         if (!problem) return;
 
-        const stdin = problem?.testcases.map((tc) => tc.input);
-        const expected_outputs = problem?.testcases.map((tc) => tc.output);
+        const stdin = problem.testcases.map((tc) => tc.input);
+        const expected_outputs = problem.testcases.map((tc) => tc.output);
 
         try {
-            // clearResults();
             const langId = getLanguageId(selectedLanguage);
-            await executeCode(
-                code,
-                langId,
-                stdin,
-                expected_outputs,
-                id
-            );
+            const newSub = await executeCode(code, langId, stdin, expected_outputs, id);
             toast.success("Code executed successfully");
             setActiveMainTab("feedback");
+
+            // ⏳ Begin fetching AI feedback in background
+            setIsLoadingFeedback(true);
+            setAiFeedback(""); // Clear old feedback
+
+            console.log(newSub?.testCases);
+
+            axiosInstance
+                .post("/feedback/code-feedback", {
+                    code,
+                    language: selectedLanguage,
+                    testCases: newSub?.testCases || [],
+                })
+                .then((res) => {
+                    setAiFeedback(res.data.feedback);
+                })
+                .catch((err) => {
+                    console.error("Feedback error:", err);
+                    setAiFeedback("⚠️ Could not generate feedback.");
+                })
+                .finally(() => {
+                    setIsLoadingFeedback(false);
+                });
         } catch (err) {
             toast.error("Code execution failed");
         }
@@ -111,42 +132,37 @@ export default function ProblemSolvingPage() {
             label: "Feedback",
             icon: BarChart3,
             content: (
-                <div className="p-4 space-y-4">
-                    {submission?.length === 0 && <p>No Feedback yet</p>}
+                <div className="p-4 space-y-6">
+                    <div className="prose max-w-3xl text-sm text-white bg-neutral-800 border border-neutral-700 p-4 rounded">
+                        <h3 className="text-lg font-bold text-primary mb-2">AI Code Feedback</h3>
+                        {isLoadingFeedback ? (
+                            <p className="text-muted-foreground">Getting AI feedback...</p>
+                        ) : aiFeedback ? (
+                            <pre className="whitespace-pre-wrap">{aiFeedback}</pre>
+                        ) : (
+                            <p className="text-muted-foreground">Run your code to see feedback.</p>
+                        )}
+                    </div>
+
+                    {/* Your existing per-testcase feedback UI */}
                     {submission?.testCases?.map((res, idx) => (
-                        <div
-                            key={idx}
-                            className="border border-neutral-700 rounded p-4"
-                        >
-                            <h3 className="text-sm font-semibold text-white">
-                                Test Case #{idx + 1}
-                            </h3>
-                            <p className="text-xs mt-1">
-                                Input: {problem?.testcases[idx]?.input}
-                            </p>
-                            <p className="text-xs">
-                                Expected Output:{" "}
-                                {problem?.testcases[idx]?.output}
-                            </p>
-                            <p className="text-xs">
-                                Your Output: {res.stdout?.trim()}
-                            </p>
+                        <div key={idx} className="border border-neutral-700 rounded p-4">
+                            <h3 className="text-sm font-semibold text-white">Test Case #{idx + 1}</h3>
+                            <p className="text-xs mt-1">Input: {problem?.testcases[idx]?.input}</p>
+                            <p className="text-xs">Expected Output: {problem?.testcases[idx]?.output}</p>
+                            <p className="text-xs">Your Output: {res.stdout?.trim()}</p>
                             <p className="text-xs font-medium mt-1">
                                 Verdict:{" "}
                                 {res.status.description === "Accepted" ? (
-                                    <span className="text-green-500">
-                                        Accepted
-                                    </span>
+                                    <span className="text-green-500">Accepted</span>
                                 ) : (
-                                    <span className="text-red-500">
-                                        Wrong Answer
-                                    </span>
+                                        <span className="text-red-500">Wrong Answer</span>
                                 )}
                             </p>
                         </div>
                     ))}
                 </div>
-            ),
+            )
         },
     ];
 
