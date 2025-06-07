@@ -4,7 +4,7 @@ import { BarChart, Users, Award } from 'lucide-react';
 
 export function RankingSection({ ranking }) {
   return (
-    <Card>
+    <Card className="bg-gray-900/80">
       <CardHeader>
         <CardTitle className="flex items-center">
           <Award className="mr-2 h-5 w-5 text-yellow-500" />

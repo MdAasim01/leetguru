@@ -130,7 +130,7 @@ export default function ProfilePage() {
 
   return (
     <div className="container mx-auto p-4 md:p-6 lg:p-8 space-y-8">
-      <Card>
+      <Card className="bg-gray-900/80">
         <CardContent className="pt-6 flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6">
           <Avatar className="h-24 w-24 md:h-32 md:w-32 border-2 border-primary">
             <AvatarImage src={avatarUrl} alt={username} />
@@ -138,8 +138,8 @@ export default function ProfilePage() {
           </Avatar>
           <div className="flex-grow text-center md:text-left">
             <h1 className="text-3xl md:text-4xl font-bold">{username}</h1>
-            <p className="text-sm text-neutral-400 flex items-center justify-center md:justify-start mt-1">
-              @{authUser.id}
+            <div className="inline-flex border-1 border-gray-600 rounded p-2 my-3 bg-gray-800 text-sm text-neutral-400 items-center justify-center md:justify-start mt-1">
+              {authUser.id}
               <button
                 onClick={handleCopyUserId}
                 className="ml-2 hover:text-white text-neutral-500"
@@ -147,7 +147,7 @@ export default function ProfilePage() {
               >
                 <Copy className="w-4 h-4" />
               </button>
-            </p>
+            </div>
 
             <p className="text-muted-foreground flex items-center justify-center md:justify-start">
               <CalendarDays className="mr-2 h-4 w-4" />

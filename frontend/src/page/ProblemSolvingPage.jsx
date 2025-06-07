@@ -143,24 +143,6 @@ export default function ProblemSolvingPage() {
                             <p className="text-muted-foreground">Run your code to see feedback.</p>
                         )}
                     </div>
-
-                    {/* Your existing per-testcase feedback UI */}
-                    {submission?.testCases?.map((res, idx) => (
-                        <div key={idx} className="border border-neutral-700 rounded p-4">
-                            <h3 className="text-sm font-semibold text-white">Test Case #{idx + 1}</h3>
-                            <p className="text-xs mt-1">Input: {problem?.testcases[idx]?.input}</p>
-                            <p className="text-xs">Expected Output: {problem?.testcases[idx]?.output}</p>
-                            <p className="text-xs">Your Output: {res.stdout?.trim()}</p>
-                            <p className="text-xs font-medium mt-1">
-                                Verdict:{" "}
-                                {res.status.description === "Accepted" ? (
-                                    <span className="text-green-500">Accepted</span>
-                                ) : (
-                                        <span className="text-red-500">Wrong Answer</span>
-                                )}
-                            </p>
-                        </div>
-                    ))}
                 </div>
             )
         },

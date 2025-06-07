@@ -28,7 +28,7 @@ export function StatsSection({ stats }) {
   }
 
   return (
-    <Card>
+    <Card className="bg-gray-900/80">
       <CardHeader>
         <CardTitle className="flex items-center">
           <TrendingUp className="mr-2 h-5 w-5" />
@@ -38,11 +38,11 @@ export function StatsSection({ stats }) {
       <CardContent className="space-y-8">
         {/* Top Summary Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-center">
-          <div className="p-4 bg-muted/50 rounded-lg">
+          <div className="p-4 bg-gray-800 rounded-lg">
             <p className="text-3xl font-bold">{stats.totalSolved}</p>
             <p className="text-sm text-muted-foreground">Problems Solved</p>
           </div>
-          <div className="p-4 bg-muted/50 rounded-lg">
+          <div className="p-4 bg-gray-800 rounded-lg">
             <p className="text-3xl font-bold">{stats.totalSubmissions}</p>
             <p className="text-sm text-muted-foreground">Total Submissions</p>
           </div>

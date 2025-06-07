@@ -38,7 +38,7 @@ export function StreakCalendar({ streakData }) {
     for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
       const dateString = d.toISOString().split("T")[0];
       const count = contributionsMap[dateString] || 0;
-      let colorClass = "bg-muted/30 hover:bg-muted/60";
+      let colorClass = "bg-gray-700/30 hover:bg-gray-700/30";
 
       if (count > 0 && count <= 2)
         colorClass =
@@ -86,7 +86,7 @@ export function StreakCalendar({ streakData }) {
   const numWeeks = gridCells[0]?.length || 52;
 
   return (
-    <Card>
+    <Card className="bg-gray-900/80">
       <CardHeader>
         <CardTitle className="flex items-center">
           <Flame className="mr-2 h-5 w-5 text-orange-500" />

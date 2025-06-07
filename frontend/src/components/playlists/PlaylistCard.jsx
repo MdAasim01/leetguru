@@ -35,7 +35,7 @@ export function PlaylistCard({
   }
 
   return (
-    <Card className="bg-neutral-800 border-neutral-700 text-foreground flex flex-col h-full">
+    <Card className=" bg-gray-900/80 border-gray-800 text-foreground flex flex-col h-full">
       <CardHeader className="pb-3">
         <div className="flex justify-between items-start">
           <div>

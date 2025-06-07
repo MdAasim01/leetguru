@@ -117,7 +117,7 @@ export default function PlaylistsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-900 text-neutral-200 p-4 md:p-8">
+    <div className="min-h-screen  text-neutral-200 p-4 md:p-8">
       <header className="flex flex-col sm:flex-row justify-between items-center mb-8 pb-4 border-b border-neutral-700">
         <h1 className="text-3xl font-bold flex items-center text-neutral-100 mb-4 sm:mb-0">
           <ListMusic className="mr-3 h-8 w-8 text-blue-500" /> Playlists

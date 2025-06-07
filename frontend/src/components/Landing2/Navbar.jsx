@@ -81,7 +81,7 @@ const Navbar = () => {
                       </label>
                       <ul
                         tabIndex={0}
-                        className="menu menu-sm dropdown-content mt-3 z-[50] p-2 shadow bg-base-100 rounded-box w-52 space-y-3"
+                        className="menu menu-sm bg-gray-800 border-gray-800 dropdown-content mt-3 z-[50] p-2 shadow-lg rounded-box w-52 space-y-3"
                       >
                         {/* Admin Option */}
 
