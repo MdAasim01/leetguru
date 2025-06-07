@@ -76,9 +76,9 @@ export default function EditProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-900 text-neutral-200 p-4 md:p-8 flex justify-center">
+    <div className="min-h-screen  text-neutral-200 p-4 md:p-8 flex justify-center">
       <div className="w-full max-w-3xl">
-        <Card className="bg-neutral-850 border-neutral-700">
+        <Card className="bg-gray-900/80 border-neutral-700">
           <CardHeader className="pb-4">
             <CardTitle className="text-2xl text-neutral-100">Edit Profile</CardTitle>
             <CardDescription className="text-neutral-400">
@@ -170,7 +170,7 @@ export default function EditProfilePage() {
                 >
                   Cancel
                 </Button>
-                <Button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white">
+                <Button type="submit" className="bg-primary hover:bg-primary/90 text-slate-900">
                   Save Changes
                 </Button>
               </CardFooter>
