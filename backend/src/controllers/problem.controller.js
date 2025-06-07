@@ -121,31 +121,66 @@ export const getAllProblems = async (req, res) => {
 
 export const getProblemById = async (req, res) => {
 	const { id } = req.params;
+	const userId = req.user.id;
 
 	try {
-		const problem = await db.problem.findUnique({ where: { id } });
+		const problem = await db.problem.findUnique({
+			where: { id },
+			include: {
+				problemsPlaylists: {
+					include: {
+						playlist: {
+							include: {
+								accessList: true, // to check access
+							},
+						},
+					},
+				},
+			},
+		});
 
 		if (!problem) {
 			return res.status(404).json({ error: "Problem not found." });
 		}
 
-		// Block access to private problems not owned by user
-		if (!problem.isPublic && problem.userId !== req.user.id) {
-			return res.status(403).json({
-				error: "You are not authorized to view this problem.",
-			});
+		// If public, allow access
+		if (problem.isPublic) {
+			return res
+				.status(200)
+				.json({ success: true, message: "Problem fetched", problem });
 		}
 
-		return res.status(200).json({
-			sucess: true,
-			message: "Message Created Successfully",
-			problem,
-		});
+		// If user is the owner, allow access
+		if (problem.userId === userId) {
+			return res
+				.status(200)
+				.json({ success: true, message: "Problem fetched", problem });
+		}
+
+		// Check if user has access through any playlist containing this problem
+		const userHasAccessViaPlaylist = problem.problemsPlaylists.some(
+			(entry) =>
+				entry.playlist.accessList.some(
+					(access) => access.userId === userId
+				)
+		);
+
+		if (!userHasAccessViaPlaylist) {
+			return res
+				.status(403)
+				.json({
+					error: "You are not authorized to view this problem.",
+				});
+		}
+
+		return res
+			.status(200)
+			.json({ success: true, message: "Problem fetched", problem });
 	} catch (error) {
-		console.log(error);
-		return res.status(500).json({
-			error: "Error While Fetching Problem by id",
-		});
+		console.error("Error fetching problem:", error);
+		return res
+			.status(500)
+			.json({ error: "Error while fetching problem by ID" });
 	}
 };
 

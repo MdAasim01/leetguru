@@ -17,6 +17,9 @@ import { useState } from "react";
 import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "@/store/useAuthStore";
+import { Checkbox } from "./ui/checkbox";
+import { Label } from "./ui/label";
 
 const problemSchema = z.object({
 	title: z.string().min(3, "Title must be at least 3 characters"),
@@ -25,6 +28,7 @@ const problemSchema = z.object({
 		.min(10, "Description must be at least 10 characters"),
 	difficulty: z.enum(["EASY", "MEDIUM", "HARD"]),
 	tags: z.array(z.string()).min(1, "At least one tag is required"),
+	companies: z.array(z.string()).optional(),
 	constraints: z.string().min(1, "Constraints are required"),
 	hints: z.string().optional(),
 	editorial: z.string().optional(),
@@ -63,6 +67,7 @@ const problemSchema = z.object({
 		PYTHON: z.string().min(1, "Python solution is required"),
 		JAVA: z.string().min(1, "Java solution is required"),
 	}),
+	isPublic: z.boolean().optional().default(true),
 });
 
 const sampledpData = {
@@ -513,6 +518,7 @@ public class Main {
 const CreateProblemForm = () => {
 	const [sampleType, setSampleType] = useState("DP");
 	const navigation = useNavigate();
+	const { authUser } = useAuthStore()
 	const {
 		register,
 		control,
@@ -522,6 +528,7 @@ const CreateProblemForm = () => {
 	} = useForm({
 		resolver: zodResolver(problemSchema),
 		defaultValues: {
+			isPublic: true,
 			testcases: [{ input: "", output: "" }],
 			tags: [""],
 			examples: {
@@ -563,6 +570,15 @@ const CreateProblemForm = () => {
 		name: "tags",
 	});
 
+	const {
+		fields: companyFields,
+		append: appendCompany,
+		remove: removeCompany,
+		replace: replaceCompanies,
+	} = useFieldArray({
+		control,
+		name: "companies",
+	});
 	const [isLoading, setIsLoading] = useState(false);
 
 	const onSubmit = async (value) => {
@@ -636,6 +652,7 @@ const CreateProblemForm = () => {
 								Load Sample
 							</button>
 						</div>
+
 					</div>
 
 					<form
@@ -755,6 +772,44 @@ const CreateProblemForm = () => {
 								</div>
 							)}
 						</div>
+
+						{/* Companies */}
+						<div className="card bg-base-200 p-4 md:p-6 shadow-md mt-6">
+							<div className="flex items-center justify-between mb-4">
+								<h3 className="text-lg md:text-xl font-semibold flex items-center gap-2">
+									<BookOpen className="w-5 h-5" />
+									Companies
+								</h3>
+								<button
+									type="button"
+									className="btn btn-primary btn-sm"
+									onClick={() => appendCompany("")}
+								>
+									<Plus className="w-4 h-4 mr-1" /> Add Company
+								</button>
+							</div>
+							<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+								{companyFields.map((field, index) => (
+									<div key={field.id} className="flex gap-2 items-center">
+										<input
+											type="text"
+											className="input input-bordered flex-1"
+											{...register(`companies.${index}`)}
+											placeholder="Enter company name"
+										/>
+										<button
+											type="button"
+											className="btn btn-ghost btn-square btn-sm"
+											onClick={() => removeCompany(index)}
+											disabled={companyFields.length === 1}
+										>
+											<Trash2 className="w-4 h-4 text-error" />
+										</button>
+									</div>
+								))}
+							</div>
+						</div>
+
 
 						{/* Test Cases */}
 						<div className="card bg-base-200 p-4 md:p-6 shadow-md">
@@ -1145,6 +1200,32 @@ const CreateProblemForm = () => {
 								</div>
 							</div>
 						</div>
+
+						// Inside your form JSX
+						{authUser.role === "ADMIN" && (
+							<Controller
+								name="isPublic"
+								control={control}
+								defaultValue={true}
+								render={({ field }) => (
+									<div className="flex items-start gap-3">
+										<Checkbox
+											id="isPublic"
+											checked={field.value}
+											onCheckedChange={(checked) => field.onChange(checked === true)}
+										/>
+										<div className="grid gap-2">
+											<Label htmlFor="isPublic">Make it public</Label>
+											<p className="text-muted-foreground text-sm">
+												By clicking this checkbox, you agree to make this problem public.
+												Every user will be able to see and attempt this problem.
+											</p>
+										</div>
+									</div>
+								)}
+							/>
+						)}
+
 
 						<div className="card-actions justify-end pt-4 border-t">
 							<button

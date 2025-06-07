@@ -22,7 +22,7 @@ const Navbar = () => {
 
   return (
     <motion.nav
-      className={` w-full z-50 top-0 bg-gray-900/80 border-b border-gray-800 transition-all duration-300 
+      className={` w-full relative z-50 top-0 bg-gray-900/80 border-b border-gray-800 transition-all duration-300 
         ${scrolled
           ? "bg-gray-900/90 backdrop-blur-md py-2"
           : " py-4"
@@ -81,7 +81,7 @@ const Navbar = () => {
                       </label>
                       <ul
                         tabIndex={0}
-                        className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52 space-y-3"
+                        className="menu menu-sm dropdown-content mt-3 z-[50] p-2 shadow bg-base-100 rounded-box w-52 space-y-3"
                       >
                         {/* Admin Option */}
 
