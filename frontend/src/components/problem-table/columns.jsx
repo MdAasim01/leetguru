@@ -15,7 +15,7 @@ import { TooltipProvider } from "@/components/ui/tooltip" // Ensure Tooltip comp
 import { DataTableColumnHeader } from "./data-table-column-header"
 import { Link } from "react-router-dom"
 
-export const getColumns = (onSolvedChange) => [
+export const getColumns = (authUser, onSaveToPlaylist) => [
   {
     id: "solved",
     accessorKey: "solved",
@@ -171,7 +171,7 @@ export const getColumns = (onSolvedChange) => [
                 Delete
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => alert(`Saving to playlist: ${problem.title}`)}>
+              <DropdownMenuItem onClick={() => onSaveToPlaylist(problem.id)}>
                 <ListPlus className="mr-2 h-4 w-4" />
                 Save to Playlist
               </DropdownMenuItem>

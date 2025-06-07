@@ -17,8 +17,10 @@ import { cn } from "@/lib/utils"
 import { useAuthStore } from "../../store/useAuthStore"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Checkbox } from "@/components/ui/checkbox"
+import { usePlaylistStore } from "@/store/usePlaylistStore"
+import toast from "react-hot-toast"
 
-export default function ProblemsTable({ problems, playlists = [] }) {
+export default function ProblemsTable({ problems }) {
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(true)
   const [rowSelection, setRowSelection] = useState({})
@@ -30,6 +32,11 @@ export default function ProblemsTable({ problems, playlists = [] }) {
   const [selectedPlaylists, setSelectedPlaylists] = useState([])
 
   const { authUser } = useAuthStore()
+  const { playlists, getAllPlaylists, addProblemToPlaylist } = usePlaylistStore()
+
+  useEffect(() => {
+    getAllPlaylists();
+  }, [getAllPlaylists]);
 
   const fetchProblems = async () => {
     setLoading(true)
@@ -58,17 +65,37 @@ export default function ProblemsTable({ problems, playlists = [] }) {
     fetchProblems()
   }, [])
 
-  const handleSolvedChange = (id, solved) => {
-    setData((prev) =>
-      prev.map((p) => (p.id === id ? { ...p, solved } : p))
-    )
-  }
+  // const handleSolvedChange = (id, solved) => {
+  //   setData((prev) =>
+  //     prev.map((p) => (p.id === id ? { ...p, solved } : p))
+  //   )
+  // }
 
   const handleSaveToPlaylist = (problemId) => {
-    setSelectedProblemId(problemId)
-    setSelectedPlaylists([])
-    setShowPlaylistModal(true)
-  }
+    setSelectedProblemId(problemId);
+    setSelectedPlaylists([]);
+    setShowPlaylistModal(true); // 👉 Just open the modal
+  };
+
+  const handleConfirmSave = async () => {
+    if (!selectedPlaylists.length) {
+      toast.error("Please select at least one playlist.");
+      return;
+    }
+
+    try {
+      for (const playlistId of selectedPlaylists) {
+        await addProblemToPlaylist(playlistId, [selectedProblemId]);
+      }
+
+      toast.success("Problem added to playlist(s)");
+      setShowPlaylistModal(false);
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to add problem to playlist");
+    }
+  };
+
 
   const handlePlaylistToggle = (playlistId) => {
     setSelectedPlaylists((prev) =>
@@ -78,12 +105,7 @@ export default function ProblemsTable({ problems, playlists = [] }) {
     )
   }
 
-  const handleConfirmSave = () => {
-    console.log("Saving problem", selectedProblemId, "to playlists", selectedPlaylists)
-    setShowPlaylistModal(false)
-  }
-
-  const columns = useMemo(() => getColumns(handleSolvedChange, authUser, handleSaveToPlaylist), [authUser])
+  const columns = useMemo(() => getColumns(authUser, handleSaveToPlaylist), [authUser])
 
   const table = useReactTable({
     data,
@@ -137,7 +159,7 @@ export default function ProblemsTable({ problems, playlists = [] }) {
               table.getRowModel().rows.map((row) => (
                 <TableRow key={row.id} data-state={row.getIsSelected() && "selected"} className={
                   row.original?.tags?.includes("demo")
-                    ? "bg-yellow-100 dark:bg-slate-900"
+                    ? "dark:border-solid dark:border-2 dark:border-primary/70"
                     : ""
                 }>
                   {row.getVisibleCells().map((cell) => {
