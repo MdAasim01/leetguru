@@ -20,10 +20,10 @@ export function ProblemDescriptionPanel({ problem }) {
         <h1 className="text-3xl font-semibold tracking-tight">{problem.title}</h1>
         <Badge
           variant={
-            problem.difficulty === "Easy"
-              ? "success"
-              : problem.difficulty === "Medium"
-                ? "warning"
+            problem?.difficulty === "EASY"
+              ? "default"
+              : problem?.difficulty === "MEDIUM"
+                ? "secondary"
                 : "destructive"
           }
           className="uppercase tracking-wide text-xs px-2 py-1"

@@ -10,13 +10,18 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export function TestCasesPanel({ testCases = [], submission = null, forceTab = "testcases" }) {
-  const [activeTab, setActiveTab] = useState(forceTab || "testcases");
+
+  useEffect(() => {
+    console.log(forceTab);
+  }, [forceTab]);
+
+  const [activeTab, setActiveTab] = useState("testcases");
 
   const memoryArr = submission ? JSON.parse(submission.memory || "[]") : []
   const timeArr = submission ? JSON.parse(submission.time || "[]") : []
 
   useEffect(() => {
-    setActiveTab("results");
+    setActiveTab(forceTab);
   }, [forceTab]);
 
   const avgMemory =
@@ -47,7 +52,6 @@ export function TestCasesPanel({ testCases = [], submission = null, forceTab = "
             </TabsTrigger>
             <TabsTrigger
               value="results"
-              disabled={!submission}
               className="text-xs px-3 py-1.5 data-[state=active]:bg-neutral-700 data-[state=active]:text-foreground"
             >
               <CodeXml className="mr-1.5 h-4 w-4" /> Results
