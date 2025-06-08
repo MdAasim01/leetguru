@@ -2,22 +2,32 @@ import { useState, useRef } from "react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Camera } from "lucide-react"
+import toast from "react-hot-toast"
 
 export function ProfilePictureUpload({ currentAvatarUrl, onAvatarChange }) {
   const [previewUrl, setPreviewUrl] = useState(currentAvatarUrl)
   const fileInputRef = useRef(null)
 
   const handleFileChange = (event) => {
-    const file = event.target.files[0]
+    const file = event.target.files[0];
     if (file) {
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        setPreviewUrl(reader.result)
-        onAvatarChange(file, reader.result) // ✅ send file and preview
+      const maxSizeInMB = 10;
+      const maxSizeInBytes = maxSizeInMB * 1024 * 1024;
+
+      if (file.size > maxSizeInBytes) {
+        toast.error(`File size should not exceed ${maxSizeInMB} MB.`);
+        return;
       }
-      reader.readAsDataURL(file)
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewUrl(reader.result);
+        onAvatarChange(file, reader.result); // ✅ send file and preview
+      };
+      reader.readAsDataURL(file);
     }
-  }
+  };
+
 
   const triggerFileInput = () => {
     fileInputRef.current?.click()
