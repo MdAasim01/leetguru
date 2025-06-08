@@ -154,22 +154,22 @@ export default function ProfilePage() {
               Joined on {new Date(joinDate).toLocaleDateString()}
             </p>
             <div className="flex space-x-4 mt-6">
-              <a href={authUser.website} target="_blank" className="text-gray-400 hover:text-white">
+              <a href={authUser?.website} target="_blank" className="text-gray-400 hover:text-white">
                 <div className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center">
                   <Globe className="h-5 w-5" />
                 </div>
               </a>
-              <a href={authUser.github} target="_blank" className="text-gray-400 hover:text-white">
+              <a href={authUser?.github} target="_blank" className="text-gray-400 hover:text-white">
                 <div className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center">
                   <Github className="h-5 w-5" />
                 </div>
               </a>
-              <a href={authUser.twitter} target="_blank" className="text-gray-400 hover:text-white">
+              <a href={authUser?.twitter} target="_blank" className="text-gray-400 hover:text-white">
                 <div className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center">
                   <Twitter className="h-5 w-5" />
                 </div>
               </a>
-              <a href={authUser.linkedin} target="_blank" className="text-gray-400 hover:text-white">
+              <a href={authUser?.linkedin} target="_blank" className="text-gray-400 hover:text-white">
                 <div className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center">
                   <Linkedin className="h-5 w-5" />
                 </div>
