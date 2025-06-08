@@ -29,6 +29,7 @@ import { useSubmissionStore } from "@/store/useSubmissionStore";
 import { axiosInstance } from "@/lib/axios";
 import { useAuthStore } from "@/store/useAuthStore";
 import { Badge } from "@/components/ui/badge";
+import EditorSkeleton from "@/components/problem-solving/EditorSkeleton";
 
 export default function ProblemSolvingPage() {
     const { id } = useParams();
@@ -184,9 +185,7 @@ export default function ProblemSolvingPage() {
 
     if (isProblemLoading) {
         return (
-            <div className="h-screen flex flex-col bg-neutral-900 text-neutral-300">
-                LOADING
-            </div>
+            <EditorSkeleton />
         )
     }
 
