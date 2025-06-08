@@ -31,11 +31,13 @@ import EditorialPanel from "@/components/problem-solving/EditorialPanel";
 import SubmissionsPanel from "@/components/problem-solving/SubmissionsPanel";
 import { useSubmissionStore } from "@/store/useSubmissionStore";
 import { axiosInstance } from "@/lib/axios";
+import { useAuthStore } from "@/store/useAuthStore";
 
 export default function ProblemSolvingPage() {
     const { id } = useParams();
     const { getProblemById, problem, isProblemLoading } = useProblemStore();
     const { submissionsByUser, getSubmissionForProblem } = useSubmissionStore();
+    const { checkAuth } = useAuthStore();
     const { executeCode, isExecuting, submission } =
         useExecutionStore();
 
@@ -71,10 +73,26 @@ export default function ProblemSolvingPage() {
 
         try {
             const langId = getLanguageId(selectedLanguage);
-            const newSub = await executeCode(code, langId, stdin, expected_outputs, id);
+            await executeCode(code, langId, stdin, expected_outputs, id);
             toast.success("Code executed successfully");
+            setAiFeedback("");
             setActiveMainTab("feedback");
 
+        } catch (err) {
+            toast.error("Code execution failed");
+        }
+    };
+
+    const handleGenerateFeedback = async () => {
+        if (coins < 3) {
+            toast.error("You need at least 3 coins to generate AI feedback.");
+            return;
+        }
+
+        setIsLoadingFeedback(true);
+        setAiFeedback("");
+
+        try {
             // ⏳ Begin fetching AI feedback in background
             setIsLoadingFeedback(true);
             setAiFeedback(""); // Clear old feedback
@@ -95,10 +113,43 @@ export default function ProblemSolvingPage() {
                 .finally(() => {
                     setIsLoadingFeedback(false);
                 });
+
+            checkAuth();
+            toast.success("AI feedback generated, 3 coins deducted.");
         } catch (err) {
-            toast.error("Code execution failed");
+            console.error(err);
+            toast.error("Failed to generate AI feedback.");
+        } finally {
+            setIsLoadingFeedback(false);
         }
     };
+
+    // Add a button in your AI Feedback tab content:
+    const feedbackContent = (
+        <div className="p-4 space-y-6">
+            <div className="prose max-w-3xl text-sm text-[#ebebeb] bg-neutral-800 border border-neutral-700 p-4 rounded">
+                <h3 className="text-lg font-bold text-primary mb-2">AI Code Feedback</h3>
+
+                <button
+                    disabled={isLoadingFeedback || coins < 3}
+                    onClick={handleGenerateFeedback}
+                    className="mb-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 rounded text-white"
+                >
+                    {isLoadingFeedback ? "Generating feedback..." : `Generate Feedback (3 coins)`}
+                </button>
+
+                {isLoadingFeedback ? (
+                    <p className="text-muted-foreground">Getting AI feedback...</p>
+                ) : aiFeedback ? (
+                    <pre className="whitespace-pre-wrap">{aiFeedback}</pre>
+                ) : (
+                    <p className="text-muted-foreground">Click the button above to generate AI feedback.</p>
+                )}
+            </div>
+        </div>
+    );
+
+
 
     const mainTabs = [
         {
@@ -129,20 +180,7 @@ export default function ProblemSolvingPage() {
             value: "feedback",
             label: "AI Feedback",
             icon: BarChart3,
-            content: (
-                <div className="p-4 space-y-6">
-                    <div className="prose max-w-3xl text-sm text-[#ebebeb] bg-neutral-800 border border-neutral-700 p-4 rounded">
-                        <h3 className="text-lg font-bold text-primary mb-2">AI Code Feedback</h3>
-                        {isLoadingFeedback ? (
-                            <p className="text-muted-foreground">Getting AI feedback...</p>
-                        ) : aiFeedback ? (
-                            <pre className="whitespace-pre-wrap">{aiFeedback}</pre>
-                        ) : (
-                            <p className="text-muted-foreground">Run your code to see feedback.</p>
-                        )}
-                    </div>
-                </div>
-            )
+            content: feedbackContent,
         },
     ];
 

@@ -5,6 +5,7 @@ import { Code, LogOut, User } from 'lucide-react';
 import { useAuthStore } from '@/store/useAuthStore';
 import { Link } from 'react-router-dom';
 import { motion } from "framer-motion";
+import { Badge } from '../ui/badge';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -63,7 +64,11 @@ const Navbar = () => {
               {authUser ? (
                 <>
                   <div className="flex items-center gap-8">
+                    <Badge className="mr-2 text-slate-900">
+                      {authUser?.coins} Coins
+                    </Badge>
                     <div className="dropdown dropdown-end">
+
                       <label
                         tabIndex={0}
                         className="btn btn-ghost btn-circle avatar flex flex-row "
