@@ -64,8 +64,9 @@ const Navbar = () => {
               {authUser ? (
                 <>
                   <div className="flex items-center gap-8">
-                    <Badge className="mr-2 text-slate-900">
-                      {authUser?.coins} Coins
+                    <Badge variant="outline" className="mr-2 border-2 border-solid border-yellow-500 text-white animate-pulse py-2.5 px-4 rounded-4xl text-lg">
+                      <span className='font-black text-yellow-400'>{authUser?.coins}&nbsp;</span>
+                      Coins
                     </Badge>
                     <div className="dropdown dropdown-end">
 

@@ -15,29 +15,26 @@ import {
     BookOpen,
     History,
     BarChart3,
-    Loader2,
-    ArrowBigLeft,
     ChevronLeft,
 } from "lucide-react";
 import { useExecutionStore } from "../store/useExecutionStore";
 import { useProblemStore } from "../store/useProblemStore";
 import toast from "react-hot-toast";
 import { getLanguageId } from "@/lib/lang";
-import { Chevron } from "react-day-picker";
 import SolutionsPanel from "@/components/problem-solving/SolutionsPanel";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Editor } from "@monaco-editor/react";
 import EditorialPanel from "@/components/problem-solving/EditorialPanel";
 import SubmissionsPanel from "@/components/problem-solving/SubmissionsPanel";
 import { useSubmissionStore } from "@/store/useSubmissionStore";
 import { axiosInstance } from "@/lib/axios";
 import { useAuthStore } from "@/store/useAuthStore";
+import { Badge } from "@/components/ui/badge";
 
 export default function ProblemSolvingPage() {
     const { id } = useParams();
     const { getProblemById, problem, isProblemLoading } = useProblemStore();
     const { submissionsByUser, getSubmissionForProblem } = useSubmissionStore();
-    const { checkAuth } = useAuthStore();
+    const { checkAuth, authUser } = useAuthStore();
     const { executeCode, isExecuting, submission } =
         useExecutionStore();
 
@@ -53,10 +50,6 @@ export default function ProblemSolvingPage() {
         getProblemById(id);
         getSubmissionForProblem(id);
     }, [id]);
-
-    useEffect(() => {
-        console.log("submission:", submission);
-    }, []);
 
     useEffect(() => {
         if (problem && selectedLanguage) {
@@ -84,7 +77,13 @@ export default function ProblemSolvingPage() {
     };
 
     const handleGenerateFeedback = async () => {
-        if (coins < 3) {
+
+        if (!submissionsByUser) {
+            toast.error("No submissions found");
+            return;
+        }
+
+        if (authUser?.coins < 3) {
             toast.error("You need at least 3 coins to generate AI feedback.");
             return;
         }
@@ -113,13 +112,12 @@ export default function ProblemSolvingPage() {
                 .finally(() => {
                     setIsLoadingFeedback(false);
                 });
-
-            checkAuth();
             toast.success("AI feedback generated, 3 coins deducted.");
         } catch (err) {
             console.error(err);
             toast.error("Failed to generate AI feedback.");
         } finally {
+            checkAuth();
             setIsLoadingFeedback(false);
         }
     };
@@ -131,9 +129,9 @@ export default function ProblemSolvingPage() {
                 <h3 className="text-lg font-bold text-primary mb-2">AI Code Feedback</h3>
 
                 <button
-                    disabled={isLoadingFeedback || coins < 3}
+                    disabled={isLoadingFeedback || authUser?.coins < 3}
                     onClick={handleGenerateFeedback}
-                    className="mb-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 rounded text-white"
+                    className="mb-4 px-4 py-2 bg-primary hover:bg-primary/80 disabled:bg-gray-600 rounded text-slate-900 cursor-pointer"
                 >
                     {isLoadingFeedback ? "Generating feedback..." : `Generate Feedback (3 coins)`}
                 </button>
@@ -184,15 +182,30 @@ export default function ProblemSolvingPage() {
         },
     ];
 
+    if (isProblemLoading) {
+        return (
+            <div className="h-screen flex flex-col bg-neutral-900 text-neutral-300">
+                LOADING
+            </div>
+        )
+    }
+
     return (
         <div className="h-screen flex flex-col bg-neutral-900 text-neutral-300">
-            <header className="p-2 border-b border-neutral-700 shrink-0 flex items-center space-x-2">
-                <Link className="cursor-pointer border border-neutral-700 rounded p-1" to="/all-problems">
-                    <ChevronLeft className="mr-4 h-8 w-8" />
-                </Link>
-                <h5 className="text-lg font-semibold text-white">
-                    Problem Arena: {problem?.title}
-                </h5>
+            <header className="p-2 border-b border-neutral-700 shrink-0 flex justify-between items-center space-x-2">
+                <div className="flex items-center space-x-2">
+                    <Link className="cursor-pointer border border-neutral-700 rounded p-1" to="/all-problems">
+                        <ChevronLeft className="mr-4 h-8 w-8" />
+                    </Link>
+                    <h5 className="text-lg font-semibold text-white">
+                        Problem Arena: {problem?.title}
+                    </h5>
+                </div>
+
+                <Badge variant="outline" className="mr-2 border-2 border-solid border-yellow-500 text-white animate-pulse py-2 px-2.5 rounded-4xl text-lg">
+                    <span className='font-black text-yellow-400'>{authUser?.coins}&nbsp;</span>
+                    Coins
+                </Badge>
             </header>
 
             <ResizablePanelGroup
