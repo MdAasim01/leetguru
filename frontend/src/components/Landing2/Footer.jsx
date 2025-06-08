@@ -1,5 +1,6 @@
 // src/components/Footer.jsx
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
@@ -32,26 +33,13 @@ const Footer = () => {
           </div>
           
           <div>
-            <h3 className="text-lg font-bold text-white">Product</h3>
+            <h3 className="text-lg font-bold text-white">Problems</h3>
             <ul className="mt-4 space-y-3">
-              {['Features', 'Problem Library', 'Pricing', 'Changelog', 'Roadmap'].map((item) => (
+              {['Array', 'String', 'Hashmap', 'Linked List', 'Tree'].map((item) => (
                 <li key={item}>
-                  <a href="#" className="text-gray-400 hover:text-emerald-400">
+                  <Link to="/login" className="text-gray-400 hover:text-emerald-400">
                     {item}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-          
-          <div>
-            <h3 className="text-lg font-bold text-white">Resources</h3>
-            <ul className="mt-4 space-y-3">
-              {['Blog', 'Documentation', 'Guides', 'Interview Tips', 'Community'].map((item) => (
-                <li key={item}>
-                  <a href="#" className="text-gray-400 hover:text-emerald-400">
-                    {item}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -60,11 +48,24 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-bold text-white">Company</h3>
             <ul className="mt-4 space-y-3">
+              {['Google', 'Amazon', 'Microsoft', 'Meta', 'Netflix'].map((item) => (
+                <li key={item}>
+                  <Link to="/login" className="text-gray-400 hover:text-emerald-400">
+                    {item}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          
+          <div>
+            <h3 className="text-lg font-bold text-white">Quick Links</h3>
+            <ul className="mt-4 space-y-3">
               {['About', 'Careers', 'Contact', 'Partners', 'Legal'].map((item) => (
                 <li key={item}>
-                  <a href="#" className="text-gray-400 hover:text-emerald-400">
+                  <Link to="/" className="text-gray-400 hover:text-emerald-400">
                     {item}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -73,18 +74,18 @@ const Footer = () => {
         
         <div className="mt-16 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-400">
-            © {new Date().getFullYear()} CodeCraft. All rights reserved.
+            © {new Date().getFullYear()} LeetGuru. All rights reserved.
           </p>
           <div className="mt-4 md:mt-0 flex space-x-6">
-            <a href="#" className="text-gray-400 hover:text-white">
+            <Link to="/" className="text-gray-400 hover:text-white">
               Terms
-            </a>
-            <a href="#" className="text-gray-400 hover:text-white">
+            </Link>
+            <Link to="/" className="text-gray-400 hover:text-white">
               Privacy
-            </a>
-            <a href="#" className="text-gray-400 hover:text-white">
+            </Link>
+            <Link to="/" className="text-gray-400 hover:text-white">
               Cookies
-            </a>
+            </Link>
           </div>
         </div>
       </div>

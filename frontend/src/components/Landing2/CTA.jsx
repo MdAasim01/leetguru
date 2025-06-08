@@ -13,7 +13,7 @@ const CTA = () => {
                 Ready to master coding interviews?
               </h2>
               <p className="mt-4 text-xl text-gray-300">
-                Join thousands of developers who have landed their dream jobs using CodeCraft.
+                Join thousands of developers who have landed their dream jobs using LeetGuru.
               </p>
             </div>
             <div>

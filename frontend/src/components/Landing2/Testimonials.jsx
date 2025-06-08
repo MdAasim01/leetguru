@@ -8,13 +8,13 @@ const Testimonials = () => {
     {
       name: "Alex Johnson",
       role: "Software Engineer at Google",
-      content: "CodeCraft completely changed how I prepare for coding interviews. The company-specific problem sets and detailed explanations helped me land offers from three FAANG companies!",
+      content: "LeetGuru completely changed how I prepare for coding interviews. The company-specific problem sets and detailed explanations helped me land offers from three FAANG companies!",
       avatar: "AJ"
     },
     {
       name: "Sarah Kim",
       role: "Engineering Manager",
-      content: "As a hiring manager, I use CodeCraft to create custom assessments for candidates. The private playlists and team analytics save us countless hours in the hiring process.",
+      content: "As a hiring manager, I use LeetGuru to create custom assessments for candidates. The private playlists and team analytics save us countless hours in the hiring process.",
       avatar: "SK"
     },
     {
