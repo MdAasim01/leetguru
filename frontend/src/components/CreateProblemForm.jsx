@@ -628,7 +628,7 @@ const CreateProblemForm = () => {
 
 	return (
 		<div className="container mx-auto py-8 px-4 max-w-7xl">
-			<div className="card bg-base-100 shadow-xl">
+			<div className="card bg-gray-900/80 shadow-xl">
 				<div className="card-body p-6 md:p-8">
 					<div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 md:mb-8 pb-4 border-b">
 						<h2 className="card-title text-2xl md:text-3xl flex items-center gap-3">
@@ -685,7 +685,7 @@ const CreateProblemForm = () => {
 								</label>
 								<input
 									type="text"
-									className="input input-bordered w-full text-base md:text-lg"
+									className="input rounded-md py-3.5 h-12 bg-input/30 border outline-0 border-neutral-600 focus:border-blue-500 text-neutral-200 w-full text-base md:text-lg"
 									{...register("title")}
 									placeholder="Enter problem title"
 								/>
@@ -705,7 +705,7 @@ const CreateProblemForm = () => {
 									</span>
 								</label>
 								<textarea
-									className="textarea textarea-bordered min-h-32 w-full text-base md:text-lg p-4 resize-y"
+									className="textarea textarea-bordered min-h-32 w-full text-base md:text-lg p-4 resize-y bg-input/30"
 									{...register("description")}
 									placeholder="Enter problem description"
 								/>
@@ -725,7 +725,7 @@ const CreateProblemForm = () => {
 									</span>
 								</label>
 								<select
-									className="select select-bordered w-full text-base md:text-lg"
+									className="select select-bordered w-full text-base md:text-lg bg-input/30"
 									{...register("difficulty")}
 								>
 									<option value="EASY">Easy</option>
@@ -743,7 +743,7 @@ const CreateProblemForm = () => {
 						</div>
 
 						{/* Tags */}
-						<div className="card bg-base-200 p-4 md:p-6 shadow-md">
+						<div className="card bg-input/30 p-4 md:p-6 shadow-md">
 							<div className="flex items-center justify-between mb-4">
 								<h3 className="text-lg md:text-xl font-semibold flex items-center gap-2">
 									<BookOpen className="w-5 h-5" />
@@ -765,7 +765,7 @@ const CreateProblemForm = () => {
 									>
 										<input
 											type="text"
-											className="input input-bordered flex-1"
+											className="input input-bordered bg-gray-900/80 flex-1"
 											{...register(`tags.${index}`)}
 											placeholder="Enter tag"
 										/>
@@ -790,7 +790,7 @@ const CreateProblemForm = () => {
 						</div>
 
 						{/* Companies */}
-						<div className="card bg-base-200 p-4 md:p-6 shadow-md mt-6">
+						<div className="card bg-input/30 p-4 md:p-6 shadow-md mt-6">
 							<div className="flex items-center justify-between mb-4">
 								<h3 className="text-lg md:text-xl font-semibold flex items-center gap-2">
 									<BookOpen className="w-5 h-5" />
@@ -809,7 +809,7 @@ const CreateProblemForm = () => {
 									<div key={field.id} className="flex gap-2 items-center">
 										<input
 											type="text"
-											className="input input-bordered flex-1"
+											className="input bg-gray-900/80 input-bordered flex-1"
 											{...register(`companies.${index}`)}
 											placeholder="Enter company name"
 										/>
@@ -828,7 +828,7 @@ const CreateProblemForm = () => {
 
 
 						{/* Test Cases */}
-						<div className="card bg-base-200 p-4 md:p-6 shadow-md">
+						<div className="card bg-input/30 p-4 md:p-6 shadow-md">
 							<div className="flex items-center justify-between mb-6">
 								<h3 className="text-lg md:text-xl font-semibold flex items-center gap-2">
 									<CheckCircle2 className="w-5 h-5" />
@@ -852,7 +852,7 @@ const CreateProblemForm = () => {
 								{testCaseFields.map((field, index) => (
 									<div
 										key={field.id}
-										className="card bg-base-100 shadow-md"
+										className="card bg-gray-900/80 shadow-md"
 									>
 										<div className="card-body p-4 md:p-6">
 											<div className="flex justify-between items-center mb-4">
@@ -882,7 +882,7 @@ const CreateProblemForm = () => {
 														</span>
 													</label>
 													<textarea
-														className="textarea textarea-bordered min-h-24 w-full p-3 resize-y"
+														className="textarea textarea-bordered min-h-24 w-full p-3 resize-y bg-input/30"
 														{...register(
 															`testcases.${index}.input`
 														)}
@@ -910,7 +910,7 @@ const CreateProblemForm = () => {
 														</span>
 													</label>
 													<textarea
-														className="textarea textarea-bordered min-h-24 w-full p-3 resize-y"
+														className="textarea textarea-bordered min-h-24 w-full p-3 resize-y bg-input/30"
 														{...register(
 															`testcases.${index}.output`
 														)}
@@ -952,7 +952,7 @@ const CreateProblemForm = () => {
 								(language) => (
 									<div
 										key={language}
-										className="card bg-base-200 p-4 md:p-6 shadow-md"
+										className="card bg-input/30 p-4 md:p-6 shadow-md"
 									>
 										<h3 className="text-lg md:text-xl font-semibold mb-6 flex items-center gap-2">
 											<Code2 className="w-5 h-5" />
@@ -961,7 +961,7 @@ const CreateProblemForm = () => {
 
 										<div className="space-y-6">
 											{/* Starter Code */}
-											<div className="card bg-base-100 shadow-md">
+											<div className="card bg-gray-900/80 shadow-md">
 												<div className="card-body p-4 md:p-6">
 													<h4 className="font-semibold text-base md:text-lg mb-4">
 														Starter Code Template
@@ -1017,7 +1017,7 @@ const CreateProblemForm = () => {
 											</div>
 
 											{/* Reference Solution */}
-											<div className="card bg-base-100 shadow-md">
+											<div className="card bg-gray-900/80 shadow-md">
 												<div className="card-body p-4 md:p-6">
 													<h4 className="font-semibold text-base md:text-lg mb-4 flex items-center gap-2">
 														<CheckCircle2 className="w-5 h-5 text-success" />
@@ -1075,7 +1075,7 @@ const CreateProblemForm = () => {
 											</div>
 
 											{/* Examples */}
-											<div className="card bg-base-100 shadow-md">
+											<div className="card bg-gray-900/80 shadow-md">
 												<div className="card-body p-4 md:p-6">
 													<h4 className="font-semibold text-base md:text-lg mb-4">
 														Example
@@ -1088,7 +1088,7 @@ const CreateProblemForm = () => {
 																</span>
 															</label>
 															<textarea
-																className="textarea textarea-bordered min-h-20 w-full p-3 resize-y"
+																className="textarea textarea-bordered min-h-20 w-full p-3 resize-y bg-input/30"
 																{...register(
 																	`examples.${language}.input`
 																)}
@@ -1118,7 +1118,7 @@ const CreateProblemForm = () => {
 																</span>
 															</label>
 															<textarea
-																className="textarea textarea-bordered min-h-20 w-full p-3 resize-y"
+																className="textarea textarea-bordered min-h-20 w-full p-3 resize-y bg-input/30"
 																{...register(
 																	`examples.${language}.output`
 																)}
@@ -1148,7 +1148,7 @@ const CreateProblemForm = () => {
 																</span>
 															</label>
 															<textarea
-																className="textarea textarea-bordered min-h-24 w-full p-3 resize-y"
+																className="textarea textarea-bordered min-h-24 w-full p-3 resize-y bg-input/30"
 																{...register(
 																	`examples.${language}.explanation`
 																)}
@@ -1165,7 +1165,7 @@ const CreateProblemForm = () => {
 						</div>
 
 						{/* Additional Information */}
-						<div className="card bg-base-200 p-4 md:p-6 shadow-md">
+						<div className="card bg-input/30 p-4 md:p-6 shadow-md">
 							<h3 className="text-lg md:text-xl font-semibold mb-6 flex items-center gap-2">
 								<Lightbulb className="w-5 h-5 text-warning" />
 								Additional Information
@@ -1178,7 +1178,7 @@ const CreateProblemForm = () => {
 										</span>
 									</label>
 									<textarea
-										className="textarea textarea-bordered min-h-24 w-full p-3 resize-y"
+										className="textarea textarea-bordered min-h-24 w-full p-3 resize-y bg-gray-900/80"
 										{...register("constraints")}
 										placeholder="Enter problem constraints"
 									/>
@@ -1197,7 +1197,7 @@ const CreateProblemForm = () => {
 										</span>
 									</label>
 									<textarea
-										className="textarea textarea-bordered min-h-24 w-full p-3 resize-y"
+										className="textarea textarea-bordered min-h-24 w-full p-3 resize-y bg-gray-900/80"
 										{...register("hints")}
 										placeholder="Enter hints for solving the problem"
 									/>
@@ -1209,7 +1209,7 @@ const CreateProblemForm = () => {
 										</span>
 									</label>
 									<textarea
-										className="textarea textarea-bordered min-h-32 w-full p-3 resize-y"
+										className="textarea textarea-bordered min-h-32 w-full p-3 resize-y bg-gray-900/80"
 										{...register("editorial")}
 										placeholder="Enter problem editorial/solution explanation"
 									/>

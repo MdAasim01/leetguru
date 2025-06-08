@@ -134,13 +134,13 @@ export default function ProblemsTable({ problems }) {
       <DataTableToolbar table={table} />
       <div className="rounded-md border">
         <Table>
-          <TableHeader>
+          <TableHeader className="bg-gray-900/80">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   const meta = header.column.columnDef.meta
                   return (
-                    <TableHead key={header.id} colSpan={header.colSpan} className={cn(meta?.className)}>
+                    <TableHead key={header.id} colSpan={header.colSpan} className={`p-3.5 ${cn(meta?.className)}`}>
                       {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                     </TableHead>
                   )

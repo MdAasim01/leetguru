@@ -5,7 +5,7 @@ import { StatsSection } from "../components/profile/StatsSection";
 import { StreakCalendar } from "../components/profile/StreakCalendar";
 import { RankingSection } from "../components/profile/RankingSection";
 import { ProblemList } from "../components/profile/ProblemList";
-import { CalendarDays, Edit3, Copy } from "lucide-react";
+import { CalendarDays, Edit3, Copy, Globe, Github, Linkedin, Twitter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { axiosInstance } from "@/lib/axios";
 import { Link } from "react-router-dom";
@@ -137,7 +137,7 @@ export default function ProfilePage() {
             <AvatarFallback>{username.substring(0, 2).toUpperCase()}</AvatarFallback>
           </Avatar>
           <div className="flex-grow text-center md:text-left">
-            <h1 className="text-3xl md:text-4xl font-bold">{username}</h1>
+            <h1 className="text-3xl md:text-4xl font-bold mb-2">{username}</h1>
             <div className="inline-flex border-1 border-gray-600 rounded p-2 my-3 bg-gray-800 text-sm text-neutral-400 items-center justify-center md:justify-start mt-1">
               {authUser.id}
               <button
@@ -153,12 +153,36 @@ export default function ProfilePage() {
               <CalendarDays className="mr-2 h-4 w-4" />
               Joined on {new Date(joinDate).toLocaleDateString()}
             </p>
+            <div className="flex space-x-4 mt-6">
+              <a href={authUser.website} target="_blank" className="text-gray-400 hover:text-white">
+                <div className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center">
+                  <Globe className="h-5 w-5" />
+                </div>
+              </a>
+              <a href={authUser.github} target="_blank" className="text-gray-400 hover:text-white">
+                <div className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center">
+                  <Github className="h-5 w-5" />
+                </div>
+              </a>
+              <a href={authUser.twitter} target="_blank" className="text-gray-400 hover:text-white">
+                <div className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center">
+                  <Twitter className="h-5 w-5" />
+                </div>
+              </a>
+              <a href={authUser.linkedin} target="_blank" className="text-gray-400 hover:text-white">
+                <div className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center">
+                  <Linkedin className="h-5 w-5" />
+                </div>
+              </a>
+            </div>
           </div>
-          <Button variant="outline">
-            <Link to="/edit-profile" className="flex items-center space-x-2">
-              <Edit3 className="mr-2 h-4 w-4" /> Edit Profile
-            </Link>
-          </Button>
+          <div className="self-start">
+            <Button variant="outline" className="px-0 py-0">
+              <Link to="/edit-profile" className="flex items-center px-4 py-2">
+                <Edit3 className="mr-2 h-4 w-4" /> Edit Profile
+              </Link>
+            </Button>
+          </div>
         </CardContent>
       </Card>
 

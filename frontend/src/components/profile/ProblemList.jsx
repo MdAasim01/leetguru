@@ -20,7 +20,7 @@ export function ProblemList({ title, problems, type = "solved" }) { // type can 
       <div className="rounded-md border">
         <Table>
           <TableHeader>
-            <TableRow>
+            <TableRow className="bg-gray-900/80">
               <TableHead>Problem Title</TableHead>
               {type === "submissions" && <TableHead>Language</TableHead>}
               {type === "submissions" && <TableHead>Status</TableHead>}
