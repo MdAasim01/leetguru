@@ -74,6 +74,8 @@ export default function ProblemSolvingPage() {
 
         } catch (err) {
             toast.error("Code execution failed");
+        } finally {
+            checkAuth()
         }
     };
 
@@ -97,11 +99,11 @@ export default function ProblemSolvingPage() {
             setIsLoadingFeedback(true);
             setAiFeedback(""); // Clear old feedback
 
-            axiosInstance
+            await axiosInstance
                 .post("/feedback/code-feedback", {
                     code,
                     language: selectedLanguage,
-                    testCases: newSub?.testCases || [],
+                    testCases: submission?.testCases || [],
                 })
                 .then((res) => {
                     setAiFeedback(res.data.feedback);
