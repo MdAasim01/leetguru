@@ -7,7 +7,7 @@ const Footer = () => {
     <footer className="bg-gray-900 border-t border-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-3">
             <div className="flex items-center">
               <div className="bg-emerald-500 w-8 h-8 rounded-lg flex items-center justify-center">
                 <span className="text-gray-900 font-bold text-xl">LG</span>
@@ -19,7 +19,7 @@ const Footer = () => {
             <p className="mt-4 text-gray-400 max-w-md">
               The modern platform for mastering coding interviews and technical skills. Join our community of developers leveling up their careers.
             </p>
-            <div className="flex space-x-4 mt-6">
+            {/* <div className="flex space-x-4 mt-6">
               {[0, 1, 2, 3].map((item) => (
                 <a key={item} href="#" className="text-gray-400 hover:text-white">
                   <div className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center">
@@ -29,7 +29,7 @@ const Footer = () => {
                   </div>
                 </a>
               ))}
-            </div>
+            </div> */}
           </div>
           
           <div>
@@ -58,7 +58,7 @@ const Footer = () => {
             </ul>
           </div>
           
-          <div>
+          {/* <div>
             <h3 className="text-lg font-bold text-white">Quick Links</h3>
             <ul className="mt-4 space-y-3">
               {['About', 'Careers', 'Contact', 'Partners', 'Legal'].map((item) => (
@@ -69,7 +69,7 @@ const Footer = () => {
                 </li>
               ))}
             </ul>
-          </div>
+          </div> */}
         </div>
         
         <div className="mt-16 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
