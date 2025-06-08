@@ -34,17 +34,21 @@ const MonacoEditorPanel = ({
 
   const normalizeLangKey = (lang) => lang?.toUpperCase() || "JAVASCRIPT"
 
-  // Inject snippet when selectedLanguage or codeSnippets change
   useEffect(() => {
     const langKey = normalizeLangKey(selectedLanguage)
+
+    // Wait until codeSnippets is not empty
+    if (!codeSnippets || Object.keys(codeSnippets).length === 0) return
+
     const snippet = codeSnippets[langKey]
     if (snippet !== undefined) {
       setCode(snippet)
     } else {
-      toast.error(`No snippet found for language: ${langKey}`);
+      toast.error(`No snippet found for language: ${langKey}`)
       setCode("")
     }
   }, [selectedLanguage, codeSnippets])
+
 
   const handleEditorChange = (val) => {
     setCode(val || "")
