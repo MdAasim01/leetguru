@@ -130,6 +130,7 @@ exports.Prisma.UserScalarFieldEnum = {
   twitter: 'twitter',
   role: 'role',
   password: 'password',
+  coins: 'coins',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -220,6 +221,14 @@ exports.Prisma.PlaylistAccessScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.CoinTransactionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  amount: 'amount',
+  reason: 'reason',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -263,7 +272,8 @@ exports.Prisma.ModelName = {
   ProblemSolved: 'ProblemSolved',
   Playlist: 'Playlist',
   ProblemInPlaylist: 'ProblemInPlaylist',
-  PlaylistAccess: 'PlaylistAccess'
+  PlaylistAccess: 'PlaylistAccess',
+  CoinTransaction: 'CoinTransaction'
 };
 
 /**

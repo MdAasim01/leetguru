@@ -142,7 +142,40 @@ export const executeCode = async (req, res) => {
 				testCases: true,
 			},
 		});
-		//
+
+		// Award coins for successful submission
+		// after problemSolved.upsert(...)
+		if (allPassed) {
+			const existing = await db.coinTransaction.findFirst({
+				where: {
+					userId,
+					reason: "Solved Problem",
+					AND: {
+						createdAt: {
+							gte: new Date(new Date().setHours(0, 0, 0, 0)), // optional, avoid spam
+						},
+					},
+				},
+			});
+
+			if (!existing) {
+				await db.user.update({
+					where: { id: userId },
+					data: {
+						coins: { increment: 10 },
+					},
+				});
+
+				await db.coinTransaction.create({
+					data: {
+						userId,
+						amount: 10,
+						reason: `Solved Problem (Problem ID: ${problemId})`,
+					},
+				});
+			}
+		}
+
 		res.status(200).json({
 			success: true,
 			message: "Code Executed! Successfully!",

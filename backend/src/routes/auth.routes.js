@@ -1,6 +1,7 @@
 import express from "express";
 import {
 	check,
+	getUserCoinBalance,
 	login,
 	logout,
 	register,
@@ -29,6 +30,8 @@ authRoutes.post("/login", login);
 authRoutes.post("/logout", authMiddleware, logout);
 
 authRoutes.get("/check", authMiddleware, check);
+
+authRoutes.get("/coin-balance", authMiddleware, getUserCoinBalance);
 
 authRoutes.patch(
 	"/update-profile",

@@ -1,4 +1,5 @@
 import OpenAI from "openai";
+import { db } from "../libs/db.js";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -7,14 +8,33 @@ const openai = new OpenAI({
 export const getCodeFeedback = async (req, res) => {
   try {
     const { code, language, testCases } = req.body;
-
-    console.log("Received code feedback request:");
-    
+    const userId = req.user.id;
 
     if (!code || !language) {
       return res.status(400).json({ error: "Missing code or language" });
     }
 
+    // ✅ 1. Check coin balance
+    const user = await db.user.findUnique({ where: { id: userId } });
+    if (!user || user.coins < 3) {
+      return res.status(400).json({ error: "Not enough coins to generate feedback" });
+    }
+
+    // ✅ 2. Deduct 3 coins and log transaction
+    await db.user.update({
+      where: { id: userId },
+      data: { coins: { decrement: 3 } },
+    });
+
+    await db.coinTransaction.create({
+      data: {
+        userId,
+        amount: -3,
+        reason: "AI Feedback Request",
+      },
+    });
+
+    // ✅ 3. Call OpenAI
     const prompt = [
       {
         role: "system",
@@ -32,6 +52,7 @@ export const getCodeFeedback = async (req, res) => {
     });
 
     const feedback = response.choices?.[0]?.message?.content || "No feedback generated.";
+
     return res.status(200).json({ feedback });
   } catch (error) {
     console.error("OpenAI Feedback Error:", error.message);

@@ -53,6 +53,11 @@ export type ProblemInPlaylist = $Result.DefaultSelection<Prisma.$ProblemInPlayli
  * 
  */
 export type PlaylistAccess = $Result.DefaultSelection<Prisma.$PlaylistAccessPayload>
+/**
+ * Model CoinTransaction
+ * 
+ */
+export type CoinTransaction = $Result.DefaultSelection<Prisma.$CoinTransactionPayload>
 
 /**
  * Enums
@@ -288,6 +293,16 @@ export class PrismaClient<
     * ```
     */
   get playlistAccess(): Prisma.PlaylistAccessDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.coinTransaction`: Exposes CRUD operations for the **CoinTransaction** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CoinTransactions
+    * const coinTransactions = await prisma.coinTransaction.findMany()
+    * ```
+    */
+  get coinTransaction(): Prisma.CoinTransactionDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -735,7 +750,8 @@ export namespace Prisma {
     ProblemSolved: 'ProblemSolved',
     Playlist: 'Playlist',
     ProblemInPlaylist: 'ProblemInPlaylist',
-    PlaylistAccess: 'PlaylistAccess'
+    PlaylistAccess: 'PlaylistAccess',
+    CoinTransaction: 'CoinTransaction'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -754,7 +770,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "problem" | "submission" | "testCaseResult" | "problemSolved" | "playlist" | "problemInPlaylist" | "playlistAccess"
+      modelProps: "user" | "problem" | "submission" | "testCaseResult" | "problemSolved" | "playlist" | "problemInPlaylist" | "playlistAccess" | "coinTransaction"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1350,6 +1366,80 @@ export namespace Prisma {
           }
         }
       }
+      CoinTransaction: {
+        payload: Prisma.$CoinTransactionPayload<ExtArgs>
+        fields: Prisma.CoinTransactionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CoinTransactionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CoinTransactionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CoinTransactionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CoinTransactionPayload>
+          }
+          findFirst: {
+            args: Prisma.CoinTransactionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CoinTransactionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CoinTransactionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CoinTransactionPayload>
+          }
+          findMany: {
+            args: Prisma.CoinTransactionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CoinTransactionPayload>[]
+          }
+          create: {
+            args: Prisma.CoinTransactionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CoinTransactionPayload>
+          }
+          createMany: {
+            args: Prisma.CoinTransactionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CoinTransactionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CoinTransactionPayload>[]
+          }
+          delete: {
+            args: Prisma.CoinTransactionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CoinTransactionPayload>
+          }
+          update: {
+            args: Prisma.CoinTransactionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CoinTransactionPayload>
+          }
+          deleteMany: {
+            args: Prisma.CoinTransactionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CoinTransactionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CoinTransactionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CoinTransactionPayload>[]
+          }
+          upsert: {
+            args: Prisma.CoinTransactionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CoinTransactionPayload>
+          }
+          aggregate: {
+            args: Prisma.CoinTransactionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCoinTransaction>
+          }
+          groupBy: {
+            args: Prisma.CoinTransactionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CoinTransactionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CoinTransactionCountArgs<ExtArgs>
+            result: $Utils.Optional<CoinTransactionCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1442,6 +1532,7 @@ export namespace Prisma {
     playlist?: PlaylistOmit
     problemInPlaylist?: ProblemInPlaylistOmit
     playlistAccess?: PlaylistAccessOmit
+    coinTransaction?: CoinTransactionOmit
   }
 
   /* Types for Logging */
@@ -1541,6 +1632,7 @@ export namespace Prisma {
     problemSolved: number
     playlists: number
     sharedPlaylists: number
+    coinTransactions: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1549,6 +1641,7 @@ export namespace Prisma {
     problemSolved?: boolean | UserCountOutputTypeCountProblemSolvedArgs
     playlists?: boolean | UserCountOutputTypeCountPlaylistsArgs
     sharedPlaylists?: boolean | UserCountOutputTypeCountSharedPlaylistsArgs
+    coinTransactions?: boolean | UserCountOutputTypeCountCoinTransactionsArgs
   }
 
   // Custom InputTypes
@@ -1595,6 +1688,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountSharedPlaylistsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PlaylistAccessWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountCoinTransactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CoinTransactionWhereInput
   }
 
 
@@ -1728,8 +1828,18 @@ export namespace Prisma {
 
   export type AggregateUser = {
     _count: UserCountAggregateOutputType | null
+    _avg: UserAvgAggregateOutputType | null
+    _sum: UserSumAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
+  }
+
+  export type UserAvgAggregateOutputType = {
+    coins: number | null
+  }
+
+  export type UserSumAggregateOutputType = {
+    coins: number | null
   }
 
   export type UserMinAggregateOutputType = {
@@ -1745,6 +1855,7 @@ export namespace Prisma {
     twitter: string | null
     role: $Enums.UserRole | null
     password: string | null
+    coins: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -1762,6 +1873,7 @@ export namespace Prisma {
     twitter: string | null
     role: $Enums.UserRole | null
     password: string | null
+    coins: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -1779,11 +1891,20 @@ export namespace Prisma {
     twitter: number
     role: number
     password: number
+    coins: number
     createdAt: number
     updatedAt: number
     _all: number
   }
 
+
+  export type UserAvgAggregateInputType = {
+    coins?: true
+  }
+
+  export type UserSumAggregateInputType = {
+    coins?: true
+  }
 
   export type UserMinAggregateInputType = {
     id?: true
@@ -1798,6 +1919,7 @@ export namespace Prisma {
     twitter?: true
     role?: true
     password?: true
+    coins?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -1815,6 +1937,7 @@ export namespace Prisma {
     twitter?: true
     role?: true
     password?: true
+    coins?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -1832,6 +1955,7 @@ export namespace Prisma {
     twitter?: true
     role?: true
     password?: true
+    coins?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -1875,6 +1999,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: UserAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: UserSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: UserMinAggregateInputType
@@ -1905,6 +2041,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: UserCountAggregateInputType | true
+    _avg?: UserAvgAggregateInputType
+    _sum?: UserSumAggregateInputType
     _min?: UserMinAggregateInputType
     _max?: UserMaxAggregateInputType
   }
@@ -1922,9 +2060,12 @@ export namespace Prisma {
     twitter: string | null
     role: $Enums.UserRole
     password: string
+    coins: number
     createdAt: Date
     updatedAt: Date
     _count: UserCountAggregateOutputType | null
+    _avg: UserAvgAggregateOutputType | null
+    _sum: UserSumAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
   }
@@ -1956,6 +2097,7 @@ export namespace Prisma {
     twitter?: boolean
     role?: boolean
     password?: boolean
+    coins?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     problems?: boolean | User$problemsArgs<ExtArgs>
@@ -1963,6 +2105,7 @@ export namespace Prisma {
     problemSolved?: boolean | User$problemSolvedArgs<ExtArgs>
     playlists?: boolean | User$playlistsArgs<ExtArgs>
     sharedPlaylists?: boolean | User$sharedPlaylistsArgs<ExtArgs>
+    coinTransactions?: boolean | User$coinTransactionsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -1979,6 +2122,7 @@ export namespace Prisma {
     twitter?: boolean
     role?: boolean
     password?: boolean
+    coins?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["user"]>
@@ -1996,6 +2140,7 @@ export namespace Prisma {
     twitter?: boolean
     role?: boolean
     password?: boolean
+    coins?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["user"]>
@@ -2013,17 +2158,19 @@ export namespace Prisma {
     twitter?: boolean
     role?: boolean
     password?: boolean
+    coins?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "image" | "dob" | "bio" | "website" | "github" | "linkedin" | "twitter" | "role" | "password" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "image" | "dob" | "bio" | "website" | "github" | "linkedin" | "twitter" | "role" | "password" | "coins" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     problems?: boolean | User$problemsArgs<ExtArgs>
     submission?: boolean | User$submissionArgs<ExtArgs>
     problemSolved?: boolean | User$problemSolvedArgs<ExtArgs>
     playlists?: boolean | User$playlistsArgs<ExtArgs>
     sharedPlaylists?: boolean | User$sharedPlaylistsArgs<ExtArgs>
+    coinTransactions?: boolean | User$coinTransactionsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -2037,6 +2184,7 @@ export namespace Prisma {
       problemSolved: Prisma.$ProblemSolvedPayload<ExtArgs>[]
       playlists: Prisma.$PlaylistPayload<ExtArgs>[]
       sharedPlaylists: Prisma.$PlaylistAccessPayload<ExtArgs>[]
+      coinTransactions: Prisma.$CoinTransactionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2051,6 +2199,7 @@ export namespace Prisma {
       twitter: string | null
       role: $Enums.UserRole
       password: string
+      coins: number
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["user"]>
@@ -2452,6 +2601,7 @@ export namespace Prisma {
     problemSolved<T extends User$problemSolvedArgs<ExtArgs> = {}>(args?: Subset<T, User$problemSolvedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProblemSolvedPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     playlists<T extends User$playlistsArgs<ExtArgs> = {}>(args?: Subset<T, User$playlistsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlaylistPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sharedPlaylists<T extends User$sharedPlaylistsArgs<ExtArgs> = {}>(args?: Subset<T, User$sharedPlaylistsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlaylistAccessPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    coinTransactions<T extends User$coinTransactionsArgs<ExtArgs> = {}>(args?: Subset<T, User$coinTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CoinTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2493,6 +2643,7 @@ export namespace Prisma {
     readonly twitter: FieldRef<"User", 'String'>
     readonly role: FieldRef<"User", 'UserRole'>
     readonly password: FieldRef<"User", 'String'>
+    readonly coins: FieldRef<"User", 'Int'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
   }
@@ -3000,6 +3151,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: PlaylistAccessScalarFieldEnum | PlaylistAccessScalarFieldEnum[]
+  }
+
+  /**
+   * User.coinTransactions
+   */
+  export type User$coinTransactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoinTransaction
+     */
+    select?: CoinTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoinTransaction
+     */
+    omit?: CoinTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CoinTransactionInclude<ExtArgs> | null
+    where?: CoinTransactionWhereInput
+    orderBy?: CoinTransactionOrderByWithRelationInput | CoinTransactionOrderByWithRelationInput[]
+    cursor?: CoinTransactionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CoinTransactionScalarFieldEnum | CoinTransactionScalarFieldEnum[]
   }
 
   /**
@@ -11030,6 +11205,1098 @@ export namespace Prisma {
 
 
   /**
+   * Model CoinTransaction
+   */
+
+  export type AggregateCoinTransaction = {
+    _count: CoinTransactionCountAggregateOutputType | null
+    _avg: CoinTransactionAvgAggregateOutputType | null
+    _sum: CoinTransactionSumAggregateOutputType | null
+    _min: CoinTransactionMinAggregateOutputType | null
+    _max: CoinTransactionMaxAggregateOutputType | null
+  }
+
+  export type CoinTransactionAvgAggregateOutputType = {
+    amount: number | null
+  }
+
+  export type CoinTransactionSumAggregateOutputType = {
+    amount: number | null
+  }
+
+  export type CoinTransactionMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    amount: number | null
+    reason: string | null
+    createdAt: Date | null
+  }
+
+  export type CoinTransactionMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    amount: number | null
+    reason: string | null
+    createdAt: Date | null
+  }
+
+  export type CoinTransactionCountAggregateOutputType = {
+    id: number
+    userId: number
+    amount: number
+    reason: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type CoinTransactionAvgAggregateInputType = {
+    amount?: true
+  }
+
+  export type CoinTransactionSumAggregateInputType = {
+    amount?: true
+  }
+
+  export type CoinTransactionMinAggregateInputType = {
+    id?: true
+    userId?: true
+    amount?: true
+    reason?: true
+    createdAt?: true
+  }
+
+  export type CoinTransactionMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    amount?: true
+    reason?: true
+    createdAt?: true
+  }
+
+  export type CoinTransactionCountAggregateInputType = {
+    id?: true
+    userId?: true
+    amount?: true
+    reason?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type CoinTransactionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CoinTransaction to aggregate.
+     */
+    where?: CoinTransactionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CoinTransactions to fetch.
+     */
+    orderBy?: CoinTransactionOrderByWithRelationInput | CoinTransactionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CoinTransactionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CoinTransactions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CoinTransactions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CoinTransactions
+    **/
+    _count?: true | CoinTransactionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CoinTransactionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CoinTransactionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CoinTransactionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CoinTransactionMaxAggregateInputType
+  }
+
+  export type GetCoinTransactionAggregateType<T extends CoinTransactionAggregateArgs> = {
+        [P in keyof T & keyof AggregateCoinTransaction]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCoinTransaction[P]>
+      : GetScalarType<T[P], AggregateCoinTransaction[P]>
+  }
+
+
+
+
+  export type CoinTransactionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CoinTransactionWhereInput
+    orderBy?: CoinTransactionOrderByWithAggregationInput | CoinTransactionOrderByWithAggregationInput[]
+    by: CoinTransactionScalarFieldEnum[] | CoinTransactionScalarFieldEnum
+    having?: CoinTransactionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CoinTransactionCountAggregateInputType | true
+    _avg?: CoinTransactionAvgAggregateInputType
+    _sum?: CoinTransactionSumAggregateInputType
+    _min?: CoinTransactionMinAggregateInputType
+    _max?: CoinTransactionMaxAggregateInputType
+  }
+
+  export type CoinTransactionGroupByOutputType = {
+    id: string
+    userId: string
+    amount: number
+    reason: string
+    createdAt: Date
+    _count: CoinTransactionCountAggregateOutputType | null
+    _avg: CoinTransactionAvgAggregateOutputType | null
+    _sum: CoinTransactionSumAggregateOutputType | null
+    _min: CoinTransactionMinAggregateOutputType | null
+    _max: CoinTransactionMaxAggregateOutputType | null
+  }
+
+  type GetCoinTransactionGroupByPayload<T extends CoinTransactionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CoinTransactionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CoinTransactionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CoinTransactionGroupByOutputType[P]>
+            : GetScalarType<T[P], CoinTransactionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CoinTransactionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    amount?: boolean
+    reason?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["coinTransaction"]>
+
+  export type CoinTransactionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    amount?: boolean
+    reason?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["coinTransaction"]>
+
+  export type CoinTransactionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    amount?: boolean
+    reason?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["coinTransaction"]>
+
+  export type CoinTransactionSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    amount?: boolean
+    reason?: boolean
+    createdAt?: boolean
+  }
+
+  export type CoinTransactionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "amount" | "reason" | "createdAt", ExtArgs["result"]["coinTransaction"]>
+  export type CoinTransactionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type CoinTransactionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type CoinTransactionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $CoinTransactionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CoinTransaction"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      amount: number
+      reason: string
+      createdAt: Date
+    }, ExtArgs["result"]["coinTransaction"]>
+    composites: {}
+  }
+
+  type CoinTransactionGetPayload<S extends boolean | null | undefined | CoinTransactionDefaultArgs> = $Result.GetResult<Prisma.$CoinTransactionPayload, S>
+
+  type CoinTransactionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CoinTransactionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CoinTransactionCountAggregateInputType | true
+    }
+
+  export interface CoinTransactionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CoinTransaction'], meta: { name: 'CoinTransaction' } }
+    /**
+     * Find zero or one CoinTransaction that matches the filter.
+     * @param {CoinTransactionFindUniqueArgs} args - Arguments to find a CoinTransaction
+     * @example
+     * // Get one CoinTransaction
+     * const coinTransaction = await prisma.coinTransaction.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CoinTransactionFindUniqueArgs>(args: SelectSubset<T, CoinTransactionFindUniqueArgs<ExtArgs>>): Prisma__CoinTransactionClient<$Result.GetResult<Prisma.$CoinTransactionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one CoinTransaction that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CoinTransactionFindUniqueOrThrowArgs} args - Arguments to find a CoinTransaction
+     * @example
+     * // Get one CoinTransaction
+     * const coinTransaction = await prisma.coinTransaction.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CoinTransactionFindUniqueOrThrowArgs>(args: SelectSubset<T, CoinTransactionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CoinTransactionClient<$Result.GetResult<Prisma.$CoinTransactionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CoinTransaction that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CoinTransactionFindFirstArgs} args - Arguments to find a CoinTransaction
+     * @example
+     * // Get one CoinTransaction
+     * const coinTransaction = await prisma.coinTransaction.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CoinTransactionFindFirstArgs>(args?: SelectSubset<T, CoinTransactionFindFirstArgs<ExtArgs>>): Prisma__CoinTransactionClient<$Result.GetResult<Prisma.$CoinTransactionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CoinTransaction that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CoinTransactionFindFirstOrThrowArgs} args - Arguments to find a CoinTransaction
+     * @example
+     * // Get one CoinTransaction
+     * const coinTransaction = await prisma.coinTransaction.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CoinTransactionFindFirstOrThrowArgs>(args?: SelectSubset<T, CoinTransactionFindFirstOrThrowArgs<ExtArgs>>): Prisma__CoinTransactionClient<$Result.GetResult<Prisma.$CoinTransactionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more CoinTransactions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CoinTransactionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CoinTransactions
+     * const coinTransactions = await prisma.coinTransaction.findMany()
+     * 
+     * // Get first 10 CoinTransactions
+     * const coinTransactions = await prisma.coinTransaction.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const coinTransactionWithIdOnly = await prisma.coinTransaction.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CoinTransactionFindManyArgs>(args?: SelectSubset<T, CoinTransactionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CoinTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a CoinTransaction.
+     * @param {CoinTransactionCreateArgs} args - Arguments to create a CoinTransaction.
+     * @example
+     * // Create one CoinTransaction
+     * const CoinTransaction = await prisma.coinTransaction.create({
+     *   data: {
+     *     // ... data to create a CoinTransaction
+     *   }
+     * })
+     * 
+     */
+    create<T extends CoinTransactionCreateArgs>(args: SelectSubset<T, CoinTransactionCreateArgs<ExtArgs>>): Prisma__CoinTransactionClient<$Result.GetResult<Prisma.$CoinTransactionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many CoinTransactions.
+     * @param {CoinTransactionCreateManyArgs} args - Arguments to create many CoinTransactions.
+     * @example
+     * // Create many CoinTransactions
+     * const coinTransaction = await prisma.coinTransaction.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CoinTransactionCreateManyArgs>(args?: SelectSubset<T, CoinTransactionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CoinTransactions and returns the data saved in the database.
+     * @param {CoinTransactionCreateManyAndReturnArgs} args - Arguments to create many CoinTransactions.
+     * @example
+     * // Create many CoinTransactions
+     * const coinTransaction = await prisma.coinTransaction.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CoinTransactions and only return the `id`
+     * const coinTransactionWithIdOnly = await prisma.coinTransaction.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CoinTransactionCreateManyAndReturnArgs>(args?: SelectSubset<T, CoinTransactionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CoinTransactionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a CoinTransaction.
+     * @param {CoinTransactionDeleteArgs} args - Arguments to delete one CoinTransaction.
+     * @example
+     * // Delete one CoinTransaction
+     * const CoinTransaction = await prisma.coinTransaction.delete({
+     *   where: {
+     *     // ... filter to delete one CoinTransaction
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CoinTransactionDeleteArgs>(args: SelectSubset<T, CoinTransactionDeleteArgs<ExtArgs>>): Prisma__CoinTransactionClient<$Result.GetResult<Prisma.$CoinTransactionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one CoinTransaction.
+     * @param {CoinTransactionUpdateArgs} args - Arguments to update one CoinTransaction.
+     * @example
+     * // Update one CoinTransaction
+     * const coinTransaction = await prisma.coinTransaction.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CoinTransactionUpdateArgs>(args: SelectSubset<T, CoinTransactionUpdateArgs<ExtArgs>>): Prisma__CoinTransactionClient<$Result.GetResult<Prisma.$CoinTransactionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more CoinTransactions.
+     * @param {CoinTransactionDeleteManyArgs} args - Arguments to filter CoinTransactions to delete.
+     * @example
+     * // Delete a few CoinTransactions
+     * const { count } = await prisma.coinTransaction.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CoinTransactionDeleteManyArgs>(args?: SelectSubset<T, CoinTransactionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CoinTransactions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CoinTransactionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CoinTransactions
+     * const coinTransaction = await prisma.coinTransaction.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CoinTransactionUpdateManyArgs>(args: SelectSubset<T, CoinTransactionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CoinTransactions and returns the data updated in the database.
+     * @param {CoinTransactionUpdateManyAndReturnArgs} args - Arguments to update many CoinTransactions.
+     * @example
+     * // Update many CoinTransactions
+     * const coinTransaction = await prisma.coinTransaction.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more CoinTransactions and only return the `id`
+     * const coinTransactionWithIdOnly = await prisma.coinTransaction.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CoinTransactionUpdateManyAndReturnArgs>(args: SelectSubset<T, CoinTransactionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CoinTransactionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one CoinTransaction.
+     * @param {CoinTransactionUpsertArgs} args - Arguments to update or create a CoinTransaction.
+     * @example
+     * // Update or create a CoinTransaction
+     * const coinTransaction = await prisma.coinTransaction.upsert({
+     *   create: {
+     *     // ... data to create a CoinTransaction
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CoinTransaction we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CoinTransactionUpsertArgs>(args: SelectSubset<T, CoinTransactionUpsertArgs<ExtArgs>>): Prisma__CoinTransactionClient<$Result.GetResult<Prisma.$CoinTransactionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of CoinTransactions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CoinTransactionCountArgs} args - Arguments to filter CoinTransactions to count.
+     * @example
+     * // Count the number of CoinTransactions
+     * const count = await prisma.coinTransaction.count({
+     *   where: {
+     *     // ... the filter for the CoinTransactions we want to count
+     *   }
+     * })
+    **/
+    count<T extends CoinTransactionCountArgs>(
+      args?: Subset<T, CoinTransactionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CoinTransactionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CoinTransaction.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CoinTransactionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CoinTransactionAggregateArgs>(args: Subset<T, CoinTransactionAggregateArgs>): Prisma.PrismaPromise<GetCoinTransactionAggregateType<T>>
+
+    /**
+     * Group by CoinTransaction.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CoinTransactionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CoinTransactionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CoinTransactionGroupByArgs['orderBy'] }
+        : { orderBy?: CoinTransactionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CoinTransactionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCoinTransactionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CoinTransaction model
+   */
+  readonly fields: CoinTransactionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CoinTransaction.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CoinTransactionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CoinTransaction model
+   */
+  interface CoinTransactionFieldRefs {
+    readonly id: FieldRef<"CoinTransaction", 'String'>
+    readonly userId: FieldRef<"CoinTransaction", 'String'>
+    readonly amount: FieldRef<"CoinTransaction", 'Int'>
+    readonly reason: FieldRef<"CoinTransaction", 'String'>
+    readonly createdAt: FieldRef<"CoinTransaction", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CoinTransaction findUnique
+   */
+  export type CoinTransactionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoinTransaction
+     */
+    select?: CoinTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoinTransaction
+     */
+    omit?: CoinTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CoinTransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which CoinTransaction to fetch.
+     */
+    where: CoinTransactionWhereUniqueInput
+  }
+
+  /**
+   * CoinTransaction findUniqueOrThrow
+   */
+  export type CoinTransactionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoinTransaction
+     */
+    select?: CoinTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoinTransaction
+     */
+    omit?: CoinTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CoinTransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which CoinTransaction to fetch.
+     */
+    where: CoinTransactionWhereUniqueInput
+  }
+
+  /**
+   * CoinTransaction findFirst
+   */
+  export type CoinTransactionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoinTransaction
+     */
+    select?: CoinTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoinTransaction
+     */
+    omit?: CoinTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CoinTransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which CoinTransaction to fetch.
+     */
+    where?: CoinTransactionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CoinTransactions to fetch.
+     */
+    orderBy?: CoinTransactionOrderByWithRelationInput | CoinTransactionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CoinTransactions.
+     */
+    cursor?: CoinTransactionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CoinTransactions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CoinTransactions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CoinTransactions.
+     */
+    distinct?: CoinTransactionScalarFieldEnum | CoinTransactionScalarFieldEnum[]
+  }
+
+  /**
+   * CoinTransaction findFirstOrThrow
+   */
+  export type CoinTransactionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoinTransaction
+     */
+    select?: CoinTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoinTransaction
+     */
+    omit?: CoinTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CoinTransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which CoinTransaction to fetch.
+     */
+    where?: CoinTransactionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CoinTransactions to fetch.
+     */
+    orderBy?: CoinTransactionOrderByWithRelationInput | CoinTransactionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CoinTransactions.
+     */
+    cursor?: CoinTransactionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CoinTransactions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CoinTransactions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CoinTransactions.
+     */
+    distinct?: CoinTransactionScalarFieldEnum | CoinTransactionScalarFieldEnum[]
+  }
+
+  /**
+   * CoinTransaction findMany
+   */
+  export type CoinTransactionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoinTransaction
+     */
+    select?: CoinTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoinTransaction
+     */
+    omit?: CoinTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CoinTransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which CoinTransactions to fetch.
+     */
+    where?: CoinTransactionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CoinTransactions to fetch.
+     */
+    orderBy?: CoinTransactionOrderByWithRelationInput | CoinTransactionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CoinTransactions.
+     */
+    cursor?: CoinTransactionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CoinTransactions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CoinTransactions.
+     */
+    skip?: number
+    distinct?: CoinTransactionScalarFieldEnum | CoinTransactionScalarFieldEnum[]
+  }
+
+  /**
+   * CoinTransaction create
+   */
+  export type CoinTransactionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoinTransaction
+     */
+    select?: CoinTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoinTransaction
+     */
+    omit?: CoinTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CoinTransactionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CoinTransaction.
+     */
+    data: XOR<CoinTransactionCreateInput, CoinTransactionUncheckedCreateInput>
+  }
+
+  /**
+   * CoinTransaction createMany
+   */
+  export type CoinTransactionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CoinTransactions.
+     */
+    data: CoinTransactionCreateManyInput | CoinTransactionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CoinTransaction createManyAndReturn
+   */
+  export type CoinTransactionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoinTransaction
+     */
+    select?: CoinTransactionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoinTransaction
+     */
+    omit?: CoinTransactionOmit<ExtArgs> | null
+    /**
+     * The data used to create many CoinTransactions.
+     */
+    data: CoinTransactionCreateManyInput | CoinTransactionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CoinTransactionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CoinTransaction update
+   */
+  export type CoinTransactionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoinTransaction
+     */
+    select?: CoinTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoinTransaction
+     */
+    omit?: CoinTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CoinTransactionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CoinTransaction.
+     */
+    data: XOR<CoinTransactionUpdateInput, CoinTransactionUncheckedUpdateInput>
+    /**
+     * Choose, which CoinTransaction to update.
+     */
+    where: CoinTransactionWhereUniqueInput
+  }
+
+  /**
+   * CoinTransaction updateMany
+   */
+  export type CoinTransactionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CoinTransactions.
+     */
+    data: XOR<CoinTransactionUpdateManyMutationInput, CoinTransactionUncheckedUpdateManyInput>
+    /**
+     * Filter which CoinTransactions to update
+     */
+    where?: CoinTransactionWhereInput
+    /**
+     * Limit how many CoinTransactions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CoinTransaction updateManyAndReturn
+   */
+  export type CoinTransactionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoinTransaction
+     */
+    select?: CoinTransactionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoinTransaction
+     */
+    omit?: CoinTransactionOmit<ExtArgs> | null
+    /**
+     * The data used to update CoinTransactions.
+     */
+    data: XOR<CoinTransactionUpdateManyMutationInput, CoinTransactionUncheckedUpdateManyInput>
+    /**
+     * Filter which CoinTransactions to update
+     */
+    where?: CoinTransactionWhereInput
+    /**
+     * Limit how many CoinTransactions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CoinTransactionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CoinTransaction upsert
+   */
+  export type CoinTransactionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoinTransaction
+     */
+    select?: CoinTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoinTransaction
+     */
+    omit?: CoinTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CoinTransactionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CoinTransaction to update in case it exists.
+     */
+    where: CoinTransactionWhereUniqueInput
+    /**
+     * In case the CoinTransaction found by the `where` argument doesn't exist, create a new CoinTransaction with this data.
+     */
+    create: XOR<CoinTransactionCreateInput, CoinTransactionUncheckedCreateInput>
+    /**
+     * In case the CoinTransaction was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CoinTransactionUpdateInput, CoinTransactionUncheckedUpdateInput>
+  }
+
+  /**
+   * CoinTransaction delete
+   */
+  export type CoinTransactionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoinTransaction
+     */
+    select?: CoinTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoinTransaction
+     */
+    omit?: CoinTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CoinTransactionInclude<ExtArgs> | null
+    /**
+     * Filter which CoinTransaction to delete.
+     */
+    where: CoinTransactionWhereUniqueInput
+  }
+
+  /**
+   * CoinTransaction deleteMany
+   */
+  export type CoinTransactionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CoinTransactions to delete
+     */
+    where?: CoinTransactionWhereInput
+    /**
+     * Limit how many CoinTransactions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * CoinTransaction without action
+   */
+  export type CoinTransactionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CoinTransaction
+     */
+    select?: CoinTransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CoinTransaction
+     */
+    omit?: CoinTransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CoinTransactionInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -11056,6 +12323,7 @@ export namespace Prisma {
     twitter: 'twitter',
     role: 'role',
     password: 'password',
+    coins: 'coins',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -11170,6 +12438,17 @@ export namespace Prisma {
   export type PlaylistAccessScalarFieldEnum = (typeof PlaylistAccessScalarFieldEnum)[keyof typeof PlaylistAccessScalarFieldEnum]
 
 
+  export const CoinTransactionScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    amount: 'amount',
+    reason: 'reason',
+    createdAt: 'createdAt'
+  };
+
+  export type CoinTransactionScalarFieldEnum = (typeof CoinTransactionScalarFieldEnum)[keyof typeof CoinTransactionScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -11258,6 +12537,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Int'
+   */
+  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+  /**
+   * Reference to a field of type 'Int[]'
+   */
+  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Difficulty'
    */
   export type EnumDifficultyFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Difficulty'>
@@ -11289,20 +12582,6 @@ export namespace Prisma {
    * Reference to a field of type 'Boolean'
    */
   export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
-    
-
-
-  /**
-   * Reference to a field of type 'Int'
-   */
-  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-  /**
-   * Reference to a field of type 'Int[]'
-   */
-  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
 
 
@@ -11339,6 +12618,7 @@ export namespace Prisma {
     twitter?: StringNullableFilter<"User"> | string | null
     role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
     password?: StringFilter<"User"> | string
+    coins?: IntFilter<"User"> | number
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     problems?: ProblemListRelationFilter
@@ -11346,6 +12626,7 @@ export namespace Prisma {
     problemSolved?: ProblemSolvedListRelationFilter
     playlists?: PlaylistListRelationFilter
     sharedPlaylists?: PlaylistAccessListRelationFilter
+    coinTransactions?: CoinTransactionListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -11361,6 +12642,7 @@ export namespace Prisma {
     twitter?: SortOrderInput | SortOrder
     role?: SortOrder
     password?: SortOrder
+    coins?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     problems?: ProblemOrderByRelationAggregateInput
@@ -11368,6 +12650,7 @@ export namespace Prisma {
     problemSolved?: ProblemSolvedOrderByRelationAggregateInput
     playlists?: PlaylistOrderByRelationAggregateInput
     sharedPlaylists?: PlaylistAccessOrderByRelationAggregateInput
+    coinTransactions?: CoinTransactionOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -11386,6 +12669,7 @@ export namespace Prisma {
     twitter?: StringNullableFilter<"User"> | string | null
     role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
     password?: StringFilter<"User"> | string
+    coins?: IntFilter<"User"> | number
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     problems?: ProblemListRelationFilter
@@ -11393,6 +12677,7 @@ export namespace Prisma {
     problemSolved?: ProblemSolvedListRelationFilter
     playlists?: PlaylistListRelationFilter
     sharedPlaylists?: PlaylistAccessListRelationFilter
+    coinTransactions?: CoinTransactionListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -11408,11 +12693,14 @@ export namespace Prisma {
     twitter?: SortOrderInput | SortOrder
     role?: SortOrder
     password?: SortOrder
+    coins?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: UserCountOrderByAggregateInput
+    _avg?: UserAvgOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
+    _sum?: UserSumOrderByAggregateInput
   }
 
   export type UserScalarWhereWithAggregatesInput = {
@@ -11431,6 +12719,7 @@ export namespace Prisma {
     twitter?: StringNullableWithAggregatesFilter<"User"> | string | null
     role?: EnumUserRoleWithAggregatesFilter<"User"> | $Enums.UserRole
     password?: StringWithAggregatesFilter<"User"> | string
+    coins?: IntWithAggregatesFilter<"User"> | number
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
@@ -12006,6 +13295,63 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"PlaylistAccess"> | Date | string
   }
 
+  export type CoinTransactionWhereInput = {
+    AND?: CoinTransactionWhereInput | CoinTransactionWhereInput[]
+    OR?: CoinTransactionWhereInput[]
+    NOT?: CoinTransactionWhereInput | CoinTransactionWhereInput[]
+    id?: StringFilter<"CoinTransaction"> | string
+    userId?: StringFilter<"CoinTransaction"> | string
+    amount?: IntFilter<"CoinTransaction"> | number
+    reason?: StringFilter<"CoinTransaction"> | string
+    createdAt?: DateTimeFilter<"CoinTransaction"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type CoinTransactionOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    amount?: SortOrder
+    reason?: SortOrder
+    createdAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type CoinTransactionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: CoinTransactionWhereInput | CoinTransactionWhereInput[]
+    OR?: CoinTransactionWhereInput[]
+    NOT?: CoinTransactionWhereInput | CoinTransactionWhereInput[]
+    userId?: StringFilter<"CoinTransaction"> | string
+    amount?: IntFilter<"CoinTransaction"> | number
+    reason?: StringFilter<"CoinTransaction"> | string
+    createdAt?: DateTimeFilter<"CoinTransaction"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type CoinTransactionOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    amount?: SortOrder
+    reason?: SortOrder
+    createdAt?: SortOrder
+    _count?: CoinTransactionCountOrderByAggregateInput
+    _avg?: CoinTransactionAvgOrderByAggregateInput
+    _max?: CoinTransactionMaxOrderByAggregateInput
+    _min?: CoinTransactionMinOrderByAggregateInput
+    _sum?: CoinTransactionSumOrderByAggregateInput
+  }
+
+  export type CoinTransactionScalarWhereWithAggregatesInput = {
+    AND?: CoinTransactionScalarWhereWithAggregatesInput | CoinTransactionScalarWhereWithAggregatesInput[]
+    OR?: CoinTransactionScalarWhereWithAggregatesInput[]
+    NOT?: CoinTransactionScalarWhereWithAggregatesInput | CoinTransactionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"CoinTransaction"> | string
+    userId?: StringWithAggregatesFilter<"CoinTransaction"> | string
+    amount?: IntWithAggregatesFilter<"CoinTransaction"> | number
+    reason?: StringWithAggregatesFilter<"CoinTransaction"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"CoinTransaction"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     name?: string | null
@@ -12019,6 +13365,7 @@ export namespace Prisma {
     twitter?: string | null
     role?: $Enums.UserRole
     password: string
+    coins?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     problems?: ProblemCreateNestedManyWithoutUserInput
@@ -12026,6 +13373,7 @@ export namespace Prisma {
     problemSolved?: ProblemSolvedCreateNestedManyWithoutUserInput
     playlists?: PlaylistCreateNestedManyWithoutUserInput
     sharedPlaylists?: PlaylistAccessCreateNestedManyWithoutUserInput
+    coinTransactions?: CoinTransactionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -12041,6 +13389,7 @@ export namespace Prisma {
     twitter?: string | null
     role?: $Enums.UserRole
     password: string
+    coins?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     problems?: ProblemUncheckedCreateNestedManyWithoutUserInput
@@ -12048,6 +13397,7 @@ export namespace Prisma {
     problemSolved?: ProblemSolvedUncheckedCreateNestedManyWithoutUserInput
     playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
     sharedPlaylists?: PlaylistAccessUncheckedCreateNestedManyWithoutUserInput
+    coinTransactions?: CoinTransactionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -12063,6 +13413,7 @@ export namespace Prisma {
     twitter?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     password?: StringFieldUpdateOperationsInput | string
+    coins?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     problems?: ProblemUpdateManyWithoutUserNestedInput
@@ -12070,6 +13421,7 @@ export namespace Prisma {
     problemSolved?: ProblemSolvedUpdateManyWithoutUserNestedInput
     playlists?: PlaylistUpdateManyWithoutUserNestedInput
     sharedPlaylists?: PlaylistAccessUpdateManyWithoutUserNestedInput
+    coinTransactions?: CoinTransactionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -12085,6 +13437,7 @@ export namespace Prisma {
     twitter?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     password?: StringFieldUpdateOperationsInput | string
+    coins?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     problems?: ProblemUncheckedUpdateManyWithoutUserNestedInput
@@ -12092,6 +13445,7 @@ export namespace Prisma {
     problemSolved?: ProblemSolvedUncheckedUpdateManyWithoutUserNestedInput
     playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
     sharedPlaylists?: PlaylistAccessUncheckedUpdateManyWithoutUserNestedInput
+    coinTransactions?: CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -12107,6 +13461,7 @@ export namespace Prisma {
     twitter?: string | null
     role?: $Enums.UserRole
     password: string
+    coins?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -12124,6 +13479,7 @@ export namespace Prisma {
     twitter?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     password?: StringFieldUpdateOperationsInput | string
+    coins?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12141,6 +13497,7 @@ export namespace Prisma {
     twitter?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     password?: StringFieldUpdateOperationsInput | string
+    coins?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12760,6 +14117,61 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type CoinTransactionCreateInput = {
+    id?: string
+    amount: number
+    reason: string
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutCoinTransactionsInput
+  }
+
+  export type CoinTransactionUncheckedCreateInput = {
+    id?: string
+    userId: string
+    amount: number
+    reason: string
+    createdAt?: Date | string
+  }
+
+  export type CoinTransactionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: IntFieldUpdateOperationsInput | number
+    reason?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutCoinTransactionsNestedInput
+  }
+
+  export type CoinTransactionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    amount?: IntFieldUpdateOperationsInput | number
+    reason?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CoinTransactionCreateManyInput = {
+    id?: string
+    userId: string
+    amount: number
+    reason: string
+    createdAt?: Date | string
+  }
+
+  export type CoinTransactionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: IntFieldUpdateOperationsInput | number
+    reason?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CoinTransactionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    amount?: IntFieldUpdateOperationsInput | number
+    reason?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -12808,6 +14220,17 @@ export namespace Prisma {
     not?: NestedEnumUserRoleFilter<$PrismaModel> | $Enums.UserRole
   }
 
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
   export type DateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -12849,6 +14272,12 @@ export namespace Prisma {
     none?: PlaylistAccessWhereInput
   }
 
+  export type CoinTransactionListRelationFilter = {
+    every?: CoinTransactionWhereInput
+    some?: CoinTransactionWhereInput
+    none?: CoinTransactionWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -12874,6 +14303,10 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type CoinTransactionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
@@ -12887,8 +14320,13 @@ export namespace Prisma {
     twitter?: SortOrder
     role?: SortOrder
     password?: SortOrder
+    coins?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type UserAvgOrderByAggregateInput = {
+    coins?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -12904,6 +14342,7 @@ export namespace Prisma {
     twitter?: SortOrder
     role?: SortOrder
     password?: SortOrder
+    coins?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -12921,8 +14360,13 @@ export namespace Prisma {
     twitter?: SortOrder
     role?: SortOrder
     password?: SortOrder
+    coins?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type UserSumOrderByAggregateInput = {
+    coins?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -12983,6 +14427,22 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumUserRoleFilter<$PrismaModel>
     _max?: NestedEnumUserRoleFilter<$PrismaModel>
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -13213,17 +14673,6 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type IntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
-  }
-
   export type SubmissionScalarRelationFilter = {
     is?: SubmissionWhereInput
     isNot?: SubmissionWhereInput
@@ -13283,22 +14732,6 @@ export namespace Prisma {
 
   export type TestCaseResultSumOrderByAggregateInput = {
     testCase?: SortOrder
-  }
-
-  export type IntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type ProblemSolvedUserIdProblemIdCompoundUniqueInput = {
@@ -13425,6 +14858,38 @@ export namespace Prisma {
     createdAt?: SortOrder
   }
 
+  export type CoinTransactionCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    amount?: SortOrder
+    reason?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CoinTransactionAvgOrderByAggregateInput = {
+    amount?: SortOrder
+  }
+
+  export type CoinTransactionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    amount?: SortOrder
+    reason?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CoinTransactionMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    amount?: SortOrder
+    reason?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type CoinTransactionSumOrderByAggregateInput = {
+    amount?: SortOrder
+  }
+
   export type ProblemCreateNestedManyWithoutUserInput = {
     create?: XOR<ProblemCreateWithoutUserInput, ProblemUncheckedCreateWithoutUserInput> | ProblemCreateWithoutUserInput[] | ProblemUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ProblemCreateOrConnectWithoutUserInput | ProblemCreateOrConnectWithoutUserInput[]
@@ -13458,6 +14923,13 @@ export namespace Prisma {
     connectOrCreate?: PlaylistAccessCreateOrConnectWithoutUserInput | PlaylistAccessCreateOrConnectWithoutUserInput[]
     createMany?: PlaylistAccessCreateManyUserInputEnvelope
     connect?: PlaylistAccessWhereUniqueInput | PlaylistAccessWhereUniqueInput[]
+  }
+
+  export type CoinTransactionCreateNestedManyWithoutUserInput = {
+    create?: XOR<CoinTransactionCreateWithoutUserInput, CoinTransactionUncheckedCreateWithoutUserInput> | CoinTransactionCreateWithoutUserInput[] | CoinTransactionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: CoinTransactionCreateOrConnectWithoutUserInput | CoinTransactionCreateOrConnectWithoutUserInput[]
+    createMany?: CoinTransactionCreateManyUserInputEnvelope
+    connect?: CoinTransactionWhereUniqueInput | CoinTransactionWhereUniqueInput[]
   }
 
   export type ProblemUncheckedCreateNestedManyWithoutUserInput = {
@@ -13495,6 +14967,13 @@ export namespace Prisma {
     connect?: PlaylistAccessWhereUniqueInput | PlaylistAccessWhereUniqueInput[]
   }
 
+  export type CoinTransactionUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<CoinTransactionCreateWithoutUserInput, CoinTransactionUncheckedCreateWithoutUserInput> | CoinTransactionCreateWithoutUserInput[] | CoinTransactionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: CoinTransactionCreateOrConnectWithoutUserInput | CoinTransactionCreateOrConnectWithoutUserInput[]
+    createMany?: CoinTransactionCreateManyUserInputEnvelope
+    connect?: CoinTransactionWhereUniqueInput | CoinTransactionWhereUniqueInput[]
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -13509,6 +14988,14 @@ export namespace Prisma {
 
   export type EnumUserRoleFieldUpdateOperationsInput = {
     set?: $Enums.UserRole
+  }
+
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type DateTimeFieldUpdateOperationsInput = {
@@ -13585,6 +15072,20 @@ export namespace Prisma {
     deleteMany?: PlaylistAccessScalarWhereInput | PlaylistAccessScalarWhereInput[]
   }
 
+  export type CoinTransactionUpdateManyWithoutUserNestedInput = {
+    create?: XOR<CoinTransactionCreateWithoutUserInput, CoinTransactionUncheckedCreateWithoutUserInput> | CoinTransactionCreateWithoutUserInput[] | CoinTransactionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: CoinTransactionCreateOrConnectWithoutUserInput | CoinTransactionCreateOrConnectWithoutUserInput[]
+    upsert?: CoinTransactionUpsertWithWhereUniqueWithoutUserInput | CoinTransactionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: CoinTransactionCreateManyUserInputEnvelope
+    set?: CoinTransactionWhereUniqueInput | CoinTransactionWhereUniqueInput[]
+    disconnect?: CoinTransactionWhereUniqueInput | CoinTransactionWhereUniqueInput[]
+    delete?: CoinTransactionWhereUniqueInput | CoinTransactionWhereUniqueInput[]
+    connect?: CoinTransactionWhereUniqueInput | CoinTransactionWhereUniqueInput[]
+    update?: CoinTransactionUpdateWithWhereUniqueWithoutUserInput | CoinTransactionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: CoinTransactionUpdateManyWithWhereWithoutUserInput | CoinTransactionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: CoinTransactionScalarWhereInput | CoinTransactionScalarWhereInput[]
+  }
+
   export type ProblemUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<ProblemCreateWithoutUserInput, ProblemUncheckedCreateWithoutUserInput> | ProblemCreateWithoutUserInput[] | ProblemUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ProblemCreateOrConnectWithoutUserInput | ProblemCreateOrConnectWithoutUserInput[]
@@ -13653,6 +15154,20 @@ export namespace Prisma {
     update?: PlaylistAccessUpdateWithWhereUniqueWithoutUserInput | PlaylistAccessUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: PlaylistAccessUpdateManyWithWhereWithoutUserInput | PlaylistAccessUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: PlaylistAccessScalarWhereInput | PlaylistAccessScalarWhereInput[]
+  }
+
+  export type CoinTransactionUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<CoinTransactionCreateWithoutUserInput, CoinTransactionUncheckedCreateWithoutUserInput> | CoinTransactionCreateWithoutUserInput[] | CoinTransactionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: CoinTransactionCreateOrConnectWithoutUserInput | CoinTransactionCreateOrConnectWithoutUserInput[]
+    upsert?: CoinTransactionUpsertWithWhereUniqueWithoutUserInput | CoinTransactionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: CoinTransactionCreateManyUserInputEnvelope
+    set?: CoinTransactionWhereUniqueInput | CoinTransactionWhereUniqueInput[]
+    disconnect?: CoinTransactionWhereUniqueInput | CoinTransactionWhereUniqueInput[]
+    delete?: CoinTransactionWhereUniqueInput | CoinTransactionWhereUniqueInput[]
+    connect?: CoinTransactionWhereUniqueInput | CoinTransactionWhereUniqueInput[]
+    update?: CoinTransactionUpdateWithWhereUniqueWithoutUserInput | CoinTransactionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: CoinTransactionUpdateManyWithWhereWithoutUserInput | CoinTransactionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: CoinTransactionScalarWhereInput | CoinTransactionScalarWhereInput[]
   }
 
   export type ProblemCreatetagsInput = {
@@ -13897,14 +15412,6 @@ export namespace Prisma {
     connect?: SubmissionWhereUniqueInput
   }
 
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-  }
-
   export type SubmissionUpdateOneRequiredWithoutTestCasesNestedInput = {
     create?: XOR<SubmissionCreateWithoutTestCasesInput, SubmissionUncheckedCreateWithoutTestCasesInput>
     connectOrCreate?: SubmissionCreateOrConnectWithoutTestCasesInput
@@ -14095,6 +15602,20 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSharedPlaylistsInput, UserUpdateWithoutSharedPlaylistsInput>, UserUncheckedUpdateWithoutSharedPlaylistsInput>
   }
 
+  export type UserCreateNestedOneWithoutCoinTransactionsInput = {
+    create?: XOR<UserCreateWithoutCoinTransactionsInput, UserUncheckedCreateWithoutCoinTransactionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCoinTransactionsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutCoinTransactionsNestedInput = {
+    create?: XOR<UserCreateWithoutCoinTransactionsInput, UserUncheckedCreateWithoutCoinTransactionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCoinTransactionsInput
+    upsert?: UserUpsertWithoutCoinTransactionsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCoinTransactionsInput, UserUpdateWithoutCoinTransactionsInput>, UserUncheckedUpdateWithoutCoinTransactionsInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -14141,6 +15662,17 @@ export namespace Prisma {
     not?: NestedEnumUserRoleFilter<$PrismaModel> | $Enums.UserRole
   }
 
+  export type NestedIntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
   export type NestedDateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -14167,17 +15699,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedStringFilter<$PrismaModel>
     _max?: NestedStringFilter<$PrismaModel>
-  }
-
-  export type NestedIntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
   }
 
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -14230,6 +15751,33 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumUserRoleFilter<$PrismaModel>
     _max?: NestedEnumUserRoleFilter<$PrismaModel>
+  }
+
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
   }
 
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -14297,33 +15845,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
-  }
-
-  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
-  }
-
-  export type NestedFloatFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatFilter<$PrismaModel> | number
   }
 
   export type ProblemCreateWithoutUserInput = {
@@ -14502,6 +16023,30 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type CoinTransactionCreateWithoutUserInput = {
+    id?: string
+    amount: number
+    reason: string
+    createdAt?: Date | string
+  }
+
+  export type CoinTransactionUncheckedCreateWithoutUserInput = {
+    id?: string
+    amount: number
+    reason: string
+    createdAt?: Date | string
+  }
+
+  export type CoinTransactionCreateOrConnectWithoutUserInput = {
+    where: CoinTransactionWhereUniqueInput
+    create: XOR<CoinTransactionCreateWithoutUserInput, CoinTransactionUncheckedCreateWithoutUserInput>
+  }
+
+  export type CoinTransactionCreateManyUserInputEnvelope = {
+    data: CoinTransactionCreateManyUserInput | CoinTransactionCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ProblemUpsertWithWhereUniqueWithoutUserInput = {
     where: ProblemWhereUniqueInput
     update: XOR<ProblemUpdateWithoutUserInput, ProblemUncheckedUpdateWithoutUserInput>
@@ -14659,6 +16204,33 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"PlaylistAccess"> | Date | string
   }
 
+  export type CoinTransactionUpsertWithWhereUniqueWithoutUserInput = {
+    where: CoinTransactionWhereUniqueInput
+    update: XOR<CoinTransactionUpdateWithoutUserInput, CoinTransactionUncheckedUpdateWithoutUserInput>
+    create: XOR<CoinTransactionCreateWithoutUserInput, CoinTransactionUncheckedCreateWithoutUserInput>
+  }
+
+  export type CoinTransactionUpdateWithWhereUniqueWithoutUserInput = {
+    where: CoinTransactionWhereUniqueInput
+    data: XOR<CoinTransactionUpdateWithoutUserInput, CoinTransactionUncheckedUpdateWithoutUserInput>
+  }
+
+  export type CoinTransactionUpdateManyWithWhereWithoutUserInput = {
+    where: CoinTransactionScalarWhereInput
+    data: XOR<CoinTransactionUpdateManyMutationInput, CoinTransactionUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type CoinTransactionScalarWhereInput = {
+    AND?: CoinTransactionScalarWhereInput | CoinTransactionScalarWhereInput[]
+    OR?: CoinTransactionScalarWhereInput[]
+    NOT?: CoinTransactionScalarWhereInput | CoinTransactionScalarWhereInput[]
+    id?: StringFilter<"CoinTransaction"> | string
+    userId?: StringFilter<"CoinTransaction"> | string
+    amount?: IntFilter<"CoinTransaction"> | number
+    reason?: StringFilter<"CoinTransaction"> | string
+    createdAt?: DateTimeFilter<"CoinTransaction"> | Date | string
+  }
+
   export type UserCreateWithoutProblemsInput = {
     id?: string
     name?: string | null
@@ -14672,12 +16244,14 @@ export namespace Prisma {
     twitter?: string | null
     role?: $Enums.UserRole
     password: string
+    coins?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     submission?: SubmissionCreateNestedManyWithoutUserInput
     problemSolved?: ProblemSolvedCreateNestedManyWithoutUserInput
     playlists?: PlaylistCreateNestedManyWithoutUserInput
     sharedPlaylists?: PlaylistAccessCreateNestedManyWithoutUserInput
+    coinTransactions?: CoinTransactionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutProblemsInput = {
@@ -14693,12 +16267,14 @@ export namespace Prisma {
     twitter?: string | null
     role?: $Enums.UserRole
     password: string
+    coins?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     submission?: SubmissionUncheckedCreateNestedManyWithoutUserInput
     problemSolved?: ProblemSolvedUncheckedCreateNestedManyWithoutUserInput
     playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
     sharedPlaylists?: PlaylistAccessUncheckedCreateNestedManyWithoutUserInput
+    coinTransactions?: CoinTransactionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutProblemsInput = {
@@ -14822,12 +16398,14 @@ export namespace Prisma {
     twitter?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     password?: StringFieldUpdateOperationsInput | string
+    coins?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     submission?: SubmissionUpdateManyWithoutUserNestedInput
     problemSolved?: ProblemSolvedUpdateManyWithoutUserNestedInput
     playlists?: PlaylistUpdateManyWithoutUserNestedInput
     sharedPlaylists?: PlaylistAccessUpdateManyWithoutUserNestedInput
+    coinTransactions?: CoinTransactionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProblemsInput = {
@@ -14843,12 +16421,14 @@ export namespace Prisma {
     twitter?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     password?: StringFieldUpdateOperationsInput | string
+    coins?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     submission?: SubmissionUncheckedUpdateManyWithoutUserNestedInput
     problemSolved?: ProblemSolvedUncheckedUpdateManyWithoutUserNestedInput
     playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
     sharedPlaylists?: PlaylistAccessUncheckedUpdateManyWithoutUserNestedInput
+    coinTransactions?: CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type SubmissionUpsertWithWhereUniqueWithoutProblemInput = {
@@ -14923,12 +16503,14 @@ export namespace Prisma {
     twitter?: string | null
     role?: $Enums.UserRole
     password: string
+    coins?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     problems?: ProblemCreateNestedManyWithoutUserInput
     problemSolved?: ProblemSolvedCreateNestedManyWithoutUserInput
     playlists?: PlaylistCreateNestedManyWithoutUserInput
     sharedPlaylists?: PlaylistAccessCreateNestedManyWithoutUserInput
+    coinTransactions?: CoinTransactionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSubmissionInput = {
@@ -14944,12 +16526,14 @@ export namespace Prisma {
     twitter?: string | null
     role?: $Enums.UserRole
     password: string
+    coins?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     problems?: ProblemUncheckedCreateNestedManyWithoutUserInput
     problemSolved?: ProblemSolvedUncheckedCreateNestedManyWithoutUserInput
     playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
     sharedPlaylists?: PlaylistAccessUncheckedCreateNestedManyWithoutUserInput
+    coinTransactions?: CoinTransactionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSubmissionInput = {
@@ -15070,12 +16654,14 @@ export namespace Prisma {
     twitter?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     password?: StringFieldUpdateOperationsInput | string
+    coins?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     problems?: ProblemUpdateManyWithoutUserNestedInput
     problemSolved?: ProblemSolvedUpdateManyWithoutUserNestedInput
     playlists?: PlaylistUpdateManyWithoutUserNestedInput
     sharedPlaylists?: PlaylistAccessUpdateManyWithoutUserNestedInput
+    coinTransactions?: CoinTransactionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubmissionInput = {
@@ -15091,12 +16677,14 @@ export namespace Prisma {
     twitter?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     password?: StringFieldUpdateOperationsInput | string
+    coins?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     problems?: ProblemUncheckedUpdateManyWithoutUserNestedInput
     problemSolved?: ProblemSolvedUncheckedUpdateManyWithoutUserNestedInput
     playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
     sharedPlaylists?: PlaylistAccessUncheckedUpdateManyWithoutUserNestedInput
+    coinTransactions?: CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ProblemUpsertWithoutSubmissionInput = {
@@ -15286,12 +16874,14 @@ export namespace Prisma {
     twitter?: string | null
     role?: $Enums.UserRole
     password: string
+    coins?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     problems?: ProblemCreateNestedManyWithoutUserInput
     submission?: SubmissionCreateNestedManyWithoutUserInput
     playlists?: PlaylistCreateNestedManyWithoutUserInput
     sharedPlaylists?: PlaylistAccessCreateNestedManyWithoutUserInput
+    coinTransactions?: CoinTransactionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutProblemSolvedInput = {
@@ -15307,12 +16897,14 @@ export namespace Prisma {
     twitter?: string | null
     role?: $Enums.UserRole
     password: string
+    coins?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     problems?: ProblemUncheckedCreateNestedManyWithoutUserInput
     submission?: SubmissionUncheckedCreateNestedManyWithoutUserInput
     playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
     sharedPlaylists?: PlaylistAccessUncheckedCreateNestedManyWithoutUserInput
+    coinTransactions?: CoinTransactionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutProblemSolvedInput = {
@@ -15393,12 +16985,14 @@ export namespace Prisma {
     twitter?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     password?: StringFieldUpdateOperationsInput | string
+    coins?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     problems?: ProblemUpdateManyWithoutUserNestedInput
     submission?: SubmissionUpdateManyWithoutUserNestedInput
     playlists?: PlaylistUpdateManyWithoutUserNestedInput
     sharedPlaylists?: PlaylistAccessUpdateManyWithoutUserNestedInput
+    coinTransactions?: CoinTransactionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProblemSolvedInput = {
@@ -15414,12 +17008,14 @@ export namespace Prisma {
     twitter?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     password?: StringFieldUpdateOperationsInput | string
+    coins?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     problems?: ProblemUncheckedUpdateManyWithoutUserNestedInput
     submission?: SubmissionUncheckedUpdateManyWithoutUserNestedInput
     playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
     sharedPlaylists?: PlaylistAccessUncheckedUpdateManyWithoutUserNestedInput
+    coinTransactions?: CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ProblemUpsertWithoutSolvedByInput = {
@@ -15536,12 +17132,14 @@ export namespace Prisma {
     twitter?: string | null
     role?: $Enums.UserRole
     password: string
+    coins?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     problems?: ProblemCreateNestedManyWithoutUserInput
     submission?: SubmissionCreateNestedManyWithoutUserInput
     problemSolved?: ProblemSolvedCreateNestedManyWithoutUserInput
     sharedPlaylists?: PlaylistAccessCreateNestedManyWithoutUserInput
+    coinTransactions?: CoinTransactionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPlaylistsInput = {
@@ -15557,12 +17155,14 @@ export namespace Prisma {
     twitter?: string | null
     role?: $Enums.UserRole
     password: string
+    coins?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     problems?: ProblemUncheckedCreateNestedManyWithoutUserInput
     submission?: SubmissionUncheckedCreateNestedManyWithoutUserInput
     problemSolved?: ProblemSolvedUncheckedCreateNestedManyWithoutUserInput
     sharedPlaylists?: PlaylistAccessUncheckedCreateNestedManyWithoutUserInput
+    coinTransactions?: CoinTransactionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPlaylistsInput = {
@@ -15626,12 +17226,14 @@ export namespace Prisma {
     twitter?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     password?: StringFieldUpdateOperationsInput | string
+    coins?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     problems?: ProblemUpdateManyWithoutUserNestedInput
     submission?: SubmissionUpdateManyWithoutUserNestedInput
     problemSolved?: ProblemSolvedUpdateManyWithoutUserNestedInput
     sharedPlaylists?: PlaylistAccessUpdateManyWithoutUserNestedInput
+    coinTransactions?: CoinTransactionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPlaylistsInput = {
@@ -15647,12 +17249,14 @@ export namespace Prisma {
     twitter?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     password?: StringFieldUpdateOperationsInput | string
+    coins?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     problems?: ProblemUncheckedUpdateManyWithoutUserNestedInput
     submission?: SubmissionUncheckedUpdateManyWithoutUserNestedInput
     problemSolved?: ProblemSolvedUncheckedUpdateManyWithoutUserNestedInput
     sharedPlaylists?: PlaylistAccessUncheckedUpdateManyWithoutUserNestedInput
+    coinTransactions?: CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type PlaylistCreateWithoutProblemsInput = {
@@ -15859,12 +17463,14 @@ export namespace Prisma {
     twitter?: string | null
     role?: $Enums.UserRole
     password: string
+    coins?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     problems?: ProblemCreateNestedManyWithoutUserInput
     submission?: SubmissionCreateNestedManyWithoutUserInput
     problemSolved?: ProblemSolvedCreateNestedManyWithoutUserInput
     playlists?: PlaylistCreateNestedManyWithoutUserInput
+    coinTransactions?: CoinTransactionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSharedPlaylistsInput = {
@@ -15880,12 +17486,14 @@ export namespace Prisma {
     twitter?: string | null
     role?: $Enums.UserRole
     password: string
+    coins?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     problems?: ProblemUncheckedCreateNestedManyWithoutUserInput
     submission?: SubmissionUncheckedCreateNestedManyWithoutUserInput
     problemSolved?: ProblemSolvedUncheckedCreateNestedManyWithoutUserInput
     playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
+    coinTransactions?: CoinTransactionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSharedPlaylistsInput = {
@@ -15950,12 +17558,14 @@ export namespace Prisma {
     twitter?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     password?: StringFieldUpdateOperationsInput | string
+    coins?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     problems?: ProblemUpdateManyWithoutUserNestedInput
     submission?: SubmissionUpdateManyWithoutUserNestedInput
     problemSolved?: ProblemSolvedUpdateManyWithoutUserNestedInput
     playlists?: PlaylistUpdateManyWithoutUserNestedInput
+    coinTransactions?: CoinTransactionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSharedPlaylistsInput = {
@@ -15971,12 +17581,122 @@ export namespace Prisma {
     twitter?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     password?: StringFieldUpdateOperationsInput | string
+    coins?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     problems?: ProblemUncheckedUpdateManyWithoutUserNestedInput
     submission?: SubmissionUncheckedUpdateManyWithoutUserNestedInput
     problemSolved?: ProblemSolvedUncheckedUpdateManyWithoutUserNestedInput
     playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
+    coinTransactions?: CoinTransactionUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserCreateWithoutCoinTransactionsInput = {
+    id?: string
+    name?: string | null
+    email: string
+    image?: string | null
+    dob?: Date | string | null
+    bio?: string | null
+    website?: string | null
+    github?: string | null
+    linkedin?: string | null
+    twitter?: string | null
+    role?: $Enums.UserRole
+    password: string
+    coins?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    problems?: ProblemCreateNestedManyWithoutUserInput
+    submission?: SubmissionCreateNestedManyWithoutUserInput
+    problemSolved?: ProblemSolvedCreateNestedManyWithoutUserInput
+    playlists?: PlaylistCreateNestedManyWithoutUserInput
+    sharedPlaylists?: PlaylistAccessCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutCoinTransactionsInput = {
+    id?: string
+    name?: string | null
+    email: string
+    image?: string | null
+    dob?: Date | string | null
+    bio?: string | null
+    website?: string | null
+    github?: string | null
+    linkedin?: string | null
+    twitter?: string | null
+    role?: $Enums.UserRole
+    password: string
+    coins?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    problems?: ProblemUncheckedCreateNestedManyWithoutUserInput
+    submission?: SubmissionUncheckedCreateNestedManyWithoutUserInput
+    problemSolved?: ProblemSolvedUncheckedCreateNestedManyWithoutUserInput
+    playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
+    sharedPlaylists?: PlaylistAccessUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutCoinTransactionsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutCoinTransactionsInput, UserUncheckedCreateWithoutCoinTransactionsInput>
+  }
+
+  export type UserUpsertWithoutCoinTransactionsInput = {
+    update: XOR<UserUpdateWithoutCoinTransactionsInput, UserUncheckedUpdateWithoutCoinTransactionsInput>
+    create: XOR<UserCreateWithoutCoinTransactionsInput, UserUncheckedCreateWithoutCoinTransactionsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutCoinTransactionsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutCoinTransactionsInput, UserUncheckedUpdateWithoutCoinTransactionsInput>
+  }
+
+  export type UserUpdateWithoutCoinTransactionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    github?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedin?: NullableStringFieldUpdateOperationsInput | string | null
+    twitter?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    password?: StringFieldUpdateOperationsInput | string
+    coins?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    problems?: ProblemUpdateManyWithoutUserNestedInput
+    submission?: SubmissionUpdateManyWithoutUserNestedInput
+    problemSolved?: ProblemSolvedUpdateManyWithoutUserNestedInput
+    playlists?: PlaylistUpdateManyWithoutUserNestedInput
+    sharedPlaylists?: PlaylistAccessUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutCoinTransactionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    github?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedin?: NullableStringFieldUpdateOperationsInput | string | null
+    twitter?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    password?: StringFieldUpdateOperationsInput | string
+    coins?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    problems?: ProblemUncheckedUpdateManyWithoutUserNestedInput
+    submission?: SubmissionUncheckedUpdateManyWithoutUserNestedInput
+    problemSolved?: ProblemSolvedUncheckedUpdateManyWithoutUserNestedInput
+    playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
+    sharedPlaylists?: PlaylistAccessUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ProblemCreateManyUserInput = {
@@ -16033,6 +17753,13 @@ export namespace Prisma {
   export type PlaylistAccessCreateManyUserInput = {
     id?: string
     playlistId: string
+    createdAt?: Date | string
+  }
+
+  export type CoinTransactionCreateManyUserInput = {
+    id?: string
+    amount: number
+    reason: string
     createdAt?: Date | string
   }
 
@@ -16216,6 +17943,27 @@ export namespace Prisma {
   export type PlaylistAccessUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     playlistId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CoinTransactionUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: IntFieldUpdateOperationsInput | number
+    reason?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CoinTransactionUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: IntFieldUpdateOperationsInput | number
+    reason?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CoinTransactionUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: IntFieldUpdateOperationsInput | number
+    reason?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

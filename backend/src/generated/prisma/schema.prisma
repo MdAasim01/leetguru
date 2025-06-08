@@ -38,6 +38,7 @@ model User {
   twitter   String?
   role      UserRole  @default(USER)
   password  String
+  coins     Int       @default(10)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 
@@ -46,6 +47,8 @@ model User {
   problemSolved   ProblemSolved[]
   playlists       Playlist[]
   sharedPlaylists PlaylistAccess[]
+
+  coinTransactions CoinTransaction[]
 }
 
 model Problem {
@@ -174,4 +177,16 @@ model PlaylistAccess {
   user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([playlistId, userId])
+}
+
+model CoinTransaction {
+  id        String   @id @default(uuid())
+  userId    String
+  amount    Int // +10 for reward, -3 for feedback, etc.
+  reason    String // e.g., "Solved Problem", "AI Feedback"
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }

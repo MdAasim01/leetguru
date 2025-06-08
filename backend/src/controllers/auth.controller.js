@@ -51,6 +51,7 @@ export const register = async (req, res) => {
 				name: newUser.name,
 				role: newUser.role,
 				image: newUser.image,
+				coins: newUser.coins,
 			},
 		});
 	} catch (error) {
@@ -105,6 +106,7 @@ export const login = async (req, res) => {
 				name: user.name,
 				role: user.role,
 				image: user.image,
+				coins: user.coins,
 			},
 		});
 	} catch (error) {
@@ -215,3 +217,11 @@ export const updateUserProfile = async (req, res) => {
 	}
 };
 
+export const getUserCoinBalance = async (req, res) => {
+	const user = await db.user.findUnique({
+		where: { id: req.user.id },
+		select: { coins: true },
+	});
+
+	res.status(200).json({ coins: user.coins });
+};
