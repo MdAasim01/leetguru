@@ -38,6 +38,7 @@ export const authMiddleware = async (req, res, next) => {
 				github: true,
 				linkedin: true,
 				twitter: true,
+				coins: true,
 			},
 		});
 
