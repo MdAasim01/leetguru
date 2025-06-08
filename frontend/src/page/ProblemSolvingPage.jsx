@@ -79,8 +79,6 @@ export default function ProblemSolvingPage() {
             setIsLoadingFeedback(true);
             setAiFeedback(""); // Clear old feedback
 
-            console.log(newSub?.testCases);
-
             axiosInstance
                 .post("/feedback/code-feedback", {
                     code,
@@ -129,11 +127,11 @@ export default function ProblemSolvingPage() {
         },
         {
             value: "feedback",
-            label: "Feedback",
+            label: "AI Feedback",
             icon: BarChart3,
             content: (
                 <div className="p-4 space-y-6">
-                    <div className="prose max-w-3xl text-sm text-white bg-neutral-800 border border-neutral-700 p-4 rounded">
+                    <div className="prose max-w-3xl text-sm text-[#ebebeb] bg-neutral-800 border border-neutral-700 p-4 rounded">
                         <h3 className="text-lg font-bold text-primary mb-2">AI Code Feedback</h3>
                         {isLoadingFeedback ? (
                             <p className="text-muted-foreground">Getting AI feedback...</p>
