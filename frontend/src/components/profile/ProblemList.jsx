@@ -35,20 +35,20 @@ export function ProblemList({ title, problems, type = "solved" }) { // type can 
           </TableHeader>
           <TableBody>
             {problems.map(item => (
-              <TableRow key={item.id}>
-                <TableCell className="font-medium">{type === "solved" ? item.title : item.problemTitle}</TableCell>
-                {type === "submissions" && <TableCell>{item.language}</TableCell>}
-                {type === "submissions" && <TableCell className={getStatusColor(item.status)}>{item.status}</TableCell>}
-                {type === "submissions" && <TableCell>{item.runtime}</TableCell>}
-                {type === "submissions" && <TableCell>{item.memory}</TableCell>}
+              <TableRow key={item?.id}>
+                <TableCell className="font-medium">{type === "solved" ? item?.title : item?.problemTitle}</TableCell>
+                {type === "submissions" && <TableCell>{item?.language}</TableCell>}
+                {type === "submissions" && <TableCell className={getStatusColor(item?.status)}>{item?.status}</TableCell>}
+                {type === "submissions" && <TableCell>{item?.runtime}</TableCell>}
+                {type === "submissions" && <TableCell>{item?.memory}</TableCell>}
                 {type === "solved" && (
                   <TableCell>
                     <Badge variant={
-                      item.difficulty === "Easy" ? "success" :
-                      item.difficulty === "Medium" ? "warning" :
-                      item.difficulty === "Hard" ? "destructive" : "secondary"
+                      item?.difficulty === "EASY" ? "success" :
+                        item?.difficulty === "MEDIUM" ? "warning" :
+                          item?.difficulty === "HARD" ? "destructive" : "secondary"
                     }>
-                      {item.difficulty}
+                      {item?.difficulty}
                     </Badge>
                   </TableCell>
                 )}

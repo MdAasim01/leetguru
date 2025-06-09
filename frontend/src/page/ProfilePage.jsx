@@ -122,6 +122,9 @@ export default function ProfilePage() {
     fetchData();
   }, []);
 
+  console.log("Solved: ==== ", solvedProblems);
+
+
 
   const handleCopyUserId = () => {
     navigator.clipboard.writeText(authUser.id);
