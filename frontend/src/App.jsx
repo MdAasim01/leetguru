@@ -3,7 +3,6 @@ import { Outlet } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { useAuthStore } from "./store/useAuthStore";
 import { Loader } from "lucide-react";
-// import Navbar from "./components/Navbar";
 import Navbar from "./components/Landing2/Navbar";
 import { axiosInstance } from "./lib/axios";
 

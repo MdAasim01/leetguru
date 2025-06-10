@@ -1,4 +1,3 @@
-// src/components/Navbar.jsx
 import React, { useEffect, useState } from 'react';
 import LogoutButton from '../LogoutButton';
 import { Code, LogOut, User } from 'lucide-react';

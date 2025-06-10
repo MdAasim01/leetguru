@@ -4,19 +4,19 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import App from "./App.jsx";
 
-import HomePage from "./page/HomePage";
-import LoginPage from "./page/LoginPage";
-import SignUpPage from "./page/SignUpPage";
-import AdminRoute from "./components/AdminRoute";
-import AddProblem from "./page/AddProblem";
-import ProblemPage from "./page/ProblemPage";
-import LandingPage from "./page/LandingPage";
-import ProfilePage from "./page/ProfilePage";
-import ProtectedRoute from "./components/ProtectedRoute.jsx";
-import ProblemSolvingPage from "./page/ProblemSolvingPage";
-import PlaylistsPage from "./page/PlaylistPage";
-import EditProfilePage from "./page/EditProfilePage";
-import NewLanding from "./page/NewLanding";
+import {
+	HomePage,
+	LoginPage,
+	SignUpPage,
+	AdminRoute,
+	AddProblem,
+	ProfilePage,
+	ProtectedRoute,
+	ProblemSolvingPage,
+	PlaylistsPage,
+	EditProfilePage,
+	NewLanding
+} from "./page";
 
 const router = createBrowserRouter([
 	{
