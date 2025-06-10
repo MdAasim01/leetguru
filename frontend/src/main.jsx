@@ -8,15 +8,16 @@ import {
 	HomePage,
 	LoginPage,
 	SignUpPage,
-	AdminRoute,
 	AddProblem,
 	ProfilePage,
-	ProtectedRoute,
 	ProblemSolvingPage,
 	PlaylistsPage,
 	EditProfilePage,
 	NewLanding
 } from "./page";
+
+import AdminRoute from "./components/AdminRoute";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 const router = createBrowserRouter([
 	{

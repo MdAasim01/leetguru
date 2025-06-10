@@ -12,15 +12,13 @@ import NewLanding from "./NewLanding";
 
 
 export {
-    HomePage,
-    LoginPage,
-    SignUpPage,
-    AdminRoute,
-    AddProblem,
-    ProfilePage,
-    ProtectedRoute,
-    ProblemSolvingPage,
-    PlaylistsPage,
-    EditProfilePage,
-    NewLanding
-}
+	HomePage,
+	LoginPage,
+	SignUpPage,
+	AddProblem,
+	ProfilePage,
+	ProblemSolvingPage,
+	PlaylistsPage,
+	EditProfilePage,
+	NewLanding,
+};
