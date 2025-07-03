@@ -3,6 +3,8 @@ import { db } from "../libs/db.js";
 import { UserRole } from "../generated/prisma/index.js";
 import jwt from "jsonwebtoken";
 import { uploadOnCloudinary } from "../libs/cloudinary.js";
+import { sendVerificationEmail } from "../libs/sendVerificationEmail.js";
+import crypto from "crypto";
 
 export const register = async (req, res) => {
 	const { email, password, name, role } = req.body;
@@ -22,37 +24,51 @@ export const register = async (req, res) => {
 
 		const hashedPassword = await bcrypt.hash(password, 10);
 
+		const verificationToken = crypto.randomBytes(32).toString("hex");
+		const expiry = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes
+
 		const newUser = await db.user.create({
 			data: {
 				email,
 				password: hashedPassword,
 				name,
 				role: role || UserRole.USER,
+				verificationToken,
+				verificationTokenExpiry: expiry,
 			},
 		});
 
-		const token = jwt.sign({ id: newUser.id }, process.env.JWT_SECRET, {
-			expiresIn: "7d",
-		});
+		if (newUser) {
+			await sendVerificationEmail(email, verificationToken);
+		}
 
-		res.cookie("jwt", token, {
-			httpOnly: true,
-			sameSite: "None",
-			secure: process.env.NODE_ENV !== "development",
-			maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-		});
+		// const token = jwt.sign({ id: newUser.id }, process.env.JWT_SECRET, {
+		// 	expiresIn: "7d",
+		// });
+
+		// res.cookie("jwt", token, {
+		// 	httpOnly: true,
+		// 	sameSite: "None",
+		// 	secure: process.env.NODE_ENV !== "development",
+		// 	maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+		// });
+
+		// res.status(201).json({
+		// 	success: true,
+		// 	message: "User created successfully",
+		// 	user: {
+		// 		id: newUser.id,
+		// 		email: newUser.email,
+		// 		name: newUser.name,
+		// 		role: newUser.role,
+		// 		image: newUser.image,
+		// 		coins: newUser.coins,
+		// 	},
+		// });
 
 		res.status(201).json({
 			success: true,
-			message: "User created successfully",
-			user: {
-				id: newUser.id,
-				email: newUser.email,
-				name: newUser.name,
-				role: newUser.role,
-				image: newUser.image,
-				coins: newUser.coins,
-			},
+			message: "User created. Check your email to verify your account.",
 		});
 	} catch (error) {
 		console.error("Error creating user:", error);
@@ -61,6 +77,50 @@ export const register = async (req, res) => {
 		});
 	}
 };
+
+export const verifyEmail = async (req, res) => {
+	const { token } = req.params;
+
+	try {
+		const user = await db.user.findFirst({
+			where: {
+				verificationToken: token,
+				verificationTokenExpiry: { gte: new Date() },
+			},
+		});
+
+		if (!user) {
+			return res.status(400).json({ error: "Invalid or expired token" });
+		}
+
+		await db.user.update({
+			where: { id: user.id },
+			data: {
+				isVerified: true,
+				verificationToken: null,
+				verificationTokenExpiry: null,
+			},
+		});
+
+		// optionally: login automatically
+		const jwtToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+			expiresIn: "7d",
+		});
+
+		res.cookie("jwt", jwtToken, {
+			httpOnly: true,
+			sameSite: "None",
+			secure: process.env.NODE_ENV !== "development",
+			maxAge: 1000 * 60 * 60 * 24 * 7,
+		});
+
+		res.json({ message: "Email verified successfully!" });
+	} catch (error) {
+		console.error("Email verification error:", error);
+		res.status(500).json({ error: "Server error" });
+	}
+};
+
 
 export const login = async (req, res) => {
 	const { email, password } = req.body;

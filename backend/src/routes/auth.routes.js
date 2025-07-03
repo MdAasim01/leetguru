@@ -6,6 +6,7 @@ import {
 	logout,
 	register,
 	updateUserProfile,
+	verifyEmail,
 } from "../controllers/auth.controller.js";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
 import { upload } from "../middlewares/multer.middleware.js";
@@ -24,6 +25,8 @@ const uploadFields = upload.fields([
 ]);
 
 authRoutes.post("/register", register);
+
+authRoutes.get("/verify-email/:token", verifyEmail);
 
 authRoutes.post("/login", login);
 
